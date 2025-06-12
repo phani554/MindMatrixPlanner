@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MindMatrix Task Planner</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <style>
+      :root {
+        --mm-primary-navy: #00155C;
+        --mm-accent-orange: #F29C2A;
+        --mm-accent-orange-deep: #EE4D1E;
+        --mm-accent-orange-light: #FAD02C; /* Lighter shade for gradient start */
+
+        --app-bg: #0F172A; /* slate-900 */
+        --card-bg: #1E293B; /* slate-800 */
+        --text-light: #E2E8F0; /* slate-200 */
+        --text-medium: #94A3B8; /* slate-400 */
+        --text-dark: #64748B; /* slate-500 */
+      }
+
+      /* Custom scrollbar for webkit browsers - MindMatrix Branded */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--app-bg); 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--mm-accent-orange); 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--mm-accent-orange-deep);
+      }
+      body {
+        background-color: var(--app-bg);
+      }
+
+      /* Slimmer scrollbar for specific elements */
+      .custom-scrollbar-xs::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+      }
+      .custom-scrollbar-xs::-webkit-scrollbar-track {
+        background: transparent; /* Or a very subtle color */
+      }
+      .custom-scrollbar-xs::-webkit-scrollbar-thumb {
+        background: var(--text-dark); /* Or a subtle color like slate-500 */
+        border-radius: 2px;
+      }
+      .custom-scrollbar-xs::-webkit-scrollbar-thumb:hover {
+        background: var(--text-medium); /* slate-400 on hover */
+      }
+
+
+      /* MindMatrix Branded Utility Classes */
+      .mindmatrix-text-accent {
+        color: var(--mm-accent-orange);
+      }
+      .mindmatrix-bg-accent {
+        background-color: var(--mm-accent-orange);
+      }
+      .mindmatrix-bg-accent-hover:hover {
+        background-color: var(--mm-accent-orange-deep);
+      }
+      .mindmatrix-ring-accent:focus {
+        --tw-ring-color: var(--mm-accent-orange);
+      }
+      .mindmatrix-text-primary-brand { /* For logo text or specific brand elements */
+         color: var(--mm-primary-navy);
+      }
+      .mindmatrix-bg-primary-brand {
+         background-color: var(--mm-primary-navy);
+      }
+
+      /* Overriding Tailwind focus ring for specific elements if needed directly */
+      .focus-ring-mm-orange {
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+        --tw-ring-opacity: 0.5;
+        --tw-ring-color: rgba(242, 156, 42, var(--tw-ring-opacity)); /* #F29C2A with opacity */
+      }
+      
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.2.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-slate-900">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
