@@ -21,6 +21,8 @@ import { TeamTaskAllocationSummary } from './components/TeamTaskAllocationSummar
 import { AssignTaskModal } from './components/AssignTaskModal'; 
 import { GoogleGenAI } from "@google/genai";
 
+import AuthButton from "./components/AuthButton";
+
 
 // Helper function to get all members of a department recursively (includes leader)
 const getDepartmentMembersRecursive = (leaderId: ResourceId | undefined, allResources: Resource[]): Resource[] => {
@@ -728,6 +730,9 @@ const mainContentClass = "flex-1 p-4 sm:p-6 overflow-y-auto custom-scrollbar-xs"
                 <div className="flex items-center space-x-2">
                    <MindMatrixLogo className="h-10 sm:h-12 text-[#F29C2A]" />
                 </div>
+                <div className="flex-1 flex justify-center">
+                      <AuthButton compact />
+                </div>
 
                 <div className="relative group">
                     <button 
@@ -739,6 +744,7 @@ const mainContentClass = "flex-1 p-4 sm:p-6 overflow-y-auto custom-scrollbar-xs"
                             : 'Global Planner'}
                         <ChevronDownIcon className={`w-4 h-4 ml-2 transform transition-transform ${isPersonalPlannerDropdownOpen ? 'rotate-180' : ''}`} />
                     </button>
+                    
                     {isPersonalPlannerDropdownOpen && (
                         <div className="absolute right-0 mt-2 w-64 bg-slate-800 border border-slate-700 rounded-md shadow-xl z-50 py-2 max-h-80 overflow-y-auto custom-scrollbar-xs">
                             <input 
