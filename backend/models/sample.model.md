@@ -1,0 +1,153 @@
+
+USE GitHubaccesser;
+
+developers table
+id int not null
+name varchar 100, not null
+gitid bigint notnull
+username varchar 100 not null
+
+1	Furquan Khan	6465608	furquankhan
+2	Priyanka Bourunde	22660369	PriyankaBorunde
+3	Meghana Thakkekar	6465588	MeghanaThakekar
+
+
+CREATE TABLE SyncConfig (
+	LastUpdatedAt DATETIME,
+	TotalIssuesLog INT,
+	TotalPrMerged INT,
+	TotalIssueClosed INT,
+	TotalCommits INT
+	)
+
+CREATE TABLE Employees (
+	EmpId INT IDENTITY PRIMARY KEY,
+	EmpGitId INT UNIQUE,
+	FullName NVARCHAR(50),
+	UserName NVARCHAR(50),
+	Email NVARCHAR(50),
+	Designation NVARCHAR(50),
+	LastActivity DATETIME) 
+GO
+CREATE TABLE Issues  (
+	IssueID INT PRIMARY KEY,
+	IssueNumber INT UNIQUE,
+	[Status] NVARCHAR(10) NOT NULL,
+	ReportedBy INT ,
+	CreatedOn DATETIME,
+	LastUpdatedAt DATETIME ,
+	ClosedAt DATETIME  
+) 
+382255058	24348	closed	6465639	2018-11-19 15:03:56.000	2024-01-10 13:53:51.000	2024-01-10 19:23:51.000,
+420114823	26760	closed	6465639	2019-03-12 17:29:25.000	2024-01-10 13:53:51.000	2024-01-10 19:23:51.000,
+484930398	29872	closed	6465639	2019-08-25 13:15:33.000	2024-01-10 13:53:31.000	2024-01-10 19:23:31.000,
+
+GO
+CREATE TABLE TrackingIssueAssigneeLinks(
+	GitId INT IDENTITY PRIMARY KEY,
+	TimelineID BIGINT NOT NULL,
+	IssueNumber INT NOT NULL,
+	AssigneesGitId INT NOT NULL,
+	IsCurrentAssignee BIT,
+	LastUpdatedAt DATETIME,
+	AssignedDate DATETIME,
+	UnassignedDate DATETIME,
+	ReactionDate DATETIME,
+	IsAssigneeReleased BIT,
+	FOREIGN KEY (IssueNumber) REFERENCES Issues(IssueNumber),
+	--FOREIGN KEY (Assignees) REFERENCES Employees(EmpGitId)
+) 
+
+7	11700337318	70876	109220027	0	2024-02-05 15:37:54.030	2024-02-05 14:01:36.000	NULL	2024-02-05 14:05:13.000	0,
+8	11700287875	70875	98581623	0	2024-02-05 15:37:54.523	2024-02-05 13:57:03.000	NULL	NULL	0,
+GO
+CREATE TABLE TrackingIssuesLogs  (
+	IssueLogId INT IDENTITY PRIMARY KEY,
+	IssueNumber INT NOT NULL,
+	IssueID INT,
+	CreatedDate DATETIME,
+	LastUpdatedAt DATETIME ,
+	IssueTitle VARCHAR(500),
+	Lables VARCHAR(100),
+	TotalComments INT,
+	FOREIGN KEY (IssueID) REFERENCES Issues(IssueID),	
+)
+GO
+CREATE TABLE Pulls (
+	PullId INT PRIMARY KEY,
+	PullNumber INT UNIQUE,
+	[Status] varchar(50),
+	Title VARCHAR(1000),
+	ReportedBy INT,
+	CreatedAt DATETIME,
+	CloseAt DATETIME,
+	LastUpdatedAt DATETIME
+	)
+
+497	497	closed	Feature 15 day report	6465588	2014-04-25 13:19:06.000	2014-05-22 16:26:50.000	2024-05-02 15:50:14.000,
+527	527	closed	remove the inner query for issue #458 i.e any user can set the group permission even if he is not a group member	6465588	2014-05-02 07:35:14.000	2014-05-07 15:15:19.000	2024-05-02 15:50:15.000,
+530	530	closed	Issue 423	6465584	2014-05-05 07:23:23.000	2014-05-14 23:10:27.000	2024-05-02 15:50:15.000,
+630	630	closed	smartlist checkbox issue fixed	6465584	2014-05-23 12:51:20.000	2014-05-23 18:56:17.000	2024-05-02 15:50:18.000,
+GO
+CREATE TABLE TrackingPullsAssigneeLinks(
+	GitId INT IDENTITY PRIMARY KEY,
+	TimelineID BIGINT NOT NULL,
+	PullNumber INT NOT NULL,
+	AssigneesGitId INT NOT NULL,
+	LastUpdatedAt DATETIME,
+	AssignedDate DATETIME,
+	UnassignedDate DATETIME,
+	ReactionDate DATETIME,
+	IsAssigneeReleased BIT,
+	FOREIGN KEY (PullNumber) REFERENCES Pulls(PullNumber),
+	--FOREIGN KEY (AssigneesGitId) REFERENCES Employees(EmpGitId)
+)
+19306	12844304030	76110	150653428	2024-05-17 13:37:41.597	2024-05-17 13:31:00.000	NULL	NULL	0
+19307	12844187989	76109	97150054	2024-05-17 13:37:42.403	2024-05-17 13:20:27.000	NULL	NULL	0
+GO
+CREATE TABLE Commits(
+	CommitId INT PRIMARY KEY IDENTITY,
+	CommitsSha VARCHAR(100) UNIQUE,
+	CommitedAt DATETIME,
+	CommitedBy INT,
+	CommitedInPull VARCHAR(100),
+	TotoalChanges INT,
+	Addition INT,
+	DELETION INT,
+)
+1	839323257fdb912a2b6be228d6b2281b178c8aff	2024-02-01 12:12:17.000	NULL	70880	NULL	NULL	NULL
+2	728b106a472a181c0afb036c243f128a93de75ed	2024-02-01 16:26:46.000	NULL	70880	NULL	NULL	NULL
+3	56729415a40aef7f18a2d33ec039a7024644cb4c	2024-02-02 10:28:31.000	NULL	70880	NULL	NULL	NULL 
+GO
+
+CREATE TABLE TrackingReviewers(
+	Id INT IDENTITY PRIMARY KEY,
+	TimelineID BIGINT NOT NULL,
+	PullNumber INT NOT NULL,
+	RequestedGitID INT NOT NULL,
+	LastUpdatedAt DATETIME,
+	AssignedDate DATETIME,
+	ReviewedAt DATETIME,
+	ReviewerRemovedAt DATETIME,
+	IsReviewerReleased BIT,
+	FOREIGN KEY (PullNumber) REFERENCES Pulls(PullNumber),
+	--FOREIGN KEY (AssigneesGitId) REFERENCES Employees(EmpGitId)
+)
+
+5853	12843668752	76085	6465643	NULL	2024-05-17 12:31:38.000	2024-05-17 12:51:18.000	NULL	1
+5854	12835932011	76068	6465643	NULL	2024-05-16 20:59:16.000	2024-05-16 21:00:07.000	NULL	1
+
+CREATE TABLE TrackingPullsLogs  (
+	PullLogId INT IDENTITY PRIMARY KEY,
+	PullNumber INT NOT NULL,
+	PullID INT,
+	CreatedDate DATETIME,
+	LastUpdatedAt DATETIME ,
+	PullTitle VARCHAR(500),
+	Lables VARCHAR(100),
+	TotalComments INT,
+	FOREIGN KEY (PullID) REFERENCES Pulls(PullId))	
+
+1197	76110	76110	2024-05-17 08:01:00.000	2024-05-17 08:01:00.000	Setup warnings v2 part2	[in progress]	0
+1198	76109	76109	2024-05-17 07:50:16.000	2024-05-17 07:50:27.000	Business Planning Tab Display Issue	[]	0
+1199	76104	76104	2024-05-17 07:17:08.000	2024-05-17 07:52:08.000	Playbook warning v1	[]	0

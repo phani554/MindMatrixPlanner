@@ -5,24 +5,25 @@
     "main": "app.js",
     "type": "module",
     "scripts": {
-      "start": "node app.js",
-      "dev": "nodemon app.js"
+        "start": "node app.js",
+        "dev": "nodemon app.js"
     },
     "dependencies": {
-      "cors": "^2.8.5",
-      "dotenv": "^16.3.1",
-      "express": "^4.18.2",
-      "express-session": "^1.17.3",
-      "passport": "^0.6.0",
-      "passport-github2": "^0.1.12"
+        "cors": "^2.8.5",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2",
+        "express-session": "^1.17.3",
+        "mongoose": "^8.16.0",
+        "passport": "^0.6.0",
+        "passport-github2": "^0.1.12"
     },
     "devDependencies": {
-      "nodemon": "^3.0.3"
+        "nodemon": "^3.0.3"
     },
     "engines": {
-      "node": ">=18.0.0"
+        "node": ">=18.0.0"
     },
     "keywords": [],
     "author": "phani554",
     "license": "MIT"
-  }
+}
