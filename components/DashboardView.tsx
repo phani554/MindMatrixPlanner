@@ -17,6 +17,12 @@ interface DashboardViewProps {
   onOpenTimesheetModal: (entryOrDate?: TimesheetEntry | string, resourceId?: ResourceId) => void; // For Add Time button
 }
 
+interface Quote {
+  q: string;
+  a: string;
+  h?: string;
+}
+
 interface PerformerStats {
   resourceId: string;
   name: string;
@@ -83,24 +89,28 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 }) => {
   const [productivityTip, setProductivityTip] = useState<string>("Loading productivity tip...");
   const [isLoadingTip, setIsLoadingTip] = useState<boolean>(false);
-  const [tipError, setTipError] = useState<string | null>(null);
+  const [tipError, setTipError] = useState<Quote | null>(null);
+  const [quote, setQuote] = useState<Quote | null>(null);
 
   const fetchProductivityTip = useCallback(async () => { 
     setIsLoadingTip(true);
     setTipError(null);
     try {
-        if (!process.env.API_KEY) {
-            setProductivityTip("Productivity tip: Plan your day each morning!"); 
-            setTipError("AI features disabled (API_KEY not set).");
-            return;
-        }
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-        const prompt = "Suggest a short, actionable productivity tip for a software development team (1-2 sentences).";
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash-preview-04-17',
-            contents: prompt,
-        });
-        setProductivityTip(response.text || "Stay focused and take regular breaks!");
+        // if (!process.env.API_KEY) {
+        //     setProductivityTip("Productivity tip: Plan your day each morning!"); 
+        //     setTipError("AI features disabled (API_KEY not set).");
+        //     return;
+        // }
+        // const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        // const prompt = "Suggest a short, actionable productivity tip for a software development team (1-2 sentences).";
+        // const response = await ai.models.generateContent({
+        //     model: 'gemini-2.5-flash-preview-04-17',
+        //     contents: prompt,
+        // });
+        const response = await fetch("http://localhost:5100/zen/quote");
+        if (!response.ok) throw new Error("Failed to fetch quote");
+        const data: Quote = await response.json();
+        setProductivityTip(data?? "Stay focused and take regular breaks!");
     } catch (error: any) {
         console.error("Failed to fetch productivity tip:", error);
         let errorMessage = "Could not fetch a tip. Try prioritizing your most important task first!";
@@ -115,6 +125,24 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         setIsLoadingTip(false);
     }
   }, []);
+
+  // useEffect(() => {
+  //   const fetchQuote = async () => {
+  //     try {
+  //       const response = await fetch("/api/zen/quote");
+  //       if (!response.ok) throw new Error("Failed to fetch quote");
+  //       const data: Quote = await response.json();
+  //       setQuote(data || "Sample Quote");
+        
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //     finally {
+  //       setIsLoadingTip(false);
+  //     }
+  //   };
+  //   fetchQuote();
+  // }, []);
 
   useEffect(() => { fetchProductivityTip(); }, [fetchProductivityTip]);
 
@@ -330,7 +358,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   const BarChartSimple: React.FC<{data: {name:string, value:number, color:string, tasks: Task[]}[], title: string, onBarClick?: (title: string, tasks: Task[]) => void}> = ({data, title, onBarClick}) => (
     <div className="bg-slate-700/50 p-4 rounded-lg shadow">
-        <h3 className="text-md font-semibold text-slate-200 mb-3">{title}</h3>
+        {<h3 className="text-md font-semibold text-slate-200 mb-3">{title}</h3> /* Tasks by Stage */}
         <div className="space-y-2">
             {data.map(item => (
                 <div key={item.name} className="flex items-center">
@@ -417,7 +445,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <div>
                 <h3 className="text-lg font-semibold text-sky-300 mb-1">Productivity Spark</h3>
                 {isLoadingTip && <p className="text-slate-400 text-sm italic">Brewing a fresh tip...</p>}
-                {!isLoadingTip && productivityTip && <p className="text-slate-300 text-sm">{productivityTip}</p>}
+                {!isLoadingTip && productivityTip && 
+                <p className="text-slate-300 text-md">{productivityTip.q}</p>}
+                {!isLoadingTip && productivityTip && 
+                <blockquote>- {productivityTip.a}</blockquote>}
+                
                 {!isLoadingTip && tipError && <p className="text-sm text-red-400">{tipError}</p>}
             </div>
         </div>

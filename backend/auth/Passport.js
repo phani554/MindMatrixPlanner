@@ -1,5 +1,5 @@
 import passport from "passport";
-import { Strategy as GitHubStrategy } from "passport-github2";
+import { Strategy as GitHubStrategy} from "passport-github2";
 import dotenv from "dotenv";
 
 dotenv.config();

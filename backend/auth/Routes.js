@@ -2,7 +2,7 @@ import { Router } from "express";
 import passport from "./passport.js";
 import path from "path";
 import fs from "fs";
-import { isAuthenticated, validateGithubUser } from "../middleware/auth.js";
+import { isAuthenticated, validateGithubUser } from "../middleware/Auth.js";
 
 const router = Router();
 
@@ -62,7 +62,7 @@ router.get(
       : [];
     
     // If we have an allowlist and the user is not on it, log them out
-    if (allowedGitHubIds.length > 0 && !allowedGitHubIds.includes(req.user.id)) {
+    if ( !allowedGitHubIds.includes(req.user.id)) {
       req.logout(() => {
         const templatePath = path.join(process.cwd(), 'views', 'unauthorized.html');
         const renderedHtml = renderTemplate(templatePath, {

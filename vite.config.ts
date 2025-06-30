@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => {
           target: 'http://localhost:5100',
           changeOrigin: true,
           secure: false,
-        }
+        },
       }
     }
   };

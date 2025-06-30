@@ -67,7 +67,7 @@ export interface Project {
   sowExecutionDate?: string; // YYYY-MM-DD or TBD
 }
 
-// For new views
+// For new viewsa
 export enum AppView {
   DASHBOARD = 'Dashboard',
   PLANNER = 'Planner',

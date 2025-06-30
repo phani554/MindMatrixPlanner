@@ -1,8 +1,9 @@
 import express from "express";
 import session from "express-session";
-import passport from "./auth/passport.js";
-import authRoutes from "./auth/routes.js";
-import { isAuthenticated, isAuthenticatedApi } from "./middleware/auth.js";
+import passport from "./auth/Passport.js";
+import authRoutes from "./auth/Routes.js";
+import zenroute from "./routes/zenroute.js";
+import { isAuthenticated, isAuthenticatedApi } from "./middleware/Auth.js";
 import dotenv from "dotenv";
 import cors from "cors";
 import path from "path";
@@ -46,6 +47,7 @@ if (!fs.existsSync(viewsDir)){
 
 // Auth routes
 app.use("/auth", authRoutes);
+app.use("/zen", zenroute);
 
 // Protected API routes
 app.get("/api/hello", isAuthenticatedApi, (req, res) => {
