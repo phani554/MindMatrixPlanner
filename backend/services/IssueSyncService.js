@@ -3,35 +3,15 @@ import { createAppAuth } from "@octokit/auth-app";
 import fs from "fs";
 import dotenv from "dotenv";
 import mongoose, {Schema} from "mongoose";
-import { Issue } from "./models/issue.model.js";
+import { Issue } from "../models/issue.model.js";
 import { exit } from "process";
+import { db } from "../db/dbConnect.js";
+import { octokit as gitclient } from "../db/getOctokit.js";
+import { SyncConfig } from "../models/syncConfig.model.js";
+dotenv.config({ path: "C:/Users/admin/Documents/planner/MindMatrixPlanner/backend/.env" });
 
-// Load environment variables
-dotenv.config();
-
-// Constants and configuration
-const {
-  APP_ID,
-  ORG,
-  REPO,
-  SENSITIVE_TOKEN,
-  INSTALLATION_ID,
-  PRIVATE_KEY_PATH,
-  PRIVATE_KEY,
-  GITHUB_ORG,
-  GITHUB_REPO,
-  MONGODB_URI,
-  LOG_LEVEL = "info" // Default to info level logging
-} = process.env;
-
-// Validate required environment variables
-const requiredEnvVars = ['APP_ID', 'INSTALLATION_ID', 'GITHUB_ORG', 'GITHUB_REPO', 'MONGODB_URI'];
-const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
-
-if (missingEnvVars.length > 0) {
-  console.error(`❌ Missing required environment variables: ${missingEnvVars.join(', ')}`);
-  exit(1);
-}
+const {ORG,REPO,MONGODB_URI, LOG_LEVEL = "info"} = process.env;
+console.log({ ORG, REPO, MONGODB_URI }); // Sanity check
 
 // Configure logging based on LOG_LEVEL
 const logger = {
@@ -41,62 +21,6 @@ const logger = {
   debug: (...args) => LOG_LEVEL === "debug" && console.log(...args)
 };
 
-// Get private key either from environment variable or file
-const getPrivateKey = () => {
-  if (PRIVATE_KEY) {
-    return PRIVATE_KEY.replace(/\\n/g, '\n');
-  } else if (PRIVATE_KEY_PATH) {
-    try {
-      return fs.readFileSync(PRIVATE_KEY_PATH, "utf8");
-    } catch (error) {
-      logger.error(`Failed to read private key from file: ${error.message}`);
-      exit(1);
-    }
-  } else {
-    logger.error("❌ No private key provided. Set either PRIVATE_KEY or PRIVATE_KEY_PATH");
-    exit(1);
-  }
-};
-
-/**
- * Creates an authenticated Octokit instance
- * @returns {Promise<Octokit>} Authenticated Octokit instance
- */
-const getOctokit = async () => {
-  try {
-    const auth = createAppAuth({
-      appId: APP_ID,
-      privateKey: getPrivateKey(),
-      installationId: INSTALLATION_ID,
-    });
-
-    const installationAuthentication = await auth({ type: "installation" });
-
-    return new Octokit({
-      auth: installationAuthentication.token,
-      request: {
-        timeout: 30000, // 30 seconds timeout for requests
-      }
-    });
-  } catch (error) {
-    logger.error(`Failed to authenticate with GitHub: ${error.message}`);
-    throw error; // Re-throw to be handled by the caller
-  }
-};
-
-const getOctokitPat = async() => {
-  try {
-    return new Octokit({
-      auth: process.env.SENSITIVE_TOKEN,
-      request: {
-        timeout: 30000, // 30 seconds timeout for requests
-      }
-    });
-  } catch (error) {
-    logger.error(`Failed to authenticate with GitHub: ${error.message}`);
-    throw error;
-  }
-}
 
 
 
@@ -166,10 +90,26 @@ function mapIssueToDocument(issue) {
     hasSubIssues: !!issue.sub_issues_summary,// !! converts any value to a boolean
     htmlUrl: issue.html_url,
     pull_request: isPullRequest,
-    merged_at: isPullRequest && issue.pull_request && issue.pull_request.merged_at ? issue.pull_request.merged_at : null,
+    merged_at: isPullRequest && issue.pull_request && issue.pull_request.merged_at ? new Date(issue.pull_request.merged_at) : null,
 
-    lastSynced: new Date()
+    // lastSynced: new Date()
   };
+}
+
+async function mapSyncConfig() {
+  try {
+    const data = new SyncConfig( {
+      lastUpdatedAt: new Date(),
+      totalIssuesLog: await Issue.countDocuments(),
+      totalPrMerged: await Issue.countDocuments({pull_request: true, merged_at: { $exists: true, $nin: ["", null] }}),
+      totalIssueClosed: await Issue.countDocuments({state: 'closed'}),
+      totalPr: await Issue.countDocuments({pull_request: true})
+    });
+    return await data.save();    
+  } catch (error) {
+    logger.error("Error updating the Sync Config: ", error);
+  }
+  
 }
 
 /**
@@ -193,34 +133,7 @@ function logIssueDetails(issueDoc) {
   logger.debug('---------------------------------');
 }
 
-/**
- * Connect to MongoDB with retries
- * @param {string} uri - MongoDB connection URI
- * @param {number} maxRetries - Maximum retry attempts
- * @param {number} retryDelay - Delay between retries in ms
- * @returns {Promise<void>}
- */
-async function connectToMongoDB(uri, maxRetries = 3, retryDelay = 3000) {
-  let attempts = 0;
-  
-  while (attempts < maxRetries) {
-    try {
-      await mongoose.connect(uri);
-      logger.info("✅ Connected to MongoDB");
-      return;
-    } catch (error) {
-      attempts++;
-      logger.error(`Failed to connect to MongoDB (attempt ${attempts}/${maxRetries}): ${error.message}`);
-      
-      if (attempts < maxRetries) {
-        logger.info(`Retrying in ${retryDelay/1000} seconds...`);
-        await new Promise(resolve => setTimeout(resolve, retryDelay));
-      } else {
-        throw error; // All retries failed, re-throw the error
-      }
-    }
-  }
-}
+
 const sinceDate = '2025-01-01T00:00:00Z';
 /**
  * Fetch issues from GitHub and sync them to MongoDB
@@ -236,7 +149,7 @@ async function fetchAndSyncIssues(options = {}) {
     syncLimit = Infinity    // Maximum number of issues to sync
   } = options;
 
-  const octokit = await getOctokitPat();
+  const octokit = await gitclient.getforPat();
   let issueCount = 0;
   let batchCount = 0;
   let batch = [];
@@ -355,6 +268,9 @@ async function generateStats() {
       recentlyUpdated,
       oldestIssue,
       newestIssue,
+      prongoing,
+      prfailed,
+      prs,
       labelCounts,
       assigneeCounts
     ] = await Promise.all([
@@ -364,17 +280,20 @@ async function generateStats() {
       Issue.countDocuments({ updatedAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } }),
       Issue.findOne().sort({ createdAt: 1 }).select('number createdAt'),
       Issue.findOne().sort({ createdAt: -1 }).select('number createdAt'),
+      Issue.countDocuments({ pull_request: true, merged_at: null}),
+      Issue.countDocuments({ pull_request: true, merged_at: null, state: 'closed'}),
+      Issue.countDocuments({ pull_request: true}),
       Issue.aggregate([
         { $unwind: '$labels' },
         { $group: { _id: '$labels', count: { $sum: 1 } } },
         { $sort: { count: -1 } },
-        { $limit: 10 }
+        { $limit: 20 }
       ]),
       Issue.aggregate([
         { $unwind: '$assignees' },
         { $group: { _id: '$assignees.login', count: { $sum: 1 } } },
         { $sort: { count: -1 } },
-        { $limit: 10 }
+        { $limit: 20 }
       ])
     ]);
 
@@ -385,6 +304,9 @@ async function generateStats() {
       recentlyUpdated,
       oldestIssue: oldestIssue ? { number: oldestIssue.number, createdAt: formatDate(oldestIssue.createdAt) } : null,
       newestIssue: newestIssue ? { number: newestIssue.number, createdAt: formatDate(newestIssue.createdAt) } : null,
+      prfailed,
+      prongoing,
+      prs,
       topLabels: labelCounts,
       topAssignees: assigneeCounts
     };
@@ -403,7 +325,7 @@ async function main() {
   
   try {
     // Connect to MongoDB
-    await connectToMongoDB(MONGODB_URI);
+    await db.DBconnect(MONGODB_URI);
     connection = mongoose.connection;
     
     // Parse command line arguments for options
@@ -448,7 +370,11 @@ async function main() {
           : 'No issues',
         'Newest Issue': stats.newestIssue 
           ? `#${stats.newestIssue.number} (${stats.newestIssue.createdAt})` 
-          : 'No issues'
+          : 'No issues',
+        "Total PR Failed": stats.prfailed,
+        "Total PRs": stats.prs,
+        "Total PRmerged": stats.prs - stats.prfailed,
+        "Total PR ongoing" : stats.prongoing
       });
       
       if (stats.topLabels && stats.topLabels.length > 0) {
@@ -463,12 +389,12 @@ async function main() {
     } else {
       // Get the timestamp of the most recently updated issue if 'since' is not provided
       if (!options.since) {
-        const latestIssue = await Issue.findOne().sort({ updatedAt: -1 }).select('updatedAt');
+        const latestIssue = await SyncConfig.findOne().sort({ lastUpdatedAt: -1 }).select('lastUpdatedAt');
         
         // Check if we have any issues and if updatedAt is valid
-        if (latestIssue && latestIssue.updatedAt) {
+        if (latestIssue && latestIssue.lastUpdatedAt) {
           // Subtract 1 hour to ensure we don't miss any issues due to timing or timezone issues
-          options.since = new Date(latestIssue.updatedAt.getTime() - 60 * 60 * 1000);
+          options.since = new Date(latestIssue.lastUpdatedAt.getTime() - 60 * 60 * 1000);
           logger.info(`Incremental sync: Only fetching issues updated since ${formatDate(options.since)}`);
         } else {
           logger.info("No existing issues found or no valid timestamps. Performing full sync.");
@@ -477,6 +403,7 @@ async function main() {
       
       // Run the sync
       const issuesSynced = await fetchAndSyncIssues(options);
+      await mapSyncConfig();
       
       // Generate and display stats
       const stats = await generateStats();

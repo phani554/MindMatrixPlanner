@@ -47,12 +47,9 @@ const issueSchema = new mongoose.Schema({
     // },
     pull_request: { type: Boolean, default: false },
     // sub_issue: { type: Boolean, default: false },
-    merged_at: { type: String, default: null },
+    merged_at: { type: Date, default: null },
     
-    // Add a lastSynced timestamp to track when the issue was last updated in our database
-    lastSynced: { type: Date, default: Date.now }
-  }, { 
-    versionKey: 'version' // Rename the __v field to version for clarity
+    
   });
   
   // Create indexes for better query performance

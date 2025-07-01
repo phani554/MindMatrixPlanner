@@ -411,7 +411,7 @@ const App: React.FC = () => {
 
   const navigateTo = (view: AppView) => setCurrentView(view);
 
-  const handleSelectUserForPlanner = (userId: ResourceId) => {
+  const handleSelectUserForPlanner = (userId: ResourceId) => {;gffyu
     setSelectedPersonalPlannerUserId(userId);
     setCurrentView(AppView.PLANNER);
     setIsPersonalPlannerDropdownOpen(false); 
