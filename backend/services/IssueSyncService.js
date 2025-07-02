@@ -6,12 +6,12 @@ import mongoose, {Schema} from "mongoose";
 import { Issue } from "../models/issue.model.js";
 import { exit } from "process";
 import { db } from "../db/dbConnect.js";
-import { octokit as gitclient } from "../db/getOctokit.js";
+import { octokit as gitclient } from "../controller/getOctokit.js";
 import { SyncConfig } from "../models/syncConfig.model.js";
 dotenv.config({ path: "C:/Users/admin/Documents/planner/MindMatrixPlanner/backend/.env" });
 
 const {ORG,REPO,MONGODB_URI, LOG_LEVEL = "info"} = process.env;
-console.log({ ORG, REPO, MONGODB_URI }); // Sanity check
+// console.log({ ORG, REPO, MONGODB_URI }); // Sanity check
 
 // Configure logging based on LOG_LEVEL
 const logger = {

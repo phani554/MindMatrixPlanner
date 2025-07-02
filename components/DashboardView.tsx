@@ -90,9 +90,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [productivityTip, setProductivityTip] = useState<string>("Loading productivity tip...");
   const [isLoadingTip, setIsLoadingTip] = useState<boolean>(false);
   const [tipError, setTipError] = useState<Quote | null>(null);
-  const [quote, setQuote] = useState<Quote | null>(null);
+  
 
-  const fetchProductivityTip = useCallback(async () => { 
+  const fetchProductivityTip = useCallback(async (signal: AbortSignal) => { 
     setIsLoadingTip(true);
     setTipError(null);
     try {
@@ -107,11 +107,22 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         //     model: 'gemini-2.5-flash-preview-04-17',
         //     contents: prompt,
         // });
-        const response = await fetch("http://localhost:5100/zen/quote");
-        if (!response.ok) throw new Error("Failed to fetch quote");
+        const response = await fetch("http://localhost:5100/zen/quote", {
+          signal // Passing the Abort Signal
+        });
+        if (!response.ok) {
+          // This will now catch errors from YOUR backend if it fails
+          throw new Error(`Failed to fetch quote from server, status: ${response.status}`);
+        }        
+        
         const data: Quote = await response.json();
         setProductivityTip(data?? "Stay focused and take regular breaks!");
     } catch (error: any) {
+        if (error.name === 'AbortError') {
+          console.log('Productivity tip fetch was aborted.');
+          return; // Stop execution silently
+        }
+  
         console.error("Failed to fetch productivity tip:", error);
         let errorMessage = "Could not fetch a tip. Try prioritizing your most important task first!";
         if (error.message && error.message.includes("API_KEY")) {
@@ -122,7 +133,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         setProductivityTip(errorMessage); 
         setTipError("Failed to load AI tip."); 
     } finally {
-        setIsLoadingTip(false);
+        if (!signal.aborted) {
+          setIsLoadingTip(false);
+        }
     }
   }, []);
 
@@ -144,7 +157,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   //   fetchQuote();
   // }, []);
 
-  useEffect(() => { fetchProductivityTip(); }, [fetchProductivityTip]);
+  useEffect(() => { // 5. The AbortController now lives inside the useEffect hook
+    const controller = new AbortController();
+  
+    // Pass the controller's signal to our fetch function
+    fetchProductivityTip(controller.signal);
+  
+    // 6. This is the cleanup function. React runs it when the component unmounts.
+    return () => {
+      console.log("Component unmounting, aborting tip fetch.");
+      controller.abort();
+    };
+  }, [fetchProductivityTip]);
 
   const isPersonalView = !!selectedPersonalPlannerUserId;
   const viewingUser = useMemo(() => resources.find(r => r.id === selectedPersonalPlannerUserId), [selectedPersonalPlannerUserId, resources]);

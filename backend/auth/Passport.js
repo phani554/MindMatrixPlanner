@@ -33,6 +33,7 @@ passport.use(
       
       // Log authentication details for debugging
       console.log(`Authentication successful for GitHub user: ${user.username} (ID: ${user.id})`);
+      console.log(user.photos);
       
       done(null, user);
     }

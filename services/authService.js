@@ -13,6 +13,9 @@ export const authService = {
       const response = await fetch(`${API_URL}/auth/user`, {
         credentials: 'include', // Important: sends cookies with the request
       });
+
+      console.log(response);
+      
       
       if (!response.ok) {
         return null;
@@ -30,3 +33,5 @@ export const authService = {
     window.location.href = `${API_URL}/auth/logout`;
   }
 };
+
+authService.getCurrentUser();

@@ -3,15 +3,20 @@ import session from "express-session";
 import passport from "./auth/Passport.js";
 import authRoutes from "./auth/Routes.js";
 import zenroute from "./routes/zenroute.js";
+import emproute from "./routes/employee.route.js";
+import debugroute from "./routes/debugQuote.route.js";
+import issueroute from "./routes/issues.route.js";
 import { isAuthenticated, isAuthenticatedApi } from "./middleware/Auth.js";
 import dotenv from "dotenv";
 import cors from "cors";
-import path from "path";
-import fs from "fs";
+import { db } from "./db/dbConnect.js";
+import MongoStore from "connect-mongo";
 
 dotenv.config();
 
 const app = express();
+// --- FIX #3: Use a consistent environment variable name ---
+const { MONGODB_URI, PORT = 5100 } = process.env;
 
 // Configure CORS for frontend interaction
 app.use(cors({
@@ -21,35 +26,41 @@ app.use(cors({
 
 app.use(express.json());
 
-// SESSION middleware: enables user sessions
+// SESSION middleware
 app.use(
   session({
     secret: process.env.SESSION_SECRET || 'super-secret-key',
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: MONGODB_URI, // Use the consistent variable
+      collectionName: 'sessions'
+    }),
     cookie: { 
-      secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS in production
-      sameSite: 'lax', // Helps with CSRF protection
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: 24 * 60 * 60 * 1000 // 24 hours
     },
   })
 );
 
-// PASSPORT middleware: handles authentication
+// PASSPORT middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Create views directory if it doesn't exist
-const viewsDir = path.join(process.cwd(), 'views');
-if (!fs.existsSync(viewsDir)){
-  fs.mkdirSync(viewsDir, { recursive: true });
-}
 
-// Auth routes
-app.use("/auth", authRoutes);
-app.use("/zen", zenroute);
+// --- Public Routes ---
+app.use("/auth", authRoutes); // Login/logout routes should be public
 
-// Protected API routes
+// --- FIX #2: Protect all your main API routes with a single middleware ---
+// Any route defined after this line will require authentication.
+app.use("/zen", zenroute); //isAuthenticatedApi,
+app.use("/data", emproute);//isAuthenticatedApi,
+app.use("/issues", issueroute);//isAuthenticatedApi,
+app.use("/debug", debugroute);
+
+
+// Other protected API routes
 app.get("/api/hello", isAuthenticatedApi, (req, res) => {
   res.json({
     message: "Hello from the Other Side",
@@ -61,17 +72,15 @@ app.get("/api/hello", isAuthenticatedApi, (req, res) => {
   });
 });
 
-// Route to enforce authentication for the frontend
+// Route for the frontend to check if the user is authenticated
 app.get("/api/auth-required", (req, res) => {
   if (!req.isAuthenticated()) {
-    // Not authenticated, return a 401 status that the frontend can check
     return res.status(401).json({ 
       error: "Authentication required",
       loginUrl: `${process.env.BACKEND_URL || "http://localhost:5100"}/auth/login`
     });
   }
   
-  // User is authenticated, return their info
   res.json({
     authenticated: true,
     user: {
@@ -82,15 +91,7 @@ app.get("/api/auth-required", (req, res) => {
   });
 });
 
-// Frontend app protection middleware
-app.get("/protect-frontend", (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.redirect("/auth/login");
-  }
-  res.redirect(process.env.FRONTEND_URL || "http://localhost:5173");
-});
-
-// Default redirect to login page
+// Default redirect to frontend or login page
 app.get("/", (req, res) => {
   if (req.isAuthenticated()) {
     res.redirect(process.env.FRONTEND_URL || "http://localhost:5173");
@@ -99,7 +100,32 @@ app.get("/", (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5100;
-app.listen(PORT, () => {
-  console.log(`Backend Running on http://localhost:${PORT}`);
-});
+app.get("/sync", (req,res) => {
+
+})
+
+
+const startServer = async () => {
+  // Validate that the MongoDB URI exists
+  if (!MONGODB_URI) {
+    // Corrected error message to match the variable name
+    console.error('FATAL ERROR: MONGODB_URI is not defined in .env file.');
+    process.exit(1);
+  }
+
+  try {
+    // --- FIX #4: Removed unused 'connection' variable ---
+    await db.DBconnect(MONGODB_URI);
+
+    // --- FIX #1: Removed the duplicate app.listen() call ---
+    app.listen(PORT, () => {
+      console.log(`🚀 Backend Running on http://localhost:${PORT}`);
+    });
+
+  } catch (error) {
+     console.error("Could not start server. The application will now exit.");
+     process.exit(1);
+  }
+};
+
+startServer();

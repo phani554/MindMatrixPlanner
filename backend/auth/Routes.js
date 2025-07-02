@@ -87,11 +87,12 @@ router.get("/logout", (req, res) => {
 
 // Check current user session (for API use)
 router.get("/user", (req, res) => {
-  if (req.isAuthenticated()) {
-    res.json(req.user);
-  } else {
-    res.status(401).json({ error: "Not authenticated" });
-  }
+  // if (req.isAuthenticated()) {
+  //   res.json(req.user);
+  // } else {
+  //   res.status(401).json({ error: "Not authenticated" });
+  // }
+  res.json(req.user);
 });
 
 // Auth check endpoint for frontend to verify authentication

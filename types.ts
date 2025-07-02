@@ -6,12 +6,13 @@ export type ProjectId = string; // New type for Project ID
 export interface Resource {
   id: ResourceId;
   name:string;
+  username: string,
   role: string;
-  parentId?: ResourceId; // For hierarchy
-  birthDate?: string; 
-  joiningDate?: string;
-  email?: string;
-  contactNumber?: string;
+  reportsTo?: ResourceId | null; // For hierarchy
+  birthDate?: string | null; 
+  joiningDate?: string | null;
+  email?: string | null;
+  contactNumber?: string | null;
 }
 
 export enum TaskStatus {
@@ -59,6 +60,16 @@ export interface Task {
   accumulatedTime?: number; 
 }
 
+export interface Issue {
+  githubId: Number;
+  number: Number;
+  title: String;
+  state: String;
+  createdAt: Date;
+  updatedAt: Date;
+
+}
+
 export interface Project {
   id: ProjectId;
   customerName: string;
@@ -76,6 +87,7 @@ export enum AppView {
   REPORT = 'Report',
   TEAM_ROSTER = 'Team Roster',
   TIMESHEET = 'Timesheet',
+  ISSUE = "Github Issues",
 }
 
 export interface Department {
