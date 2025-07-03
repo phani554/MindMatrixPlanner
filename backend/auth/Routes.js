@@ -54,26 +54,16 @@ router.get("/github", passport.authenticate("github"));
 // Handle GitHub callback
 router.get(
   "/github/callback",
-  passport.authenticate("github", { failureRedirect: "/auth/login" }),
+  passport.authenticate("github", { 
+    failureRedirect: "/auth/login",
+    failureMessage: true // Pass the failure message along
+  }),
+  // 2. If authentication succeeds, this function is called.
   (req, res) => {
-    // Get allowlist of GitHub IDs from environment variable
-    const allowedGitHubIds = process.env.ALLOWED_GITHUB_IDS 
-      ? process.env.ALLOWED_GITHUB_IDS.split(',') 
-      : [];
+    // The check is no longer needed here. If we reach this point, the user is valid.
+    console.log(`Successfully authenticated user: ${req.user.name} (ID: ${req.user.githubId})`);
     
-    // If we have an allowlist and the user is not on it, log them out
-    if ( !allowedGitHubIds.includes(req.user.id)) {
-      req.logout(() => {
-        const templatePath = path.join(process.cwd(), 'views', 'unauthorized.html');
-        const renderedHtml = renderTemplate(templatePath, {
-          message: "Your GitHub account is not authorized to use this application."
-        });
-        res.send(renderedHtml);
-      });
-      return;
-    }
-    
-    // Successful authentication
+    // Successful authentication, send them to the status page or frontend.
     res.redirect("/auth/status");
   }
 );
@@ -87,12 +77,11 @@ router.get("/logout", (req, res) => {
 
 // Check current user session (for API use)
 router.get("/user", (req, res) => {
-  // if (req.isAuthenticated()) {
-  //   res.json(req.user);
-  // } else {
-  //   res.status(401).json({ error: "Not authenticated" });
-  // }
-  res.json(req.user);
+  if (req.isAuthenticated()) {
+    res.json(req.user);
+  } else {
+    res.status(401).json({ error: "Not authenticated" });
+  }
 });
 
 // Auth check endpoint for frontend to verify authentication
