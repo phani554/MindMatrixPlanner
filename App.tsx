@@ -417,7 +417,7 @@ const App: React.FC = () => {
 
     const fetchResources = async () => {
       try {
-        const response = await fetch('http://localhost:5100/data', {
+        const response = await fetch('http://localhost:5100/data/raw', {
           credentials: 'include', // Important: Send cookies for protected routes
           signal: controller.signal 
 

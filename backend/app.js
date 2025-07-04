@@ -67,7 +67,8 @@ app.get("/api/hello", isAuthenticatedApi, (req, res) => {
     user: {
       id: req.user.id,
       username: req.user.username,
-      displayName: req.user.displayName
+      Name: req.user.name,
+      role: req.user.role
     }
   });
 });

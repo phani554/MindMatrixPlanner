@@ -10,7 +10,8 @@ export const getQuoteController = async (req, res) => {
     const quoteObject = await getRandomQuote();
     res.status(200).json(quoteObject);
   } catch (error) {
-    console.error("Error in getQuoteController:", error.message);
+    console.error("Error in getQuoteController:", error);
+
     // Send a default quote on failure so the UI doesn't break.
     res.status(500).json({ 
       error: "Failed to fetch a quote.",

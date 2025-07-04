@@ -18,7 +18,7 @@ export const getRandomQuote = async () => {
   
     if (!response.ok) {
       const errorBody = await response.text();
-      console.error(`Quote API returned status ${response.status}:`, errorBody);
+      console.log(`Quote API returned status ${response.status}:`, errorBody);
       throw new Error(`Quote API responded with status: ${response.status}`);
     }
   

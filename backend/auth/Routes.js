@@ -1,5 +1,5 @@
 import { Router } from "express";
-import passport from "./passport.js";
+import passport from "./Passport.js";
 import path from "path";
 import fs from "fs";
 import { isAuthenticated, validateGithubUser } from "../middleware/Auth.js";
@@ -62,6 +62,7 @@ router.get(
   (req, res) => {
     // The check is no longer needed here. If we reach this point, the user is valid.
     console.log(`Successfully authenticated user: ${req.user.name} (ID: ${req.user.githubId})`);
+    console.log(req.user);
     
     // Successful authentication, send them to the status page or frontend.
     res.redirect("/auth/status");

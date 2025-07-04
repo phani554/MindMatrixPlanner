@@ -126,6 +126,7 @@ export const issueService = {
       },
       // Stage 6: Apply dynamic sorting.
       { $sort: { [sortBy]: sortOrder } }
+      // add pagination after sorting
     ];
 
     return Issue.aggregate(pipeline);
