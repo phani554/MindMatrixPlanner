@@ -1,107 +1,89 @@
-import { Resource } from '../types'; // Assuming you have a types file
+import { Resource, Quote, AuthError, User } from '../types'; // Assuming you have a types file
 import { apiService } from '@/utils/apiService';
 import { handleApiError } from '@/utils/apiError';
 
-interface Quote {
-    q: string;
-    a: string;
-};
+// --- CONFIGURATION ---
+const BASE_URL = 'http://localhost:5100';
 
-export interface User {
-    githubid: string; // The user specifically asked for this
-    login: string;
-    name: string;
-}
-
-export class AuthError extends Error {
-    public data: any;
-  
-    constructor(message: string, data: any = null) {
-      super(message);
-      this.name = 'AuthError';
-      this.data = data;
-    }
-}
-
-// --- RESOURCE SERVICE ---
+// --- AUTH SERVICE (No AbortController needed) ---
 
 /**
- * Fetches a list of resources.
- * @param signal An AbortSignal to allow the request to be cancelled.
+ * Checks authentication. On failure, it REDIRECTS the browser to the backend login page.
+ */
+const checkAuthentication = async (): Promise<User> => {
+    try {
+        const user = await apiService<User>(`${BASE_URL}/auth/me`);
+        if (!user) {
+            throw new AuthError("Authentication check returned no user data.");
+        }
+        return user;
+    } catch (error) {
+        // We don't use handleApiError because the side-effect is a redirect, not a UI message.
+        console.error('Authentication check failed, redirecting to login.', error);
+        window.location.href = `${BASE_URL}/auth/login`;
+        return new Promise(() => {}); // Prevent further code execution after redirect.
+    }
+};
+
+/**
+ * Logs the user out and REDIRECTS the browser.
+ */
+const logout = async (): Promise<void> => {
+    try {
+        await apiService(`${BASE_URL}/auth/logout`, { method: 'POST' });
+    } catch (error) {
+        console.error('Logout API call failed, but redirecting anyway.', error);
+    } finally {
+        // Always redirect on logout, regardless of API call success.
+        window.location.href = `${BASE_URL}/auth/login`;
+    }
+};
+
+// --- DATA-FETCHING SERVICES (AbortController is used here) ---
+
+/**
+ * Fetches resources and can be cancelled.
+ * @param signal An AbortSignal from an AbortController.
  */
 const getResources = async (signal: AbortSignal): Promise<Resource[]> => {
     try {
-        // Delegate the actual fetch and basic error checks to the utility
-        return await apiService<Resource[]>('http://localhost:5100/data/raw', { signal });
+        return await apiService<any[]>(`${BASE_URL}/data/raw`, { signal });
     } catch (error) {
-        // Delegate error formatting to the utility, providing context
+        // Use handleApiError to prepare a user-facing error message.
         throw handleApiError(error, 'resources');
     }
 };
 
-// Export the service with its methods
-
-
-
-// --- PRODUCTIVITY SERVICE ---
-
 /**
- * Fetches a productivity tip.
- * @param signal An AbortSignal to allow the request to be cancelled.
+ * Fetches a full Quote object and can be cancelled.
+ * @param signal An AbortSignal from an AbortController.
+ * @returns A Promise that resolves to a Quote object.
  */
-const getTip = async (signal: AbortSignal): Promise<string> => {
+const getTip = async (signal: AbortSignal): Promise<Quote> => {
     try {
-        // 1. Use the generic utility to get the data
-        const data = await apiService<Quote>("http://localhost:5100/zen/quote", { signal });
+        // Correctly type the API call and return the entire object.
+        const quote = await apiService<Quote>(`${BASE_URL}/zen/quote`, { signal });
+
+        // Handle the case where the API might return a 204 No Content
+        if (!quote) {
+            return { q: "When in doubt, take a break.", a: "System" };
+        }
         
-        // 2. Apply service-specific logic: extract the quote text and provide a fallback
-        return data?.q ?? "Stay focused and take regular breaks!";
+        return quote;
     } catch (error) {
-        // 3. Delegate error formatting to the utility
         throw handleApiError(error, 'productivity tip');
     }
-};
-// --- AUTH SERVICE ---
+}
 
-/**
- * Checks if the user is authenticated.
- * On failure, it redirects the browser to the login page.
- * @returns A promise that resolves to true if authenticated; otherwise, the page redirects.
- */
-const checkAuthentication = async (): Promise<User> => {
-    try {
-      // We call a protected endpoint. We don't care about the response data,
-      // only that the request succeeds with a 2xx status.
-      const user = await apiService<User>('http://localhost:5100/api/auth-required');
-
-      if (!user) {
-        throw new Error("Authentication successful but no user data was returned.");
-        }
-       return user;
-    } catch (error) {
-      console.error('Authentication check failed, redirecting to login.', error);
-  
-      // This service's special logic: REDIRECT on error.
-      let loginUrl = 'http://localhost:5100/auth/login'; // Fallback URL
-  
-      // If it's an AuthError and it contains a specific loginUrl, use it.
-      if (error instanceof AuthError && error.data?.loginUrl) {
-        loginUrl = error.data.loginUrl;
-      }
-  
-      window.location.href = loginUrl;
-  
-      // Return a promise that never resolves, as the page is navigating away.
-      return new Promise(() => {});
-    }
-};
-  
+// --- EXPORTS ---
 
 export const fetchService = {
     getResources,
     getTip,
-
 };
+
+// Update the authService to include the new logout function
 export const authService = {
     checkAuthentication,
+    logout,
 };

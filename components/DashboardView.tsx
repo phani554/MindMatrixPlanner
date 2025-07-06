@@ -1,6 +1,19 @@
 
 import React, { useMemo, useState, useEffect, useCallback } from 'react';
-import { Resource, Task, TaskStatus, Department, ProjectId, Project, ResourceId, TaskPriority, TimesheetEntry } from '../types';
+import { useApi } from '@/hooks/useApi';
+import { 
+  Resource,
+  Task,
+  TaskStatus,
+  Department,
+  ProjectId,
+  Project,
+  ResourceId,
+  TaskPriority,
+  TimesheetEntry,
+  Quote
+} from '../types';
+import { fetchService } from '@/services/resourceService';
 import { UserIcon, CakeIcon, PlusIcon } from './icons'; // Added PlusIcon
 import { GoogleGenAI } from "@google/genai";
 
@@ -17,11 +30,7 @@ interface DashboardViewProps {
   onOpenTimesheetModal: (entryOrDate?: TimesheetEntry | string, resourceId?: ResourceId) => void; // For Add Time button
 }
 
-interface Quote {
-  q: string;
-  a: string;
-  h?: string;
-}
+
 
 interface PerformerStats {
   resourceId: string;
@@ -87,88 +96,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     resources, tasks, departments, projects, timesheetEntries, selectedPersonalPlannerUserId, 
     onOpenTaskDetailModal, onOpenTaskModal, onOpenNewEventModal, onOpenTimesheetModal 
 }) => {
-  const [productivityTip, setProductivityTip] = useState<string>("Loading productivity tip...");
-  const [isLoadingTip, setIsLoadingTip] = useState<boolean>(false);
-  const [tipError, setTipError] = useState<Quote | null>(null);
-  
 
-  const fetchProductivityTip = useCallback(async (signal: AbortSignal) => { 
-    setIsLoadingTip(true);
-    setTipError(null);
-    try {
-        // if (!process.env.API_KEY) {
-        //     setProductivityTip("Productivity tip: Plan your day each morning!"); 
-        //     setTipError("AI features disabled (API_KEY not set).");
-        //     return;
-        // }
-        // const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-        // const prompt = "Suggest a short, actionable productivity tip for a software development team (1-2 sentences).";
-        // const response = await ai.models.generateContent({
-        //     model: 'gemini-2.5-flash-preview-04-17',
-        //     contents: prompt,
-        // });
-        const response = await fetch("http://localhost:5100/zen/quote", {
-          signal // Passing the Abort Signal
-        });
-        if (!response.ok) {
-          // This will now catch errors from YOUR backend if it fails
-          throw new Error(`Failed to fetch quote from server, status: ${response.status}`);
-        }        
-        
-        const data: Quote = await response.json();
-        setProductivityTip(data?? "Stay focused and take regular breaks!");
-    } catch (error: any) {
-        if (error.name === 'AbortError') {
-          console.log('Productivity tip fetch was aborted.');
-          return; // Stop execution silently
-        }
-  
-        console.error("Failed to fetch productivity tip:", error);
-        let errorMessage = "Could not fetch a tip. Try prioritizing your most important task first!";
-        if (error.message && error.message.includes("API_KEY")) {
-            errorMessage = "AI tips unavailable (API Key). Tip: Break down large tasks!";
-        } else if (error.message && (error.message.includes("Quota") || error.message.includes("rate limit"))){
-            errorMessage = "AI tips temporarily unavailable. Tip: Batch similar tasks together!";
-        }
-        setProductivityTip(errorMessage); 
-        setTipError("Failed to load AI tip."); 
-    } finally {
-        if (!signal.aborted) {
-          setIsLoadingTip(false);
-        }
-    }
-  }, []);
+  const { data: quote, isLoading, error } = useApi<Quote>(fetchService.getTip);
 
-  // useEffect(() => {
-  //   const fetchQuote = async () => {
-  //     try {
-  //       const response = await fetch("/api/zen/quote");
-  //       if (!response.ok) throw new Error("Failed to fetch quote");
-  //       const data: Quote = await response.json();
-  //       setQuote(data || "Sample Quote");
-        
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //     finally {
-  //       setIsLoadingTip(false);
-  //     }
-  //   };
-  //   fetchQuote();
-  // }, []);
-
-  useEffect(() => { // 5. The AbortController now lives inside the useEffect hook
-    const controller = new AbortController();
-  
-    // Pass the controller's signal to our fetch function
-    fetchProductivityTip(controller.signal);
-  
-    // 6. This is the cleanup function. React runs it when the component unmounts.
-    return () => {
-      console.log("Component unmounting, aborting tip fetch.");
-      controller.abort();
-    };
-  }, [fetchProductivityTip]);
 
   const isPersonalView = !!selectedPersonalPlannerUserId;
   const viewingUser = useMemo(() => resources.find(r => r.id === selectedPersonalPlannerUserId), [selectedPersonalPlannerUserId, resources]);
@@ -464,18 +394,27 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
 
       <section className="bg-slate-800/60 p-6 rounded-xl shadow-xl backdrop-blur-sm">
-          <div className="flex items-start">
-            <span className="text-2xl mr-3 mt-0.5">💡</span>
-            <div>
-                <h3 className="text-lg font-semibold text-sky-300 mb-1">Productivity Spark</h3>
-                {isLoadingTip && <p className="text-slate-400 text-sm italic">Brewing a fresh tip...</p>}
-                {!isLoadingTip && productivityTip && 
-                <p className="text-slate-300 text-md">{productivityTip.q}</p>}
-                {!isLoadingTip && productivityTip && 
-                <blockquote>- {productivityTip.a}</blockquote>}
-                
-                {!isLoadingTip && tipError && <p className="text-sm text-red-400">{tipError}</p>}
-            </div>
+        <div className="flex items-start">
+          <span className="text-2xl mr-3 mt-0.5">💡</span>
+          <div>
+            <h3 className="text-lg font-semibold text-sky-300 mb-1">Productivity Spark</h3>
+            
+            {/* 1. Show a loading message ONLY when isLoading is true */}
+            {isLoading && <p className="text-slate-400 text-sm italic">Brewing a fresh tip...</p>}
+            
+            {/* 2. Show an error message if loading is finished AND an error exists */}
+            {!isLoading && error && <p className="text-sm text-red-400">{error}</p>}
+            
+            {/* 3. Show the quote ONLY if loading is finished, there's no error, AND a quote exists */}
+            {!isLoading && !error && quote && (
+              <blockquote className="text-slate-300">
+                <p className="text-md">"{quote.q}"</p>
+                <footer className="text-right text-sm italic mt-1">- {quote.a}</footer>
+              </blockquote>
+            )}
+            {/* 4. If no quote is available, show a fallback message */}
+            {!isLoading && !error && !quote && <p className="text-sm text-slate-500">No tip available at the moment.</p>}
+          </div>
         </div>
       </section>
       

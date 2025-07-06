@@ -8,7 +8,7 @@ import { exit } from "process";
 import { db } from "../db/dbConnect.js";
 import { octokit as gitclient } from "../controller/getOctokit.js";
 import { SyncConfig } from "../models/syncConfig.model.js";
-dotenv.config({ path: "C:/Users/admin/Documents/planner/MindMatrixPlanner/backend/.env" });
+dotenv.config({ path: "C:/Users/phane/Documents/Projects/Web Development/MindMatrixPlanner/backend/.env" });
 
 const {ORG,REPO,MONGODB_URI, LOG_LEVEL = "info"} = process.env;
 // console.log({ ORG, REPO, MONGODB_URI }); // Sanity check
@@ -325,6 +325,7 @@ async function main() {
   
   try {
     // Connect to MongoDB
+    logger.info(`🔗 Connecting to MongoDB at ${MONGODB_URI}`);
     await db.DBconnect(MONGODB_URI);
     connection = mongoose.connection;
     

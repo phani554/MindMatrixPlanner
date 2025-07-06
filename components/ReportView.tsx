@@ -406,7 +406,7 @@ export const ReportView: React.FC<ReportViewProps> = ({ resources, tasks, depart
                 <label htmlFor="resourceSelect" className="block text-sm font-medium text-slate-300 mb-1">Resource</label>
                 <select id="resourceSelect" value={selectedResourceId} onChange={(e) => setSelectedResourceId(e.target.value)} className={inputClass} disabled={availableResourcesForFilter.length === 0 && !!selectedDepartmentId}>
                     <option value="">All Resources</option>
-                    {availableResourcesForFilter.map(res => (<option key={res.id} value={res.id}>{res.name}</option>))}
+                    {availableResourcesForFilter.map(res => (<option key={res.githubId} value={res.githubId}>{res.name}</option>))}
                 </select>
             </div>
             </>
@@ -526,7 +526,7 @@ export const ReportView: React.FC<ReportViewProps> = ({ resources, tasks, depart
                                 const departmentAffiliation = teamReportData.viewMode === 'global' ? departments.find(dep => getAllTeamMembersRecursive(dep.leaderId, resources).some(mem => mem.id === member.id)) : undefined;
 
                                 return (
-                                <tr key={member.id} className="bg-slate-700/50 border-b border-slate-600 hover:bg-slate-600/50">
+                                <tr key={member.githubId} className="bg-slate-700/50 border-b border-slate-600 hover:bg-slate-600/50">
                                     <td className="px-4 py-3 font-medium text-slate-200 whitespace-nowrap">{member.name}</td>
                                     <td className="px-4 py-3">{member.role}</td>
                                     <td className="px-4 py-3">{teamLead ? teamLead.name : 'N/A'}</td>
@@ -548,7 +548,7 @@ export const ReportView: React.FC<ReportViewProps> = ({ resources, tasks, depart
                 )}
             </div>
         </>
-      )}
+      )} // end of team report
       {activeTab === 'project' && (
         <>
             {!projectReportData && <p className="text-slate-400 text-center py-6">Please select a project to view its report.</p>}

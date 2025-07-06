@@ -20,6 +20,8 @@ import { KanbanView } from './components/KanbanView';
 import { TeamTaskAllocationSummary } from './components/TeamTaskAllocationSummary';
 import { AssignTaskModal } from './components/AssignTaskModal'; 
 import { GoogleGenAI } from "@google/genai";
+import { useApi } from './hooks/useApi';
+import { fetchService } from './services/resourceService';
 
 import AuthButton from "./components/AuthButton";
 
@@ -101,9 +103,14 @@ const parseSOWDate = (dateStr?: string): string | undefined => {
 
 
 const App: React.FC = () => {
+  const { data, isLoading, error } = useApi(fetchService.getResources);
+
   const [resources, setResources] = useState<Resource[]>([]);
-  const [isLoadingResource, setIsLoadingResource] = useState(true); // Add a loading state
-  const [errorResource, setErrorResource] = useState<string | null>(null); // Add an error state
+  const isLoadingResource = isLoading;
+  const errorResource = error;
+  // const resources = data as Resource[] || [];
+  // console.log("--- THIS IS THE REAL LOG ---", resources[0]);
+  
   const [tasks, setTasks] = useState<Task[]>([]);
   const [timesheetEntries, setTimesheetEntries] = useState<TimesheetEntry[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -203,6 +210,12 @@ const App: React.FC = () => {
   const [editingDepartment, setEditingDepartment] = useState<Department | null>(null);
   const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null);
   const [defaultEventDate, setDefaultEventDate] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if(data) {
+      setResources(data as Resource[]);
+    }
+  }, [data]);
 
 
   useEffect(() => {
@@ -411,54 +424,54 @@ const App: React.FC = () => {
 
   }, []);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    const controller = new AbortController();
+  //   const controller = new AbortController();
 
-    const fetchResources = async () => {
-      try {
-        const response = await fetch('http://localhost:5100/data/raw', {
-          credentials: 'include', // Important: Send cookies for protected routes
-          signal: controller.signal 
+  //   const fetchResources = async () => {
+  //     try {
+  //       const response = await fetch('http://localhost:5100/data/raw', {
+  //         credentials: 'include', // Important: Send cookies for protected routes
+  //         signal: controller.signal 
 
-        });
+  //       });
 
-        if (!response.ok) {
-          // If the server returns a 401 Unauthorized, it means the user is not logged in.
-          if (response.status === 401) {
-             // You can redirect to login here or set an error message.
-             window.location.href = 'http://localhost:5100/auth/login';
-             return; // Stop execution
-          }
-          throw new Error(`API request failed with status: ${response.status}`);
-        }
+  //       if (!response.ok) {
+  //         // If the server returns a 401 Unauthorized, it means the user is not logged in.
+  //         if (response.status === 401) {
+  //            // You can redirect to login here or set an error message.
+  //            window.location.href = 'http://localhost:5100/auth/login';
+  //            return; // Stop execution
+  //         }
+  //         throw new Error(`API request failed with status: ${response.status}`);
+  //       }
 
-        const fetchedData: Resource[] = await response.json();
-        setResources(fetchedData); // Set the state with the fetched data
-        console.log("Data fetch successful!");
+  //       const fetchedData: Resource[] = await response.json();
+  //       setResources(fetchedData); // Set the state with the fetched data
+  //       console.log("Data fetch successful!");
 
-      } catch (err: any) {
-        if (err.name === 'AbortError') {
-          console.log('Fetch aborted');
-        }
-        else {
-          console.error("An error occurred while fetching data:", err);
-          setErrorResource(err.message);
-        }
+  //     } catch (err: any) {
+  //       if (err.name === 'AbortError') {
+  //         console.log('Fetch aborted');
+  //       }
+  //       else {
+  //         console.error("An error occurred while fetching data:", err);
+  //         setErrorResource(err.message);
+  //       }
         
-      } finally {
-        if (!controller.signal.aborted) {
-          setIsLoadingResource(false);
-        }
-      }
-    };
+  //     } finally {
+  //       if (!controller.signal.aborted) {
+  //         setIsLoadingResource(false);
+  //       }
+  //     }
+  //   };
 
-    fetchResources(); // Call the async function from within the hook
-    return () => {
-      console.log("Cleanup: Aborting fetch request.");
-      controller.abort();
-    };
-  }, []); // The empty array [] is the key to making this run only once.
+  //   fetchResources(); // Call the async function from within the hook
+  //   return () => {
+  //     console.log("Cleanup: Aborting fetch request.");
+  //     controller.abort();
+  //   };
+  // }, []); // The empty array [] is the key to making this run only once.
 
   if (isLoadingResource) {
     return <div>Loading resources...</div>;
@@ -477,16 +490,16 @@ const App: React.FC = () => {
     setPersonalPlannerSearchTerm(''); 
   };
 
-  const handleAddOrEditResource = (resourceData: Omit<Resource, 'id'> | Resource) => {
-    if ('id' in resourceData) setResources(resources.map(r => r.id === resourceData.id ? { ...r, ...resourceData, birthDate: parseBirthDate(resourceData.birthDate), joiningDate: parseJoiningDate(resourceData.joiningDate) } : r));
-    else { const newResource: Resource = { id: `res_${self.crypto.randomUUID().substring(0,8)}`, ...resourceData, birthDate: parseBirthDate(resourceData.birthDate), joiningDate: parseJoiningDate(resourceData.joiningDate), }; setResources([...resources, newResource]); }
+  const handleAddOrEditResource = (resourceData:  Resource[]) => {
+    if ('githubId' in resourceData) setResources(resources.map(r => r.githubId === resourceData.githubId ? { ...r, ...resourceData, birthDate: parseBirthDate(resourceData.birthDate), joiningDate: parseJoiningDate(resourceData.joiningDate) } : r));
+    else { const newResource: Resource = { githubId: `res_${self.crypto.randomUUID().substring(0,8)}`, ...resourceData, birthDate: parseBirthDate(resourceData.birthDate), joiningDate: parseJoiningDate(resourceData.joiningDate), }; setResources([...resources, newResource]); }
     closeResourceModal();
   };
   const handleDeleteResource = (resourceId: ResourceId) => {
     if (window.confirm('Are you sure you want to delete this resource and all their direct reports? This cannot be undone.')) {
       const resourcesToDelete = new Set<ResourceId>(); const queue: ResourceId[] = [resourceId];
-      while(queue.length > 0) { const currentId = queue.shift(); if (currentId) { resourcesToDelete.add(currentId); resources.filter(r => r.parentId === currentId).forEach(child => queue.push(child.id)); } }
-      setResources(resources.filter(r => !resourcesToDelete.has(r.id)));
+      while(queue.length > 0) { const currentId = queue.shift(); if (currentId) { resourcesToDelete.add(currentId); resources.filter(r => r.parentId === currentId).forEach(child => queue.push(child.githubId)); } }
+      setResources(resources.filter(r => !resourcesToDelete.has(r.githubId)));
       setTasks(tasks.map(t => (resourcesToDelete.has(t.assignedResourceId || '') ? { ...t, assignedResourceId: undefined } : t)));
       setTasks(tasks.map(t => (resourcesToDelete.has(t.teamLeadId || '') ? { ...t, teamLeadId: undefined } : t)));
       setDepartmentsState(departments.map(d => (resourcesToDelete.has(d.leaderId || '') ? { ...d, leaderId: undefined } : d)));
@@ -821,10 +834,10 @@ const mainContentClass = "flex-1 p-4 sm:p-6 overflow-y-auto custom-scrollbar-xs"
                                 .sort((a,b) => a.name.localeCompare(b.name))
                                 .map(resource => (
                                 <a 
-                                    key={resource.id} 
+                                    key={resource.githubId} 
                                     href="#" 
-                                    onClick={(e) => { e.preventDefault(); handleSelectUserForPlanner(resource.id); }}
-                                    className={`block px-4 py-2 text-sm hover:bg-slate-700 ${selectedPersonalPlannerUserId === resource.id ? 'text-[#F29C2A]' : 'text-slate-300'}`}
+                                    onClick={(e) => { e.preventDefault(); handleSelectUserForPlanner(resource.githubId); }}
+                                    className={`block px-4 py-2 text-sm hover:bg-slate-700 ${selectedPersonalPlannerUserId === resource.githubId ? 'text-[#F29C2A]' : 'text-slate-300'}`}
                                 >
                                     {resource.name} <span className="text-xs text-slate-500">({resource.role})</span>
                                 </a>

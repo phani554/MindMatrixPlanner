@@ -1,11 +1,7 @@
-
-
 /**
- * Custom error for authentication issues.
- * We've added a `data` property to carry the JSON body of the error response,
- * which may contain useful information like a specific login URL.
-*/
-
+ * Custom error for authentication issues, exported from here as it's
+ * tightly coupled with the service that creates and throws it.
+ */
 export class AuthError extends Error {
     public data: any;
   
@@ -17,32 +13,34 @@ export class AuthError extends Error {
 }
   
 /**
-   * A generic, reusable API service function.
-   * @param url The API endpoint to call.
-   * @param options Standard fetch options.
-   * @returns A promise that resolves to the strongly-typed data from the API.
-   * @template T The expected data type of the successful API response.
-*/
-
+ * A generic, reusable API service function that supports cancellation.
+ * @param url The API endpoint to call.
+ * @param options Standard fetch options, including an AbortSignal.
+ * @returns A promise that resolves to the strongly-typed data from the API.
+ */
 export const apiService = async <T>(url: string, options?: RequestInit): Promise<T> => {
+    // The native `fetch` function will use the signal from the options.
     const response = await fetch(url, {
+      credentials: 'include', // Always send credentials for session-based auth.
       ...options,
-      credentials: 'include', // Centralized logic
-      signal: options?.signal,
     });
   
+    // Centralized error handling for non-successful responses.
     if (!response.ok) {
-      // Centralized error handling
+      // 401 Unauthorized is a special case that throws a specific AuthError.
       if (response.status === 401) {
-        const errorData = await response.json().catch(() => ({})); // Gracefully handle non-JSON responses
+        const errorData = await response.json().catch(() => ({})); // Gracefully handle non-JSON 401s.
         throw new AuthError('User is not authenticated', errorData);
       }      
-      throw new Error(`API request failed with status: ${response.status}`);
+      // For all other errors, throw a generic error with context.
+      throw new Error(`API Error: ${response.status} ${response.statusText}`);
     }
-    // For a 204 No Content response, we can't call .json(), so we return null.
+
+    // Handle a "204 No Content" response, which cannot be parsed as JSON.
     if (response.status === 204) {
         return null as T;
     }   
-    // The caller defines what 'T' is, and the service parses the JSON into that type.
+    
+    // Parse the JSON into the caller-defined type.
     return response.json() as Promise<T>;
 };

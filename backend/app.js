@@ -54,7 +54,7 @@ app.use("/auth", authRoutes); // Login/logout routes should be public
 
 // --- FIX #2: Protect all your main API routes with a single middleware ---
 // Any route defined after this line will require authentication.
-app.use("/zen", zenroute); //isAuthenticatedApi,
+app.use("/zen",isAuthenticatedApi, zenroute); //
 app.use("/data", emproute);//isAuthenticatedApi,
 app.use("/issues", issueroute);//isAuthenticatedApi,
 app.use("/debug", debugroute);
@@ -83,12 +83,10 @@ app.get("/api/auth-required", (req, res) => {
   }
   
   res.json({
-    authenticated: true,
-    user: {
-      id: req.user.id,
-      username: req.user.username,
-      displayName: req.user.displayName || req.user.username
-    }
+      githubid: req.user.githubid,
+      login: req.user.username,
+      name: req.user.name
+    
   });
 });
 

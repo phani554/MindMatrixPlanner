@@ -4,7 +4,7 @@ export type TaskId = string;
 export type ProjectId = string; // New type for Project ID
 
 export interface Resource {
-  id: ResourceId;
+  githubId: ResourceId;
   name:string;
   username: string,
   role: string;
@@ -13,6 +13,27 @@ export interface Resource {
   joiningDate?: string | null;
   email?: string | null;
   contactNumber?: string | null;
+}
+
+export interface Quote {
+    q: string;
+    a: string;
+}
+
+export class AuthError extends Error {
+    public data: any;
+  
+    constructor(message: string, data: any = null) {
+      super(message);
+      this.name = 'AuthError';
+      this.data = data;
+    }
+}
+
+export interface User {
+    githubid: string; 
+    login: string;
+    name: string; 
 }
 
 export enum TaskStatus {
