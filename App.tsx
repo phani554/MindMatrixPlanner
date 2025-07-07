@@ -24,6 +24,7 @@ import { useApi } from './hooks/useApi';
 import { fetchService } from './services/resourceService';
 
 import AuthButton from "./components/AuthButton";
+import { IssueView } from './components/IssueView';
 
 
 // Helper function to get all members of a department recursively (includes leader)
@@ -233,7 +234,7 @@ const App: React.FC = () => {
     ];
     setProjects(initialProjectData);
 
-    const shaileshId = 'res_shailesh_tayde';
+    const shaileshId = '686402f88b0464dbe04ac254';
     const sunilId = 'res_sunil_rao';
     const sageerId = 'res_sageer_shaikh';
     const philipId = 'res_philip_thomas';
@@ -859,6 +860,7 @@ const mainContentClass = "flex-1 p-4 sm:p-6 overflow-y-auto custom-scrollbar-xs"
             { view: AppView.REPORT, label: 'Report', icon: ReportIcon },
             { view: AppView.TEAM_ROSTER, label: 'Team Roster', icon: TeamIcon },
             { view: AppView.TIMESHEET, label: 'Timesheet', icon: TimesheetIcon },
+            { view: AppView.ISSUE, label: 'Github Issues', icon: ReportIcon },
           ].map(navItem => (
             <button 
               key={navItem.view} 
@@ -880,6 +882,7 @@ const mainContentClass = "flex-1 p-4 sm:p-6 overflow-y-auto custom-scrollbar-xs"
             {currentView === AppView.PLANNER && <PlannerViewWrapper />}
             {currentView === AppView.CALENDAR && <CalendarView tasks={tasks} projects={projects} resources={resources} events={calendarEvents} onAddEvent={openNewEventModal} onEditEvent={openEditEventModal} onDeleteEvent={handleDeleteEvent}/>}
             {currentView === AppView.REPORT && <ReportView resources={resources} tasks={tasks} departments={departments} projects={projects} onAddProject={() => openProjectModal()} onEditProject={openProjectModal} onDeleteProject={handleDeleteProject}/>}
+            {currentView === AppView.ISSUE && <IssueView resources={resources} />}
             {currentView === AppView.TEAM_ROSTER && <TeamRosterView resources={resources} departments={departments} onEditResource={openResourceModal} />}
             {currentView === AppView.TIMESHEET && <TimesheetView entries={timesheetEntries} resources={resources} departments={departments} onAddEntry={openTimesheetModal} onEditEntry={openTimesheetModal} onDeleteEntry={handleDeleteTimesheetEntry} selectedPersonalPlannerUserId={selectedPersonalPlannerUserId} />}
         </main>

@@ -2,12 +2,14 @@ import { Issue } from '../models/issue.model.js'; // Adjust the path as needed
 
 /**
  * Builds a MongoDB query object from a set of filter parameters.
- * This internal function is used by other service methods to ensure consistent filtering.
  * @param {object} [filters={}] - The filter criteria from the request query.
+ * @param {object} [options={}] - Options to control the query building logic.
+ * @param {boolean} [options.defaultToOpen=true] - If true, defaults the state to 'open' if not specified.
  * @returns {object} A MongoDB query object.
  * @private
  */
-const _buildIssuesQuery = (filters = {}) => {
+const _buildIssuesQuery = (filters = {}, options = {}) => {
+    const { defaultToOpen = true } = options;
     const query = {};
 
     const buildDateQuery = (startDate, endDate) => {
@@ -33,20 +35,23 @@ const _buildIssuesQuery = (filters = {}) => {
         }
     }
 
-    if (filters.closedById) {
-        query['closedBy.id'] = parseInt(filters.closedById, 10);
-        query.state = 'closed';
-    }
-
-    if (query.closedAt) {
-        query.state = 'closed';
-        query.closedAt = { ...query.closedAt, $ne: null };
-    } else if (filters.state && filters.state !== 'all') {
+    // --- Revised State Logic ---
+    if (filters.state && filters.state !== 'all') {
+        // Highest precedence: an explicit state filter from the user.
         query.state = filters.state;
-    } else if (!query.state) {
-        // Default to 'open' if no state was specified or inferred.
+    } else if (filters.closedById || query.closedAt) {
+        // Second precedence: filters that imply a 'closed' state.
+        query.state = 'closed';
+    } else if (defaultToOpen && filters.state !== 'all') {
+        // Lowest precedence: default to 'open' only if allowed and 'all' wasn't specified.
         query.state = 'open';
     }
+    
+    // Ensure closedAt has a value if it's part of the query
+    if (query.closedAt) {
+        query.closedAt = { ...query.closedAt, $ne: null };
+    }
+    // --- End of Revised State Logic ---
 
     if (filters.pull_request !== undefined) {
         query.pull_request = filters.pull_request === 'true';
@@ -65,42 +70,114 @@ const _buildIssuesQuery = (filters = {}) => {
  * Service object encapsulating all complex issue-related business logic.
  */
 export const issueService = {
-  /**
-   * Aggregates issue data to provide statistics for each assignee, with filtering and sorting.
-   * @param {object} [filters={}] - An object containing filter criteria (see findIssues).
-   * @param {object} [sortOptions={}] - An object for sorting the results.
-   * @param {string} [sortOptions.sortBy='totalIssues'] - Field to sort by: 'openIssues', 'closedIssues', 'totalIssues', 'name'.
-   * @param {string} [sortOptions.order='desc'] - Sort order: 'asc' or 'desc'.
-   * @returns {Promise<Array>} A promise that resolves to an array of employee stats.
-   */
-  async getAssigneeStats(filters = {}, sortOptions = {}) {
-    const query = _buildIssuesQuery(filters);
+   // Fast summary endpoint for doughnut chart
+   async getSummaryStats(filters = {}) {
+    const query = _buildIssuesQuery(filters, { defaultToOpen: false });
+    
+    const pipeline = [
+      { $match: query },
+      {
+        $group: {
+          _id: null,
+          totalIssues: { $sum: 1 },
+          openIssues: { $sum: { $cond: [{ $eq: ["$state", "open"] }, 1, 0] } },
+          closedIssues: { $sum: { $cond: [{ $eq: ["$state", "closed"] }, 1, 0] } }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalIssues: 1,
+          openIssues: 1,
+          closedIssues: 1
+        }
+      }
+    ];
 
-    // Define the valid sort fields and their corresponding paths in the aggregation.
+    const result = await Issue.aggregate(pipeline);
+    return result[0] || { 
+      totalIssues: 0, 
+      openIssues: 0, 
+      closedIssues: 0 
+    };
+  },
+  // This function and its pipeline are correct based on our last revision.
+  async getAssigneeStats(filters = {}, sortOptions = {}) {
+    // Calls the builder with defaultToOpen: false, correctly getting all states by default.
+    const query = _buildIssuesQuery(filters, { defaultToOpen: false });
+     // Extract assignee-specific filters for post-unwind filtering
+    const assigneePostFilters = {};
+    if (filters.assignees) {
+      assigneePostFilters['assignees.login'] = { $in: filters.assignees.split(',') };
+    }
+
+    if (filters.assignee_ids) {
+      assigneePostFilters['assignees.id'] = { $in: filters.assignee_ids.split(',').map(id => parseInt(id.trim(), 10)) };
+    }
+
     const validSortFields = {
         openIssues: 'openIssues',
         closedIssues: 'closedIssues',
         totalIssues: 'totalIssues',
         name: 'employee.name'
     };
-
     const sortBy = validSortFields[sortOptions.sortBy] || 'totalIssues';
     const sortOrder = sortOptions.order === 'asc' ? 1 : -1;
 
     const pipeline = [
-      // Stage 1: Filter issues based on the provided criteria FIRST.
       { $match: query },
-      // Stage 2: Unwind assignees to process them individually.
       { $unwind: "$assignees" },
-      // Stage 3: Group by assignee and count open/closed issues.
+      // 🔥 KEY FIX: Re-apply assignee filters after unwind
+      ...(Object.keys(assigneePostFilters).length > 0 ? [{ $match: assigneePostFilters }] : []),
       {
         $group: {
           _id: { id: "$assignees.id", login: "$assignees.login" },
-          openCount: { $sum: { $cond: [{ $eq: ["$state", "open"] }, 1, 0] } },
-          closedCount: { $sum: { $cond: [{ $eq: ["$state", "closed"] }, 1, 0] } }
+          openIssues: { $sum: { $cond: [{ $eq: ["$state", "open"] }, 1, 0] } },
+          closedIssues: { $sum: { $cond: [{ $eq: ["$state", "closed"] }, 1, 0] } },
+          issues: { $push: { state: "$state", labels: "$labels" } }
         }
       },
-      // Stage 4: Join with the employees collection.
+      { $unwind: "$issues" },
+      { $unwind: { path: "$issues.labels", preserveNullAndEmptyArrays: true } },
+      {
+        $group: {
+          _id: {
+            assigneeId: "$_id.id",
+            assigneeLogin: "$_id.login",
+            state: "$issues.state",
+            label: "$issues.labels"
+          },
+          labelCount: { $sum: 1 },
+          openIssues: { $first: "$openIssues" },
+          closedIssues: { $first: "$closedIssues" }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            assigneeId: "$_id.assigneeId",
+            assigneeLogin: "$_id.assigneeLogin",
+            state: "$_id.state"
+          },
+          labels: { $push: { label: "$_id.label", count: "$labelCount" } },
+          openIssues: { $first: "$openIssues" },
+          closedIssues: { $first: "$closedIssues" }
+        }
+      },
+      {
+        $group: {
+          _id: { id: "$_id.assigneeId", login: "$_id.assigneeLogin" },
+          countsByStateAndLabel: {
+            $push: {
+              state: "$_id.state",
+              stateCount: { $sum: "$labels.count" },
+              labels: "$labels"
+            }
+          },
+          openIssues: { $first: "$openIssues" },
+          closedIssues: { $first: "$closedIssues" }
+        }
+      },
       {
         $lookup: {
           from: "employees",
@@ -110,38 +187,30 @@ export const issueService = {
         }
       },
       { $unwind: { path: "$employeeInfo", preserveNullAndEmptyArrays: true } },
-      // Stage 5: Reshape the output document.
       {
         $project: {
           _id: 0,
           employee: {
             githubId: "$_id.id",
             login: "$_id.login",
-            name: { $ifNull: ["$employeeInfo.name", "$_id.login"] }
+            name: { $ifNull: ["$employeeInfo.name", "$_id.login"] },
+            countsByStateAndLabel: "$countsByStateAndLabel"
           },
-          openIssues: "$openCount",
-          closedIssues: "$closedCount",
-          totalIssues: { $add: ["$openCount", "$closedCount"] }
+          openIssues: "$openIssues",
+          closedIssues: "$closedIssues",
+          totalIssues: { $add: ["$openIssues", "$closedIssues"] }
         }
       },
-      // Stage 6: Apply dynamic sorting.
       { $sort: { [sortBy]: sortOrder } }
-      // add pagination after sorting
     ];
 
     return Issue.aggregate(pipeline);
   },
 
-  /**
-   * Finds issues based on a flexible set of criteria and returns calculated stats.
-   * @param {object} [filters={}] - The filter criteria from the request query.
-   * @returns {Promise<object>} A promise resolving to an object with counts, stats, and the list of issues.
-   */
+  // This function now behaves correctly in all cases.
   async findIssues(filters = {}) {
-    // Re-use the private query builder to get the query object.
+    // Calls the builder with defaultToOpen: true, correctly defaulting to 'open' issues.
     const query = _buildIssuesQuery(filters);
-
-    // Now proceed with the rest of the logic as before.
     const issues = await Issue.find(query).sort({ updatedAt: -1 });
 
     const totalCount = issues.length;

@@ -42,11 +42,41 @@ export const issueController = {
             };
 
             const stats = await issueService.getAssigneeStats(filters, sortOptions);
-            res.status(200).json(stats);
-        } catch (error)
-        {
+            
+            // Enhanced response with metadata
+            res.status(200).json({
+                data: stats,
+                count: stats.length,
+                filters: filters,
+                sortOptions: sortOptions,
+                timestamp: new Date().toISOString()
+            });
+        } catch (error) {
             console.error("Error in getAssigneeStats controller:", error);
             res.status(500).json({ message: "An error occurred while generating assignee statistics." });
+        }
+    },
+
+    /**
+     * Handles the request to get summary statistics for doughnut charts and quick overviews.
+     * Maps to routes like: GET /api/issues/summary, GET /api/issues/summary?assignee_ids=123
+     * @param {import('express').Request} req - The Express request object.
+     * @param {import('express').Response} res - The Express response object.
+     */
+    async getSummaryStats(req, res) {
+        try {
+            // Use the same filter structure as other endpoints for consistency
+            const filters = req.query;
+            const summary = await issueService.getSummaryStats(filters);
+            
+            res.status(200).json({
+                data: summary,
+                filters: filters,
+                timestamp: new Date().toISOString()
+            });
+        } catch (error) {
+            console.error("Error in getSummaryStats controller:", error);
+            res.status(500).json({ message: "An error occurred while generating issue summary." });
         }
     }
 };

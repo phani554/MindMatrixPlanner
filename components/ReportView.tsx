@@ -515,7 +515,7 @@ export const ReportView: React.FC<ReportViewProps> = ({ resources, tasks, depart
                         </thead>
                         <tbody>
                             {(teamReportData.viewMode === 'department' ? teamReportData.resourcesToDisplay : resources).map(member => {
-                                const memberTasks = filteredTasksByDate.filter(t => t.assignedResourceId === member.id);
+                                const memberTasks = filteredTasksByDate.filter(t => t.assignedResourceId === member.githubId);
                                 const tasksDone = memberTasks.filter(t => t.status === TaskStatus.DONE).length;
                                 const tasksInProgress = memberTasks.filter(t => t.status === TaskStatus.IN_PROGRESS).length;
                                 const tasksTodo = memberTasks.filter(t => t.status === TaskStatus.TODO).length;
@@ -531,10 +531,10 @@ export const ReportView: React.FC<ReportViewProps> = ({ resources, tasks, depart
                                     <td className="px-4 py-3">{member.role}</td>
                                     <td className="px-4 py-3">{teamLead ? teamLead.name : 'N/A'}</td>
                                     {teamReportData.viewMode === 'global' && <td className="px-4 py-3">{departmentAffiliation ? departmentAffiliation.name : 'N/A'}</td>}
-                                    <td className="px-4 py-3 text-center">{tasksDone}</td>
-                                    <td className="px-4 py-3 text-center">{tasksInProgress}</td>
-                                    <td className="px-4 py-3 text-center">{tasksTodo}</td>
-                                    <td className="px-4 py-3 text-center">{memberTasks.length}</td>
+                                    <td className="px-4 py-3 text-center">{tasksDone}</td> // closed issues
+                                    <td className="px-4 py-3 text-center">{tasksInProgress}</td> // open issues 
+                                    <td className="px-4 py-3 text-center">{tasksTodo}</td>//  open issue with on-hold or in-discussion
+                                    <td className="px-4 py-3 text-center">{memberTasks.length}</td> // total issues open
                                     <td className={`px-4 py-3 text-center ${tasksDelayed > 0 ? 'text-red-400 font-semibold' : ''}`}>{tasksDelayed}</td>
                                     <td className="px-4 py-3 text-center">{totalHoursSpent > 0 ? `${totalHoursSpent}h` : '-'}</td>
                                     <td className="px-4 py-3 text-center">{formatTimeForReport(totalAccumulatedTime) !== '0h 0m' ? formatTimeForReport(totalAccumulatedTime) : '-'}</td>
