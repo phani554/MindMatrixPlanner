@@ -59,7 +59,7 @@ app.use("/zen",isAuthenticatedApi, zenroute); //
 app.use("/data", emproute);//isAuthenticatedApi,
 app.use("/issues", issueroute);//
 app.use("/debug", debugroute);
-app.use("/sync", syncroute);
+app.use("/sync",isAuthenticatedApi, syncroute);
 
 
 // Other protected API routes
