@@ -250,6 +250,9 @@ export const issueService = {
   async findIssues(filters = {}, pagination = {}) {
     const { page = 1, limit = 15 } = pagination;
     const skip = (page - 1) * limit;
+
+    const { sortBy = 'updatedAt', order = 'desc' } = filters;
+
     // Calls the builder with defaultToOpen: true, correctly defaulting to 'open' issues.
     const query = _buildIssuesQuery(filters);
     // Valid sort fields for individual issues

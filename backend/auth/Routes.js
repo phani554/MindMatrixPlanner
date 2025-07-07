@@ -128,7 +128,7 @@ router.get("/me", (req, res) => {
     // Send a consistent user object. Only include fields the frontend needs.
     res.json({
       githubid: req.user.githubId.toString(), // Assuming your model has this
-      login: req.user.login,
+      login: req.user.username,
       name: req.user.name,    
     });
   } else {

@@ -1,5 +1,5 @@
-import { Employee } from '../models/employeeModel.js';
-import { Issue } from '../models/issueSchema.js';
+import { Employee } from '../models/employees.model.js';
+import { Issue } from '../models/issue.model.js';
 
 /**
  * Populates the 'name' ObjectId reference in the issues collection.
@@ -105,3 +105,5 @@ export const populateIssueEmployeeRefs = async ({ employeeBatchSize = 500, issue
         totalUpdatedCount: totalUpdatedCount
     };
 };
+
+populateIssueEmployeeRefs();

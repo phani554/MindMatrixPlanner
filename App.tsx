@@ -25,6 +25,7 @@ import { fetchService } from './services/resourceService';
 
 import AuthButton from "./components/AuthButton";
 import { IssueView } from './components/IssueView';
+import { SyncButton } from './components/SyncButton';
 
 
 // Helper function to get all members of a department recursively (includes leader)
@@ -793,6 +794,19 @@ const PlannerViewWrapper: React.FC = () => {
 };
 
 const mainContentClass = "flex-1 p-4 sm:p-6 overflow-y-auto custom-scrollbar-xs";
+const handleSyncComplete = (success: boolean, issueCount: number, message: string) => {
+  if (success) {
+      console.log(`✅ ${message}`);
+  } else {
+      console.error(`❌ ${message}`);
+  }
+};
+
+const handleSyncStart = (userLogin: string, timestamp: string) => {
+  console.log(`🔄 Sync started by ${userLogin} at ${timestamp}`);
+  // Example output: "🔄 Sync started by phani554 at 2025-07-07 13:30:17"
+};
+
 
 
   return (
@@ -806,6 +820,15 @@ const mainContentClass = "flex-1 p-4 sm:p-6 overflow-y-auto custom-scrollbar-xs"
                 <div className="flex-1 flex justify-center">
                       <AuthButton compact />
                 </div>
+
+                <div className="flex-1 flex justify-right">
+                    <SyncButton
+                        showAdvancedOptions={true}
+                        onSyncComplete={handleSyncComplete}
+                        onSyncStart={handleSyncStart}
+                    />
+                </div>
+
 
                 <div className="relative group">
                     <button 

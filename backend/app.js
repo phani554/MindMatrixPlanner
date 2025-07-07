@@ -6,6 +6,7 @@ import zenroute from "./routes/zenroute.js";
 import emproute from "./routes/employee.route.js";
 import debugroute from "./routes/debugQuote.route.js";
 import issueroute from "./routes/issues.route.js";
+import syncroute from './routes/sync.route.js';
 import { isAuthenticated, isAuthenticatedApi } from "./middleware/Auth.js";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -56,8 +57,9 @@ app.use("/auth", authRoutes); // Login/logout routes should be public
 // Any route defined after this line will require authentication.
 app.use("/zen",isAuthenticatedApi, zenroute); //
 app.use("/data", emproute);//isAuthenticatedApi,
-app.use("/issues", issueroute);//isAuthenticatedApi,
+app.use("/issues", issueroute);//
 app.use("/debug", debugroute);
+app.use("/sync", syncroute);
 
 
 // Other protected API routes
@@ -99,9 +101,7 @@ app.get("/", (req, res) => {
   }
 });
 
-app.get("/sync", (req,res) => {
 
-})
 
 
 const startServer = async () => {
