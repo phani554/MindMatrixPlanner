@@ -102,7 +102,9 @@ export const issueService = {
     };
   },
   // This function and its pipeline are correct based on our last revision.
-  async getAssigneeStats(filters = {}, sortOptions = {}) {
+  async getAssigneeStats(filters = {}, sortOptions = {}, pagination = {}) {
+    const { page = 1, limit = 15 } = pagination;
+    const skip = (page - 1) * limit;
     // Calls the builder with defaultToOpen: false, correctly getting all states by default.
     const query = _buildIssuesQuery(filters, { defaultToOpen: false });
      // Extract assignee-specific filters for post-unwind filtering
@@ -124,10 +126,10 @@ export const issueService = {
     const sortBy = validSortFields[sortOptions.sortBy] || 'totalIssues';
     const sortOrder = sortOptions.order === 'asc' ? 1 : -1;
 
-    const pipeline = [
+    // Base aggregation stages (shared between count and data queries)
+    const baseAggregationStages = [
       { $match: query },
       { $unwind: "$assignees" },
-      // 🔥 KEY FIX: Re-apply assignee filters after unwind
       ...(Object.keys(assigneePostFilters).length > 0 ? [{ $match: assigneePostFilters }] : []),
       {
         $group: {
@@ -204,16 +206,74 @@ export const issueService = {
       { $sort: { [sortBy]: sortOrder } }
     ];
 
-    return Issue.aggregate(pipeline);
+    // Pipeline for counting total records
+    const countPipeline = [
+      ...baseAggregationStages,
+      { $count: "totalCount" }
+    ];
+
+    // Pipeline for getting paginated data
+    const dataPipeline = [
+      ...baseAggregationStages,
+      { $skip: skip },
+      { $limit: limit }
+    ];
+
+    try {
+      // Execute both aggregations in parallel
+      const [totalCountResult, paginatedResults] = await Promise.all([
+        Issue.aggregate(countPipeline),
+        Issue.aggregate(dataPipeline)
+      ]);
+
+      const totalCount = totalCountResult[0]?.totalCount || 0;
+      const totalPages = Math.ceil(totalCount / limit);
+
+      return {
+        data: paginatedResults,
+        pagination: {
+          currentPage: page,
+          totalPages,
+          totalCount,
+          limit,
+          hasNextPage: page < totalPages,
+          hasPrevPage: page > 1
+        }
+      };
+    } catch (error) {
+      console.error('Error in getAssigneeStats aggregation:', error);
+      throw error;
+    }
   },
 
-  // This function now behaves correctly in all cases.
-  async findIssues(filters = {}) {
+  // Enhanced findIssues with pagination  
+  async findIssues(filters = {}, pagination = {}) {
+    const { page = 1, limit = 15 } = pagination;
+    const skip = (page - 1) * limit;
     // Calls the builder with defaultToOpen: true, correctly defaulting to 'open' issues.
     const query = _buildIssuesQuery(filters);
-    const issues = await Issue.find(query).sort({ updatedAt: -1 });
+    // Valid sort fields for individual issues
+    const validSortFields = {
+      createdAt: 'createdAt',           // When issue was created
+      updatedAt: 'updatedAt',           // When issue was last updated  
+      closedAt: 'closedAt',             // When issue was closed
+      title: 'title',                   // Issue title alphabetically
+      number: 'number',                 // GitHub issue number
+      state: 'state'                    // open/closed
+    };
 
-    const totalCount = issues.length;
+    const sortField = validSortFields[sortBy] || 'updatedAt';
+    const sortDirection = order === 'asc' ? 1 : -1;
+
+    // Get total count and paginated results in parallel
+    const [totalCount, issues] = await Promise.all([
+      Issue.countDocuments(query),
+      Issue.find(query)
+        .sort({ [sortField]: sortDirection })  // ✅ Dynamic sorting instead of hardcoded
+        .skip(skip)
+        .limit(limit)
+    ]);
+    const totalPages = Math.ceil(totalCount / limit);
     const staleCount = issues.filter(issue => issue.isStale(filters.staleDays)).length;
 
     let averageAgeInDays;
@@ -239,12 +299,22 @@ export const issueService = {
     ]);
 
     return {
+      data: issues,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalCount,
+        limit,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1
+      },
+      metrics: {
         totalCount,
         staleCount,
         ...(averageAgeInDays !== undefined && { averageAgeInDays }),
         ...(averageResolutionTimeInDays !== undefined && { averageResolutionTimeInDays }),
-        countsByStateAndLabel,
-        issues,
+        countsByStateAndLabel
+      }
     };
   }
 };

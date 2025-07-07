@@ -14,9 +14,31 @@ export const issueController = {
         try {
             // The filters are passed directly from the request's query string.
             // Our service is already designed to handle these.
-            const filters = req.query;
-            const result = await issueService.findIssues(filters);
-            res.status(200).json(result);
+            const allParams = req.query;             // Extract pagination parameters
+            // Extract sorting options
+            const sortOptions = {
+                sortBy: allParams.sortBy || 'updatedAt',
+                order: allParams.order || 'desc'
+            };
+            const pagination = {
+                page: parseInt(req.query.page) || 1,
+                limit: Math.min(parseInt(req.query.limit) || 15, 100) // Max 100 per page
+            };
+            // Create clean filters
+            const filters = { ...allParams };
+            delete filters.page;
+            delete filters.limit;
+            delete filters.sortBy;
+            delete filters.order;
+
+            const result = await issueService.findIssues(filters, pagination, sortOptions);
+            
+            res.status(200).json({
+                ...result,
+                filters: filters,
+                sortOptions: sortOptions,
+                timestamp: new Date().toISOString()
+            });
         } catch (error) {
             console.error("Error in getIssues controller:", error);
             res.status(500).json({ message: "An error occurred while fetching issues." });
@@ -32,7 +54,7 @@ export const issueController = {
     async getAssigneeStats(req, res) {
         try {
             // Filters are extracted directly from the query string for consistency.
-            const filters = req.query;
+            const allParams = req.query;
 
             // Sorting options are also extracted from the query string.
             // The service has defaults if these are not provided.
@@ -41,12 +63,25 @@ export const issueController = {
                 order: req.query.order
             };
 
-            const stats = await issueService.getAssigneeStats(filters, sortOptions);
+            // Extract pagination parameters
+            const pagination = {
+                page: parseInt(req.query.page) || 1,
+                limit: Math.min(parseInt(req.query.limit) || 15, 100) // Max 100 per page
+            };
+
+            // Create clean filters by removing non-filter parameters
+            const filters = { ...allParams };
+            delete filters.page;
+            delete filters.limit; 
+            delete filters.sortBy;
+            delete filters.order;
+
             
-            // Enhanced response with metadata
+
+            const result = await issueService.getAssigneeStats(filters, sortOptions, pagination);
+            
             res.status(200).json({
-                data: stats,
-                count: stats.length,
+                ...result,
                 filters: filters,
                 sortOptions: sortOptions,
                 timestamp: new Date().toISOString()
