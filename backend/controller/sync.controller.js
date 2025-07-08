@@ -1,11 +1,12 @@
 import { runSync } from '../services/githubSyncService.js';
+import { syncTeamMembers } from '../services/githubEmployeeFetchService.js';
 import { logger } from '../utils/syncUtility.js';
 
 /**
  * Controller to trigger the GitHub issue synchronization.
  * Responds to an API request.
  */
-export async function triggerSync(req, res) {
+export const triggerSync = async function(req, res) {
   // Destructure the request body to separate sync options from the new metadata.
   // The '...syncOptions' rest parameter will collect properties like 'fullSync', 'since', etc.
   const { triggeredBy, triggeredAt, ...syncOptions } = req.body;
@@ -23,7 +24,8 @@ export async function triggerSync(req, res) {
     res.status(200).json({
       success: true,
       message: 'Synchronization completed successfully.',
-      issueCount: issuesSynced,
+      issueCount: issuesSynced[0],
+      expiration_date: issuesSynced[1]
     });
   } catch (error) {
     // The error is already logged with details by the service layer.
@@ -33,4 +35,33 @@ export async function triggerSync(req, res) {
       message: error.message || 'An unknown error occurred during synchronization.',
     });
   }
-}
+};
+
+export const handleTeamSyncRequest = async (req, res, next) => {
+  // teamSlug will be undefined if the route without the parameter is hit
+  const { teamSlug } = req.params;
+  const options = {};
+
+  // Only add teamSlug to options if it was actually provided in the URL
+  if (teamSlug) {
+      options.teamSlug = teamSlug;
+      logger.info(`Received specific API sync request for team: '${teamSlug}'.`);
+  } else {
+      logger.info(`Received API request for default sync (developers, testers).`);
+  }
+
+  try {
+      // Pass the options object to the service. It will be {} for the default case.
+      const syncResult = await syncTeamMembers(options);
+
+      res.status(200).json({
+          message: `Sync successful.`,
+          ...syncResult, // Spreads { syncedTeams: [...], totalSyncedEmployees: ... }
+      });
+
+  } catch (error) {
+      // Pass any errors to the global error handler
+      logger.error(`API controller caught an error during sync. Passing to error handler.`);
+      next(error);
+  }
+};

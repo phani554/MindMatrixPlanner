@@ -821,7 +821,7 @@ const handleSyncStart = (userLogin: string, timestamp: string) => {
                       <AuthButton compact />
                 </div>
 
-                <div className="flex-1 flex justify-right">
+                <div className=" flex ">
                     <SyncButton
                         showAdvancedOptions={true}
                         onSyncComplete={handleSyncComplete}

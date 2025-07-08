@@ -1,6 +1,7 @@
 import { Issue } from "../models/issue.model.js";
 import { SyncConfig } from "../models/syncConfig.model.js";
 import { octokit as gitclient } from "../controller/getOctokit.js";
+import { expiration_date } from "../controller/getOctokit.js";
 import { 
   ORG,
   REPO,
@@ -85,6 +86,8 @@ export async function runSync(options = {}) {
   try {
     for await (const page of octokit.paginate.iterator(octokit.rest.issues.listForRepo, requestParams)) {
       if (issueCount >= syncLimit) break;
+      const expiration_date = new Date(page.headers['github-authentication-token-expiration']).toUTCString();
+
       
       for (const issue of page.data) {
         if (issueCount >= syncLimit) break;
@@ -109,7 +112,9 @@ export async function runSync(options = {}) {
 
     await mapSyncConfig();
     logger.info(`🎉 Synced ${issueCount} issues in ${batchCount} batches.`);
-    return issueCount;
+
+    const result = [issueCount, expiration_date];
+    return result;
 
   } catch (error) {
     let descriptiveError;
@@ -117,7 +122,8 @@ export async function runSync(options = {}) {
     if (error && error.status) {
       switch (error.status) {
         case 401:
-          descriptiveError = new Error('GitHub API Authentication Failed (401). The Personal Access Token (PAT) is likely invalid, expired, or has been revoked. Please generate a new token.');
+          const expiration_date = new Date(parseInt(error.headers['github-authentication-token-expiration']));
+          descriptiveError = new Error(`GitHub API Authentication Failed (401). The Personal Access Token (PAT) is likely invalid, expired, or has been revoked. Current Github Token Expires on ${expiration_date}`);
           break;
         case 403:
           if (error.headers && error.headers['x-ratelimit-remaining'] === '0') {
@@ -136,5 +142,44 @@ export async function runSync(options = {}) {
     
     logger.error(`❌ ${descriptiveError.message}`);
     throw descriptiveError;
+  }
+}
+
+export async function getLastSyncStatus() {
+  try {
+    const latestSyncConfig = await SyncConfig.findOne().sort({ lastUpdatedAt: -1 }).select('lastUpdatedAt');
+    let lastSyncedDateMessage = "No previous sync found.";
+    let lastSyncedTimestamp = null; // To store the raw timestamp if available
+
+    if (latestSyncConfig && latestSyncConfig.lastUpdatedAt) {
+      const lastSyncedDate = new Date(latestSyncConfig.lastUpdatedAt);
+      const today = new Date();
+
+      // Normalize dates to the beginning of the day for comparison
+      lastSyncedDate.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+
+      lastSyncedTimestamp = latestSyncConfig.lastUpdatedAt; // Store the original timestamp
+
+      if (lastSyncedDate.getTime() === today.getTime()) {
+        const lastSyncedTime = new Date(latestSyncConfig.lastUpdatedAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }); // Format time nicely
+        lastSyncedDateMessage = `Last synced today at ${lastSyncedTime}.`;
+      } else {
+        const lastSyncedFormattedDate = new Date(latestSyncConfig.lastUpdatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }); // Format date nicely
+        lastSyncedDateMessage = `Last synced on ${lastSyncedFormattedDate}.`;
+      }
+    }
+
+    return {
+      message: lastSyncedDateMessage,
+      timestamp: lastSyncedTimestamp, // Provide the raw timestamp too, useful for frontend
+    };
+  } catch (error) {
+    logger.error(`❌ Error fetching last sync status: ${error.message}`);
+    return {
+      message: "Failed to retrieve last sync status.",
+      timestamp: null,
+      error: error.message,
+    };
   }
 }

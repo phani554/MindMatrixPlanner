@@ -2,6 +2,7 @@ import { Octokit } from "@octokit/rest";
 import { createAppAuth } from "@octokit/auth-app";
 import fs from "fs";
 import dotenv from "dotenv";
+import { ORG } from "../utils/syncUtility.js";
 
 
 dotenv.config();
@@ -66,5 +67,50 @@ const octokit = {
 
 };
 
+async function getGithubDisplayName(githubUrl) {
+  try {
+    // Extract the username from the URL
+    const urlParts = githubUrl.split('/');
+    const username = urlParts[urlParts.length - 1]; // Assuming username is the last part
 
+    // Construct the API endpoint URL
+    const apiUrl = `https://api.github.com/users/${username}`;
+
+    // Make a GET request to the API
+    const response = await fetch(apiUrl);
+
+    // Check for errors
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Parse the JSON response
+    const userData = await response.json();
+
+    // Get the display name
+    const displayName = userData.name;
+    console.log(displayName);
+
+    return displayName;
+
+  } catch (error) {
+    return githubUrl
+;
+  }
+}
+
+const octokitclient = await octokit.getforPat();
+
+const response = await octokitclient.rest.teams.listMembersInOrg({
+  org: ORG,
+  team_slug: 'testers',
+  per_page: 100
+});
+export const expiration_date = new Date(response.headers['github-authentication-token-expiration']).toUTCString();
+const developer_member_list = [];
+for (const member of response.data) {
+  developer_member_list.push(`username: ${member.login}, githubId: ${member.id}, html_url: ${await getGithubDisplayName(member.html_url)}`);
+}
+console.log(developer_member_list);
+console.log(developer_member_list.length);
 export {octokit};

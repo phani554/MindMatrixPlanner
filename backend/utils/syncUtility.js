@@ -90,6 +90,7 @@ export const syncUtility = {
         try {
         const data = new SyncConfig( {
             lastUpdatedAt: new Date(),
+            employeeLastUpdatedAt: new Date(),
             totalIssuesLog: await Issue.countDocuments(),
             totalPrMerged: await Issue.countDocuments({pull_request: true, merged_at: { $exists: true, $nin: ["", null] }}),
             totalIssueClosed: await Issue.countDocuments({state: 'closed'}),

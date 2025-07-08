@@ -20,6 +20,10 @@ const syncConfigSchema = new mongoose.Schema({
   totalPr: {
     type: Number,
     default: null
+  },
+  employeeLastUpdatedAt: {
+    type: Date,
+    default: null,
   }
 });
 
