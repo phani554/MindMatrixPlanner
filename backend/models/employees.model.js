@@ -38,12 +38,13 @@ const employeeSchema = new mongoose.Schema({
     githubId: {
         type: Number,
         unique: true,
-        sparse: true, // IMPORTANT: Allows multiple nulls but unique for actual values
+        required: true,
         index: true
     },
     username: {
         type: String,
         default: null,
+        unique: true,
         trim: true
     },
     modules: [{

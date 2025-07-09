@@ -66,90 +66,102 @@ async function _getDisplayName(octokit, username) {
 * @returns {Promise<Object>} A detailed report object for the team's sync.
 */
 async function _syncSingleTeam(teamSlug, octokit) {
-   const role = mapTeamSlugToRole(teamSlug);
-   logger.info(`-- Starting sync for team: '${teamSlug}' (Role: '${role}') --`);
+  const role = mapTeamSlugToRole(teamSlug);
+  logger.info(`-- Starting sync for team: '${teamSlug}' (Role: '${role}') --`);
 
-   // Initialize a report object to gather all actions and logs
-   const report = {
-       updated: [],
-       inserted: [],
-       deleted: [],
-       skippedDeletions: [],
-       unenriched: [],
-       logs: []
-   };
+  const report = {
+    updated: [], inserted: [], deleted: [],
+    skippedDeletions: [], unenriched: [], logs: []
+  };
 
-   const existingEmployees = await Employee.find({ role: role });
-   const existingGithubIds = new Set(existingEmployees.map(emp => emp.githubId).filter(id => id != null));
+  // Fetch existing employees in this role
+  const existingEmps = await Employee.find({ role });
+  const existingGithubIds = new Set(existingEmps.map(e => e.githubId).filter(Boolean));
+  const incomingGithubIds = new Set();
 
-   const incomingGithubIds = new Set();
-   const requestParams = { org: ORG, team_slug: teamSlug, per_page: 100 };
+  // 1️⃣ Sync loop
+  const params = { org: ORG, team_slug: teamSlug, per_page: 100 };
+  for await (const page of octokit.paginate.iterator(octokit.rest.teams.listMembersInOrg, params)) {
+    for (const member of page.data) {
+      incomingGithubIds.add(member.id);
+      const apiDisplayName = await _getDisplayName(octokit, member.login);
 
-   for await (const page of octokit.paginate.iterator(octokit.rest.teams.listMembersInOrg, requestParams)) {
-       for (const member of page.data) {
-           incomingGithubIds.add(member.id);
+      // Three-step lookup
+      let existingDoc =
+        await Employee.findOne({ githubId: member.id }) ||
+        await Employee.findOne({ username: member.login }) ||
+        (apiDisplayName && apiDisplayName.trim().split(' ').length === 2
+          ? await Employee.findOne({ name: apiDisplayName })
+          : null);
 
-           try {
-               const apiDisplayName = await _getDisplayName(octokit, member.login);
-               let existingDoc = await Employee.findOne({ githubId: member.id });
-               if (!existingDoc) existingDoc = await Employee.findOne({ username: member.login });
-               if (!existingDoc && apiDisplayName) existingDoc = await Employee.findOne({ name: apiDisplayName });
+      if (existingDoc) {
+        // Update existing
+        const payload = {
+          githubId: member.id,
+          username: member.login,
+          role
+        };
+        if (apiDisplayName?.trim().split(' ').length === 2) {
+          payload.name = apiDisplayName;
+        }
+        await Employee.updateOne({ _id: existingDoc._id }, { $set: payload });
+        report.updated.push(existingDoc.name);
 
-               if (existingDoc) {
-                   const updatePayload = { githubId: member.id, username: member.login, role: role };
-                   if (apiDisplayName) updatePayload.name = apiDisplayName;
-                   await Employee.updateOne({ _id: existingDoc._id }, { $set: updatePayload });
-                   report.updated.push(existingDoc.name);
-               } else {
-                   const finalDisplayName = apiDisplayName || member.login;
-                   const employeeDocument = mapEmployeeToDocument(member, role, finalDisplayName);
-                   const newEmp = await Employee.create(employeeDocument);
-                   report.inserted.push(newEmp.name);
-                   report.logs.push({ level: 'info', message: `Created new employee record for username: '${member.login}'` });
-               }
-           } catch (err) {
-               const errorMessage = `Could not process '${member.login}'. Error: ${err.message}`;
-               report.logs.push({ level: 'error', message: errorMessage });
-           }
-       }
-   }
+      } else {
+        // Create new
+        const newName =
+          apiDisplayName?.trim().split(' ').length === 2
+            ? apiDisplayName
+            : member.login;
+        const doc = mapEmployeeToDocument(member, role, newName);
+        const created = await Employee.create(doc);
+        report.inserted.push(created.name);
+        report.logs.push({
+          level: 'info',
+          message: `Created new employee record for username: '${member.login}'`
+        });
+      }
+    }
+  }
 
-   // [NEW] Identify and report unenriched employees
-   const unenrichedDocs = await Employee.find({ role: role, githubId: null });
-   if (unenrichedDocs.length > 0) {
-       report.unenriched = unenrichedDocs.map(emp => ({ name: emp.name, _id: emp._id }));
-   }
+  // 2️⃣ Safe‑deletion logic
+  const toDeleteIds = [...existingGithubIds].filter(id => !incomingGithubIds.has(id));
+  if (toDeleteIds.length) {
+    const candidates = await Employee.find({ githubId: { $in: toDeleteIds } });
 
-   // [NEW] Safe deletion logic that reports sensitive skips
-   const idsToDelete = [...existingGithubIds].filter(id => !incomingGithubIds.has(id));
-   if (idsToDelete.length > 0) {
-       const employeesToDelete = await Employee.find({ githubId: { $in: idsToDelete } });
-       const safeToDeleteIds = [];
+    const safeDelete = [];
+    for (const emp of candidates) {
+      const subs = await Employee.find({ reportsTo: emp._id }, 'name');
+      if (subs.length) {
+        // Warn about orphaned reports
+        console.warn(
+          `⚠️ Deleting manager/team‑lead '${emp.name}' will orphan: ${subs.map(s => s.name).join(', ')}`
+        );
+        report.skippedDeletions.push({
+          name: emp.name,
+          githubId: emp.githubId,
+          username: emp.username,
+          referencedBy: subs.map(s => s.name)
+        });
+      } else {
+        safeDelete.push(emp._id);
+        report.deleted.push(emp.name);
+      }
+    }
 
-       for (const emp of employeesToDelete) {
-           // Find who reports to this employee using their ObjectId
-           const subordinates = await Employee.find({ reportsTo: emp._id }, 'name');
-           if (subordinates.length > 0) {
-               // This is a sensitive record; add it to the skipped list
-               report.skippedDeletions.push({
-                   name: emp.name,
-                   githubId: emp.githubId,
-                   username: emp.username,
-                   referencedBy: subordinates.map(sub => sub.name)
-               });
-           } else {
-               safeToDeleteIds.push(emp._id);
-               report.deleted.push(emp.name);
-           }
-       }
+    if (safeDelete.length) {
+      await Employee.deleteMany({ _id: { $in: safeDelete } });
+      console.log(`🗑 Deleted employees: ${report.deleted.join(', ')}`);
+    }
+  }
 
-       if (safeToDeleteIds.length > 0) {
-           await Employee.deleteMany({ _id: { $in: safeToDeleteIds } });
-       }
-   }
+  // 3️⃣ Unenriched check
+  const unenriched = await Employee.find({ role, githubId: null }, 'name');
+  report.unenriched = unenriched.map(e => e.name);
 
-   return report;
+  return report;
 }
+
 
 /**
 * Fetches and syncs team members from GitHub, returning a comprehensive report.

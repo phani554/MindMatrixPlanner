@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import { Issue } from "../models/issue.model.js";
 import { SyncConfig } from "../models/syncConfig.model.js";
 
-dotenv.config({ path: "C:/Users/admin/Documents/planner/MindMatrixPlanner/backend/.env" });
+dotenv.config({ path: "C:/Users/phane/Documents/Projects/Web Development/MindMatrixPlanner/backend/.env" });
 export const {ORG,REPO,MONGODB_URI, LOG_LEVEL = "info"} = process.env;
 
 // Configure logging based on LOG_LEVEL
