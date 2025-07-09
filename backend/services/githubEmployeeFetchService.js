@@ -1,141 +1,208 @@
 import { Employee } from "../models/employees.model.js";
 import { octokit as gitclient } from "../controller/getOctokit.js";
 import { ORG, logger } from "../utils/syncUtility.js";
+import mongoose from "mongoose";
 
 /**
- * Maps a GitHub team member object to our MongoDB document structure.
- * @param {Object} member - GitHub member object from the teams.listMembersInOrg call.
- * @param {string} teamSlug - The slug of the team the member belongs to.
- * @param {string|null} displayName - The member's public display name.
- * @returns {Object} Document ready for MongoDB.
+ * [NEW] Centralizes the mapping from a GitHub team slug to a DB role enum.
+ * @param {string} teamSlug - The slug from GitHub (e.g., 'developers').
+ * @returns {string} The corresponding role for the DB (e.g., 'developer').
  */
-function mapEmployeeToDocument(member, teamSlug, displayName) {
-    return {
-        githubId: member.id,
-        username: member.login,
-        name: displayName,
-        role: teamSlug,
-    };
+function mapTeamSlugToRole(teamSlug) {
+    switch (teamSlug.toLowerCase()) {
+        case 'developers':
+            return 'developer';
+        case 'testers':
+            return 'tester';
+        case 'admins': // Example for future expansion
+            return 'admin';
+        default:
+            logger.warn(`Unknown team slug '${teamSlug}' received. Defaulting role to slug name.`);
+            return teamSlug;
+    }
 }
 
 /**
+ * Maps a GitHub member object to our MongoDB document structure.
+ * @param {Object} member - GitHub member object.
+ * @param {string} role - The standardized role (e.g., 'developer').
+ * @param {string|null} displayName - The member's public display name.
+ * @returns {Object} Document ready for MongoDB.
+ */
+function mapEmployeeToDocument(member, role, displayName) {
+    const employeeDoc = {
+        githubId: member.id,
+        username: member.login,
+        role: role,
+    };
+    if (displayName) {
+        employeeDoc.name = displayName;
+    }
+    return employeeDoc;
+}
+
+
+/**
  * Fetches the display name for a given GitHub username.
+ * Handles errors gracefully.
  * @param {Octokit} octokit - The authenticated Octokit client.
  * @param {string} username - The GitHub login/username.
- * @returns {Promise<string|null>} The display name or null if not found/errored.
+ * @returns {Promise<string|null>} The display name or null.
  */
 async function _getDisplayName(octokit, username) {
     try {
         const { data: user } = await octokit.rest.users.getByUsername({ username });
-        console.log(user);
         return user.name || null;
     } catch (error) {
-        logger.warn(`Could not fetch display name for ${username}. Error: ${error.message}`);
-        return null; // Return null to not block the entire sync
+        logger.warn(`Could not fetch display name for '${username}' (Error: ${error.status || 'N/A'}). Will proceed without it.`);
+        return null; // Return null to not block the sync
     }
 }
 
 /**
- * [HELPER FUNCTION] Contains the core logic to sync a single team.
- * @param {string} teamSlug - The slug of the team to sync.
- * @param {Octokit} octokit - The authenticated Octokit client.
- * @returns {Promise<number>} The number of employees upserted for this team.
+* [HELPER FUNCTION] Performs the sync for a single team and returns a detailed report.
+* @param {string} teamSlug - The slug of the team to sync.
+* @param {Octokit} octokit - The authenticated Octokit client.
+* @returns {Promise<Object>} A detailed report object for the team's sync.
 */
 async function _syncSingleTeam(teamSlug, octokit) {
-    logger.info(`-- Starting sync for individual team: '${teamSlug}' --`);
+   const role = mapTeamSlugToRole(teamSlug);
+   logger.info(`-- Starting sync for team: '${teamSlug}' (Role: '${role}') --`);
 
-    // 1. Fetch current DB state for the team
-    const existingEmployees = await Employee.find({ role: teamSlug });
-    const existingNameMap = new Map(existingEmployees.map(emp => [emp.username, emp.name]));
-    const existingUsernames = new Set(existingEmployees.map(emp => emp.username));
+   // Initialize a report object to gather all actions and logs
+   const report = {
+       updated: [],
+       inserted: [],
+       deleted: [],
+       skippedDeletions: [],
+       unenriched: [],
+       logs: []
+   };
 
-    // 2. Fetch members and perform upserts
-    const incomingUsernames = new Set();
-    let upsertedCount = 0;
-    const requestParams = { org: ORG, team_slug: teamSlug, per_page: 100 };
+   const existingEmployees = await Employee.find({ role: role });
+   const existingGithubIds = new Set(existingEmployees.map(emp => emp.githubId).filter(id => id != null));
 
-    for await (const page of octokit.paginate.iterator(octokit.rest.teams.listMembersInOrg, requestParams)) {
-        for (const member of page.data) {
-            incomingUsernames.add(member.login);
+   const incomingGithubIds = new Set();
+   const requestParams = { org: ORG, team_slug: teamSlug, per_page: 100 };
 
-            // Step A: Determine the final, correct display name using your existing logic
-            let finalDisplayName = await _getDisplayName(octokit, member.login);
-            if ((!finalDisplayName || finalDisplayName.trim() === "") && existingNameMap.has(member.login)) {
-                finalDisplayName = existingNameMap.get(member.login);
-                logger.info(`Using existing DB name '${finalDisplayName}' for GitHub user '${member.login}'.`);
-            }
+   for await (const page of octokit.paginate.iterator(octokit.rest.teams.listMembersInOrg, requestParams)) {
+       for (const member of page.data) {
+           incomingGithubIds.add(member.id);
 
-            // Step B: Use your utility function to create the document payload
-            const employeeDocument = mapEmployeeToDocument(member, teamSlug, finalDisplayName);
+           try {
+               const apiDisplayName = await _getDisplayName(octokit, member.login);
+               let existingDoc = await Employee.findOne({ githubId: member.id });
+               if (!existingDoc) existingDoc = await Employee.findOne({ username: member.login });
+               if (!existingDoc && apiDisplayName) existingDoc = await Employee.findOne({ name: apiDisplayName });
 
-            // Step C: Sanitize the document. This is CRUCIAL. If a name couldn't be found,
-            // we remove the 'name' key to prevent $set from overwriting an existing name with null.
-            if (!employeeDocument.name) {
-                delete employeeDocument.name;
-            }
+               if (existingDoc) {
+                   const updatePayload = { githubId: member.id, username: member.login, role: role };
+                   if (apiDisplayName) updatePayload.name = apiDisplayName;
+                   await Employee.updateOne({ _id: existingDoc._id }, { $set: updatePayload });
+                   report.updated.push(existingDoc.name);
+               } else {
+                   const finalDisplayName = apiDisplayName || member.login;
+                   const employeeDocument = mapEmployeeToDocument(member, role, finalDisplayName);
+                   const newEmp = await Employee.create(employeeDocument);
+                   report.inserted.push(newEmp.name);
+                   report.logs.push({ level: 'info', message: `Created new employee record for username: '${member.login}'` });
+               }
+           } catch (err) {
+               const errorMessage = `Could not process '${member.login}'. Error: ${err.message}`;
+               report.logs.push({ level: 'error', message: errorMessage });
+           }
+       }
+   }
 
-            // Step D: Build the flexible filter to find the employee by ID or by name
-            const filterConditions = [{ githubId: member.id }];
-            // Only add the name to the filter if we actually found a valid one.
-            if (finalDisplayName) {
-                filterConditions.push({ name: finalDisplayName });
-            }
-            const filter = { $or: filterConditions };
+   // [NEW] Identify and report unenriched employees
+   const unenrichedDocs = await Employee.find({ role: role, githubId: null });
+   if (unenrichedDocs.length > 0) {
+       report.unenriched = unenrichedDocs.map(emp => ({ name: emp.name, _id: emp._id }));
+   }
 
-            // Step E: Execute the upsert operation with the cleaned document
-            await Employee.findOneAndUpdate(
-                filter,
-                { $set: employeeDocument }, // $set uses our cleaned document
-                { upsert: true, runValidators: true, new: true }
-            );
-            upsertedCount++;
-        }
-    }
-    logger.info(`Successfully upserted ${upsertedCount} members for team '${teamSlug}'.`);
+   // [NEW] Safe deletion logic that reports sensitive skips
+   const idsToDelete = [...existingGithubIds].filter(id => !incomingGithubIds.has(id));
+   if (idsToDelete.length > 0) {
+       const employeesToDelete = await Employee.find({ githubId: { $in: idsToDelete } });
+       const safeToDeleteIds = [];
 
-    // 3. Identify and delete stale records (Remains unchanged)
-    const usernamesToDelete = [...existingUsernames].filter(username => !incomingUsernames.has(username));
-    if (usernamesToDelete.length > 0) {
-        logger.info(`Removing ${usernamesToDelete.length} stale records for team '${teamSlug}'.`);
-        const deleteResult = await Employee.deleteMany({ role: teamSlug, username: { $in: usernamesToDelete } });
-        logger.info(`Deleted ${deleteResult.deletedCount} stale records for team '${teamSlug}'.`);
-    }
-    return upsertedCount;
+       for (const emp of employeesToDelete) {
+           // Find who reports to this employee using their ObjectId
+           const subordinates = await Employee.find({ reportsTo: emp._id }, 'name');
+           if (subordinates.length > 0) {
+               // This is a sensitive record; add it to the skipped list
+               report.skippedDeletions.push({
+                   name: emp.name,
+                   githubId: emp.githubId,
+                   username: emp.username,
+                   referencedBy: subordinates.map(sub => sub.name)
+               });
+           } else {
+               safeToDeleteIds.push(emp._id);
+               report.deleted.push(emp.name);
+           }
+       }
+
+       if (safeToDeleteIds.length > 0) {
+           await Employee.deleteMany({ _id: { $in: safeToDeleteIds } });
+       }
+   }
+
+   return report;
 }
 
-
 /**
- * Fetches and syncs team members from GitHub.
- * If a teamSlug is provided, syncs only that team.
- * If no teamSlug is provided, syncs a default list of teams (developers, testers).
- * @param {Object} [options={}] - Configuration options for the sync.
- * @param {string} [options.teamSlug] - The slug of a specific team to sync.
+* Fetches and syncs team members from GitHub, returning a comprehensive report.
+* @param {Object} [options={}] - Configuration options.
+* @returns {Promise<Object>} The final aggregated report object.
 */
 export async function syncTeamMembers(options = {}) {
-    const { teamSlug } = options;
+   const { teamSlug } = options;
+   const defaultTeams = ['developers', 'testers'];
+   const teamsToSync = teamSlug ? [teamSlug] : defaultTeams;
+   logger.info(`🚀 Starting sync for team(s): [${teamsToSync.join(', ')}]`);
 
-    // Define the list of teams to be processed
-    const defaultTeams = ['developers', 'testers'];
-    const teamsToSync = teamSlug ? [teamSlug] : defaultTeams;
+   // Initialize the final aggregated report
+   const finalReport = {
+       updated: [], inserted: [], deleted: [],
+       discrepancies: { skippedDeletions: [], unenrichedEmployees: [] },
+       logs: []
+   };
 
-    logger.info(`🚀 Starting sync for team(s): [${teamsToSync.join(', ')}]`);
+   try {
+       const octokit = await gitclient.getforPat();
+       await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/github-dashboard');
+       logger.info("Database connected successfully.\n");
 
-    const octokit = await gitclient.getforPat();
-    let totalSyncedCount = 0;
+       for (const team of teamsToSync) {
+           const teamReport = await _syncSingleTeam(team, octokit);
+           // Aggregate results from each team into the final report
+           finalReport.updated.push(...teamReport.updated);
+           finalReport.inserted.push(...teamReport.inserted);
+           finalReport.deleted.push(...teamReport.deleted);
+           finalReport.discrepancies.skippedDeletions.push(...teamReport.skippedDeletions);
+           finalReport.discrepancies.unenrichedEmployees.push(...teamReport.unenriched);
+           finalReport.logs.push(...teamReport.logs);
+       }
 
-    try {
-        // Loop through the list of teams and sync each one
-        for (const team of teamsToSync) {
-            const countForTeam = await _syncSingleTeam(team, octokit);
-            totalSyncedCount += countForTeam;
-        }
-
-        logger.info(`🎉 Successfully completed sync for all specified teams. Total employees synced: ${totalSyncedCount}.`);
-        return {
-            syncedTeams: teamsToSync,
-            totalSyncedEmployees: totalSyncedCount,
-        };
-
+       const totalProcessed = finalReport.updated.length + finalReport.inserted.length;
+       logger.info(`🎉 Successfully completed sync. Total employees processed: ${totalProcessed}.`);
+       
+       const report =  {
+           status: 'success',
+           stats: {
+               teamsSynced: teamsToSync,
+               totalProcessed: totalProcessed,
+               updated: finalReport.updated.length,
+               inserted: finalReport.inserted.length,
+               deleted: finalReport.deleted.length,
+               deletionsSkipped: finalReport.discrepancies.skippedDeletions.length
+           },
+           discrepancies: finalReport.discrepancies,
+           logs: finalReport.logs
+       };
+       console.log(report);
+       return report;
     } catch (error) {
         let descriptiveError = new Error(`An unexpected error occurred during the employee sync process: ${error.message}`);
         if (error && error.status) {
@@ -147,7 +214,6 @@ export async function syncTeamMembers(options = {}) {
                     descriptiveError = new Error('GitHub API Permission Denied (403). The PAT lacks required scopes (e.g., `read:org`).');
                     break;
                 case 404:
-                    // Make the error message more specific
                     descriptiveError = new Error(`A team in the sync list was not found in organization '${ORG}' (404). Check if teams [${teamsToSync.join(', ')}] exist.`);
                     break;
                 default:
@@ -155,7 +221,20 @@ export async function syncTeamMembers(options = {}) {
             }
         }
         logger.error(`❌ ${descriptiveError.message}`);
-        throw descriptiveError;
+        return {
+            status: 'error',
+            message: descriptiveError.message,
+            stats: {},
+            discrepancies: {},
+            logs: finalReport.logs.concat({ level: 'error', message: descriptiveError.message })
+        };
+    }
+    finally{
+        if (mongoose.connection.readyState === 1) {
+            await mongoose.disconnect();
+            logger.info("\nDatabase connection closed.");    
+        }
     }
 }
-
+// To run this script directly for testing:
+syncTeamMembers();

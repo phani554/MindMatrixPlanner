@@ -107,10 +107,10 @@ const response = await octokitclient.rest.teams.listMembersInOrg({
   per_page: 100
 });
 export const expiration_date = new Date(response.headers['github-authentication-token-expiration']).toUTCString();
-const developer_member_list = [];
-for (const member of response.data) {
-  developer_member_list.push(`username: ${member.login}, githubId: ${member.id}, html_url: ${await getGithubDisplayName(member.html_url)}`);
-}
-console.log(developer_member_list);
-console.log(developer_member_list.length);
+// const developer_member_list = [];
+// for (const member of response.data) {
+//   developer_member_list.push(`username: ${member.login}, githubId: ${member.id}, html_url: ${await getGithubDisplayName(member.html_url)}`);
+// }
+// console.log(developer_member_list);
+// console.log(developer_member_list.length);
 export {octokit};
