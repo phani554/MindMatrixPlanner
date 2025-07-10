@@ -4,6 +4,7 @@ import { Doughnut } from 'react-chartjs-2';
 import { useAssigneeStats, useSummaryStats, useModules } from '../hooks/useIssueData';
 import { IssueFilters, AssigneeStatsSortOptions, PaginationParams } from '@/api.types.ts';
 import { Resource } from '../types';
+import { buildGitHubSearchURL } from '@/utils/queryBuilder';
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -340,7 +341,7 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
         setFilters(prev => {
             const newFilters = { ...prev };
             if (selectedRole) {
-                newFilters.role = selectedRole as 'Developer' | 'Tester';
+                newFilters.role = selectedRole as 'developer' | 'tester';
             } else {
                 delete newFilters.role; // Clear filter if "All Roles" is selected
             }
@@ -818,6 +819,10 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
                             )}
                             {statsData.map((stat: any) => {
                                 const onHoldCount = getOnHoldCount(stat);
+                                const baseLinkFilters: IssueFilters = {
+                                    ...filters,
+                                    assignees: [stat.employee.login] 
+                                };
 
                                 return (
                                     <tr 
@@ -827,25 +832,46 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
                                         <td className="px-4 py-3 font-medium text-slate-200 whitespace-nowrap">
                                             {stat.employee.name}
                                         </td>
+                                        {/* --- Clickable Link for CLOSED items --- */}
                                         <td className="px-4 py-3 text-center">
-                                            <span className="text-emerald-400 font-medium">
+                                            <a
+                                                // The utility is called with the base filters PLUS the specific state for this cell.
+                                                href={buildGitHubSearchURL({ ...baseLinkFilters, state: 'closed' })}
+                                                target="_blank" rel="noopener noreferrer"
+                                                className="text-emerald-400 font-medium hover:underline"
+                                                title={`View ${stat.closedIssues} closed items for ${stat.employee.name} on GitHub`}
+                                            >
                                                 {stat.closedIssues}
-                                            </span>
+                                            </a>
                                         </td>
+
+                                        {/* --- Clickable Link for OPEN items --- */}
                                         <td className="px-4 py-3 text-center">
-                                            <span className="text-amber-400 font-medium">
+                                            <a
+                                                href={buildGitHubSearchURL({ ...baseLinkFilters, state: 'open' })}
+                                                target="_blank" rel="noopener noreferrer"
+                                                className="text-amber-400 font-medium hover:underline"
+                                                title={`View ${stat.openIssues} open items for ${stat.employee.name} on GitHub`}
+                                            >
                                                 {stat.openIssues}
-                                            </span>
+                                            </a>
                                         </td>
+
                                         <td className="px-4 py-3 text-center">
-                                            <span className="text-red-400 font-medium">
-                                                {onHoldCount}
-                                            </span>
+                                            <span className="text-red-400 font-medium">{getOnHoldCount(stat)}</span>
                                         </td>
+
+                                        {/* --- Clickable Link for ALL items for this user --- */}
                                         <td className="px-4 py-3 text-center">
-                                            <span className="text-blue-400 font-semibold">
-                                                {stat.openIssues + onHoldCount}
-                                            </span>
+                                            <a
+                                                // Here we set state to 'all', so the 'is:' filter for state is omitted.
+                                                href={buildGitHubSearchURL({ ...baseLinkFilters, state: 'all' })}
+                                                target="_blank" rel="noopener noreferrer"
+                                                className="text-blue-400 font-semibold hover:underline"
+                                                title={`View all assigned items for ${stat.employee.name} on GitHub`}
+                                            >
+                                                {stat.totalIssues}
+                                            </a>
                                         </td>
                                     </tr>
                                 );

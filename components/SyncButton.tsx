@@ -3,6 +3,7 @@ import { useSseSync } from '@/hooks/useSseSync';
 import { useAuth } from '@/contexts/AuthProvider.tsx';
 import { syncRun } from '@/utils/apiService';
 import { configs } from '@/config';
+import { formatLastSynced } from '@/utils/formatDate';
 
 // --- Interfaces (No changes needed) ---
 interface SyncOptions {
@@ -156,7 +157,7 @@ export const SyncButton: React.FC<SyncButtonProps> = ({
                       <strong>Issues:</strong> total {completionData.issueStats.totalIssuesLog}, merged {completionData.issueStats.totalPrMerged}
                     </div>
                     <div className="text-slate-400">
-                      <strong>Expires:</strong> {new Date(completionData.expiration_date).toLocaleString()}
+                      <strong>Expires:</strong> {formatLastSynced(completionData.expiration_date)}
                     </div>
                   </div>
                 </>
@@ -222,6 +223,7 @@ export const SyncButton: React.FC<SyncButtonProps> = ({
                     <p>• Incremental: Updates since last sync</p>
                     <p>• Full: Syncs all issues from scratch</p>
                     <p>• Triggered by: <span className="text-slate-300">{currentUser}</span></p>
+                    <p>• Token Expires on: {completionData? formatLastSynced(completionData.expiration_date): "Available after sync"}</p>
                 </div>
             </div>
         )}

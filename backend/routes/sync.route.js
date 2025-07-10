@@ -1,6 +1,5 @@
 import {Router} from 'express';
-import { triggerFullSync } from '../controller/sync.controller.js';
-
+import { getStatus, triggerFullSync } from '../controller/sync.controller.js';
 import { clients } from '../utils/eventutil.js';
 
 
@@ -25,5 +24,7 @@ router.get("/stream", (req, res) => {
       if (idx !== -1) clients.splice(idx, 1);
     });
 });
+
+router.route('/status').get(getStatus);
 
 export default router;

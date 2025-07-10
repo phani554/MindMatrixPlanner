@@ -1,8 +1,10 @@
-import { runSync } from '../services/githubSyncService.js';
+import { getLastSyncStatus, runSync } from '../services/githubSyncService.js';
 import { syncTeamMembers } from '../services/githubEmployeeFetchService.js';
 import { logger } from '../utils/syncUtility.js';
 import { syncUtility } from '../utils/syncUtility.js';
 import { broadcastSyncComplete, broadcastSyncError } from '../utils/eventutil.js'; // Assuming you might add an error broadcast
+import { handleAsync } from '../utils/handleAsync.js';
+
 
 const mapSyncConfig = syncUtility.mapSyncConfig;
 
@@ -133,3 +135,13 @@ export const triggerFullSync = (req, res, next) => {
         message: "Sync process initiated. You will be notified via SSE upon completion."
     });
 };
+export const getStatus = handleAsync(async (req,res) => {
+    const status = await getLastSyncStatus();
+    if (!status){
+        return res.status(404).json({ status: 'fail', message: 'Sync status has not been recorded yet.' });
+    }
+    res.status(200).json({
+        status: 'success',
+        data: status,
+    });
+});

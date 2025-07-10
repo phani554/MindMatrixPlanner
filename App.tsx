@@ -22,11 +22,11 @@ import { AssignTaskModal } from './components/AssignTaskModal';
 import { GoogleGenAI } from "@google/genai";
 import { useApi } from './hooks/useApi';
 import { fetchService } from './services/resourceService';
-
+import { useSyncStatus } from './hooks/useIssueData';
 import AuthButton from "./components/AuthButton";
 import { IssueView } from './components/IssueView';
 import { SyncButton } from './components/SyncButton';
-
+import { formatLastSynced } from './utils/formatDate';
 
 // Helper function to get all members of a department recursively (includes leader)
 const getDepartmentMembersRecursive = (leaderId: ResourceId | undefined | null, allResources: Resource[]): Resource[] => {
@@ -105,6 +105,8 @@ const parseSOWDate = (dateStr?: string): string | undefined => {
 
 
 const App: React.FC = () => {
+  const { data: syncStatus } = useSyncStatus();
+
   const { data, isLoading, error } = useApi(fetchService.getResources);
 
   const [resources, setResources] = useState<Resource[]>([]);
@@ -773,7 +775,7 @@ const PlannerViewWrapper: React.FC = () => {
             </div>
         );
     }
-    const viewingUser = resources.find(r => r.id === selectedPersonalPlannerUserId);
+    const viewingUser = resources.find(r => r.githubId === selectedPersonalPlannerUserId);
     if (!viewingUser) return <p className="text-red-400">Error: Selected user for planner not found.</p>;
     
     const userTasks = tasks.filter(t => t.assignedResourceId === selectedPersonalPlannerUserId);
@@ -822,6 +824,9 @@ const handleSyncStart = (userLogin: string, timestamp: string) => {
                 </div>
 
                 <div className=" flex ">
+                  <div className = "flex gap-5 mr-5 items-center">
+                   Last Synced {(formatLastSynced(syncStatus.timestamp))}
+                  </div>
                     <SyncButton
                         showAdvancedOptions={true}
                         onSyncComplete={handleSyncComplete}

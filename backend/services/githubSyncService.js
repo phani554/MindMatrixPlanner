@@ -166,37 +166,65 @@ export async function runSync(options = {}) {
 
 export async function getLastSyncStatus() {
   try {
-    const latestSyncConfig = await SyncConfig.findOne().sort({ lastUpdatedAt: -1 }).select('lastUpdatedAt');
-    let lastSyncedDateMessage = "No previous sync found.";
-    let lastSyncedTimestamp = null; // To store the raw timestamp if available
+    // Step 1: Fetch the single configuration document. Since there's only one,
+    // a simple findOne() is all that's needed.
+    const syncConfig = await SyncConfig.findOne();
 
-    if (latestSyncConfig && latestSyncConfig.lastUpdatedAt) {
-      const lastSyncedDate = new Date(latestSyncConfig.lastUpdatedAt);
-      const today = new Date();
-
-      // Normalize dates to the beginning of the day for comparison
-      lastSyncedDate.setHours(0, 0, 0, 0);
-      today.setHours(0, 0, 0, 0);
-
-      lastSyncedTimestamp = latestSyncConfig.lastUpdatedAt; // Store the original timestamp
-
-      if (lastSyncedDate.getTime() === today.getTime()) {
-        const lastSyncedTime = new Date(latestSyncConfig.lastUpdatedAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }); // Format time nicely
-        lastSyncedDateMessage = `Last synced today at ${lastSyncedTime}.`;
-      } else {
-        const lastSyncedFormattedDate = new Date(latestSyncConfig.lastUpdatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }); // Format date nicely
-        lastSyncedDateMessage = `Last synced on ${lastSyncedFormattedDate}.`;
-      }
+    if (!syncConfig) {
+      // This case handles when the collection is empty.
+      return { message: "Sync has not been run yet.", timestamp: null };
     }
 
+    // Step 2: Safely access the nested lastUpdatedAt dates.
+    const employeeSyncDate = syncConfig.employeeSync?.lastUpdatedAt;
+    const issueSyncDate = syncConfig.issueSync?.lastUpdatedAt;
+
+    // Step 3: Intelligently determine the most recent sync date.
+    let mostRecentDate = null;
+    if (employeeSyncDate && issueSyncDate) {
+      // If both dates exist, pick the later one.
+      mostRecentDate = employeeSyncDate > issueSyncDate ? employeeSyncDate : issueSyncDate;
+    } else {
+      // Otherwise, use whichever one is not null.
+      mostRecentDate = employeeSyncDate || issueSyncDate;
+    }
+
+    // Step 4: Handle the case where the sync has run but no dates were recorded.
+    if (!mostRecentDate) {
+      return { message: "Sync has been configured, but a successful date is not recorded.", timestamp: null };
+    }
+
+    // Step 5: Format the user-friendly message based on the most recent date.
+    // This part contains the fix for the toISOString/toLocaleString error.
+    let lastSyncedDateMessage = "";
+    const lastSyncedDate = new Date(mostRecentDate);
+    const today = new Date();
+
+    const isToday = lastSyncedDate.getFullYear() === today.getFullYear() &&
+                    lastSyncedDate.getMonth() === today.getMonth() &&
+                    lastSyncedDate.getDate() === today.getDate();
+
+    if (isToday) {
+      // Correctly use toLocaleTimeString for today's date.
+      const lastSyncedTime = lastSyncedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+      lastSyncedDateMessage = `Last synced today at ${lastSyncedTime}`;
+    } else {
+      // Use a clear date format for previous days.
+      const lastSyncedFormattedDate = lastSyncedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      lastSyncedDateMessage = `Last synced on ${lastSyncedFormattedDate}`;
+    }
+
+    // Step 6: Return a consistent and useful payload for the API.
     return {
       message: lastSyncedDateMessage,
-      timestamp: lastSyncedTimestamp, // Provide the raw timestamp too, useful for frontend
+      timestamp: mostRecentDate.toISOString(), // Provide the raw ISO timestamp for the frontend
     };
+
   } catch (error) {
     logger.error(`❌ Error fetching last sync status: ${error.message}`);
+    // Return a structured error response
     return {
-      message: "Failed to retrieve last sync status.",
+      message: "An error occurred while retrieving sync status.",
       timestamp: null,
       error: error.message,
     };

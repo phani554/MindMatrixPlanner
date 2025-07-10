@@ -97,3 +97,32 @@ export const authService = {
     checkAuthentication,
     logout,
 };
+interface SyncStatusData {
+    message: string;
+    timestamp: string; // JSON converts Dates to ISO strings
+}
+
+export const employeeService = {
+    async getSyncStatus(signal?: AbortSignal): Promise<SyncStatusData> {
+        try {
+            const response = await apiService<{ data: any }>(`${BASE_URL}/sync/status`, { signal });
+            return response.data;
+        } catch (error) {
+            // It's okay if this fails silently (e.g., on first run)
+            console.warn("Could not fetch sync status:", error);
+            return { message:'failed', timestamp: ''};
+        }
+    },
+
+    // async updateEmployee(githubId: number, updateData: Partial<Resource>): Promise<Resource> {
+    //     try {
+    //         return await apiService<Resource>(`${BASE_URL}/${githubId}`, {
+    //             method: 'PATCH',
+    //             body: JSON.stringify(updateData),
+    //             headers: { 'Content-Type': 'application/json' },
+    //         });
+    //     } catch (error) {
+    //         throw handleApiError(error, 'updating employee');
+    //     }
+    // }
+};
