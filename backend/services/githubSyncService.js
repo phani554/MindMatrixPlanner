@@ -30,18 +30,25 @@ async function _processIssueBatch(batch) {
   }
 }
 
+// In githubSyncService.js
+
 async function _getIncrementalSyncDate() {
-    // Using await here makes the async nature explicit and satisfies linters.
-    const latestSync = await SyncConfig.findOne().sort({ lastUpdatedAt: -1 }).select('lastUpdatedAt');
-    
-    if (latestSync && latestSync.lastUpdatedAt) {
-        const sinceDate = new Date(latestSync.lastUpdatedAt.getTime() - 60 * 60 * 1000);
-        logger.info(`Incremental sync: Fetching issues updated since ${formatDate(sinceDate)}`);
-        return sinceDate;
-    }
-    
-    logger.info("No existing sync config found. Performing full sync.");
-    return null;
+  // CORRECTED: Use dot notation to query the nested field.
+  const latestSync = await SyncConfig.findOne()
+      .sort({ 'issueSync.lastUpdatedAt': -1 }) // Correct sort key
+      .select('issueSync.lastUpdatedAt');      // Correct select key
+  
+  // CORRECTED: Check the nested path for the date.
+  if (latestSync && latestSync.issueSync && latestSync.issueSync.lastUpdatedAt) {
+      // Subtract 1 hour to account for any potential clock drift or race conditions
+      const sinceDate = new Date(latestSync.issueSync.lastUpdatedAt.getTime() - 60 * 60 * 1000);
+      logger.info(`Incremental sync: Fetching issues updated since ${formatDate(sinceDate)}`);
+      return sinceDate;
+  }
+  
+  // This part is now correct: it only runs if no valid sync date is found.
+  logger.info("No existing sync config found. Performing full sync.");
+  return null;
 }
 
 export async function runSync(options = {}) {

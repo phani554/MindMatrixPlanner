@@ -1,11 +1,7 @@
 import {Router} from 'express';
 import { triggerFullSync } from '../controller/sync.controller.js';
 
-let clients = [];
-export function broadcastSyncComplete(payload) {
-    const data = `event: sync_completed\ndata: ${JSON.stringify(payload)}\n\n`;
-    clients.forEach(res => res.write(data));
-};
+import { clients } from '../utils/eventutil.js';
 
 
 const router = Router();
