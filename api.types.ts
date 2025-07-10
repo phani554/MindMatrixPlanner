@@ -34,6 +34,9 @@ export interface IssueFilters {
     teamLeadGithubId?: number;
 
     includeIndirectReports?: boolean;
+    role?: 'developer' | 'tester';
+    showIssues?: boolean;
+    showPullRequests?: boolean;
     [key: string]: any;
 }
 

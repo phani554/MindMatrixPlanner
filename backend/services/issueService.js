@@ -11,45 +11,63 @@ import { Employee } from '../models/employees.model.js';
  * @private
  */
 const _getEmployeeFilteredIds = async (filters = {}) => {
-  const { module, teamLeadGithubId, includeIndirectReports } = filters;
-  if (!module && !teamLeadGithubId) {
-      return null; // No employee-specific filters to apply
+  const { teamLeadGithubId, includeIndirectReports, role } = filters;
+
+  let moduleList = [];
+  if (typeof filters.module === 'string' && filters.module) {
+      moduleList = filters.module.split(',').map(m => m.trim()).filter(m => m);
+  } else if (Array.isArray(filters.module)) {
+      moduleList = filters.module;
   }
 
-  const employeeQuery = {};
+  // These variables will hold the RESULTS of separate queries.
+  let idsFromMainFilter = null; // For Role and Module
+  let idsFromTeamFilter = null; // For Team Lead and Hierarchy
 
-  if (module && Array.isArray(module) && module.length > 0) {
-    employeeQuery.modules = { $all: module };
+  // --- STEP 1: Execute the Role/Module Query ---
+  const mainEmployeeQuery = {};
+  if (moduleList.length > 0) {
+      mainEmployeeQuery.modules = { $all: moduleList };
+  }
+  if (role) {
+      mainEmployeeQuery.role = new RegExp(`^${role}$`, 'i');
   }
 
-  // 2. Handle Team Lead filter (with new hierarchical logic)
+  if (Object.keys(mainEmployeeQuery).length > 0) {
+      const employees = await Employee.find(mainEmployeeQuery).select('githubId').lean();
+      idsFromMainFilter = employees.map(e => e.githubId);
+      // Optimization: if this filter returns no one, no intersection is possible.
+      if (idsFromMainFilter.length === 0) return [-1]; 
+  }
+
+  // --- STEP 2: Execute the Team Lead Hierarchy Query ---
   if (teamLeadGithubId) {
-      let teamMemberIds;
       if (includeIndirectReports === true || includeIndirectReports === 'true') {
-          // --- HIERARCHY PATH ---
-          // Use the new static method to get the entire reporting chain.
-          teamMemberIds = await Employee.getReportingHierarchyIds(teamLeadGithubId);
+          idsFromTeamFilter = await Employee.getReportingHierarchyIds(teamLeadGithubId);
       } else {
-        // --- DIRECT REPORTS PATH ---
-        // Find the lead's _id.
-        const lead = await Employee.findOne({ githubId: teamLeadGithubId }).select('_id').lean();
-        if (lead) {
-            // Find direct reports and get their GitHub IDs.
-            const directReports = await Employee.find({ reportsTo: lead._id }).select('githubId').lean();
-            teamMemberIds = directReports.map(e => e.githubId);
-        } else {
-            teamMemberIds = []; // Lead not found, so no reports.
-        }
+          const lead = await Employee.findOne({ githubId: teamLeadGithubId }).select('_id').lean();
+          idsFromTeamFilter = lead ? (await Employee.find({ reportsTo: lead._id }).select('githubId').lean()).map(e => e.githubId) : [];
       }
-      
-    // If team members were found, add a condition to the main employeeQuery.
-    // This will AND with the module filter if it's also active.
-    employeeQuery.githubId = { $in: teamMemberIds.length > 0 ? teamMemberIds : [-1] };
+      // Optimization: if this filter returns no one, no intersection is possible.
+      if (idsFromTeamFilter.length === 0) return [-1];
   }
-
-  // 3. Execute the final combined query and return the list of matching GitHub IDs.
-  const employees = await Employee.find(employeeQuery).select('githubId').lean();
-  return employees.map(e => e.githubId);
+  
+  // --- STEP 3: Combine the results correctly ---
+  if (idsFromMainFilter !== null && idsFromTeamFilter !== null) {
+      // AND Case: Both filter groups were active. Find the intersection.
+      const setA = new Set(idsFromMainFilter);
+      const finalIds = idsFromTeamFilter.filter(id => setA.has(id));
+      return finalIds.length > 0 ? finalIds : [-1];
+  } else if (idsFromMainFilter !== null) {
+      // Only Role/Module filter was active.
+      return idsFromMainFilter;
+  } else if (idsFromTeamFilter !== null) {
+      // Only Team filter was active.
+      return idsFromTeamFilter;
+  } else {
+      // No employee-based filters were active at all.
+      return null;
+  }
 };
 
 
@@ -123,8 +141,12 @@ const _buildIssuesQuery = async (filters = {}, options = {}) => {
     }
     // --- End of Centralized Logic ---
 
-    if (filters.pull_request !== undefined) {
-        query.pull_request = filters.pull_request === 'true';
+    const showIssues = filters.showIssues === true || filters.showIssues === 'true';
+    const showPullRequests = filters.showPullRequests === true || filters.showPullRequests === 'true';
+    if (showIssues && !showPullRequests) {
+      query.pull_request = false;
+    } else if (!showIssues && showPullRequests) {
+        query.pull_request = true;
     }
     if (filters.user) query['user.login'] = filters.user;
     if (filters.createdById) query['user.id'] = parseInt(filters.createdById, 10);

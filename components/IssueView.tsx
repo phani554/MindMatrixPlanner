@@ -37,8 +37,9 @@ type SortField = 'openIssues' | 'closedIssues' | 'totalIssues' | 'name';
 export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
     // --- Filter State ---
     const [filters, setFilters] = useState<IssueFilters>({
-        pull_request: false,
-        state: 'all'
+        state: 'all',
+        showIssues: true, // Default to showing only issues
+        showPullRequests: false,
     });
 
     // --- Sort and Pagination State ---
@@ -333,6 +334,28 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
         }));
         // No need to reset pagination here as it's a sub-filter of the team lead.
     };
+
+    const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedRole = e.target.value;
+        setFilters(prev => {
+            const newFilters = { ...prev };
+            if (selectedRole) {
+                newFilters.role = selectedRole as 'Developer' | 'Tester';
+            } else {
+                delete newFilters.role; // Clear filter if "All Roles" is selected
+            }
+            return newFilters;
+        });
+        setPagination({ page: 1, limit: pagination.limit });
+    };
+
+    const handleTypeToggle = (type: 'issues' | 'pullRequests') => {
+        setFilters(prev => ({
+            ...prev,
+            [type === 'issues' ? 'showIssues' : 'showPullRequests']: !prev[type === 'issues' ? 'showIssues' : 'showPullRequests']
+        }));
+        setPagination({ page: 1, limit: pagination.limit });
+    };
     // --- ADDED END ---
 
     // --- Helper function to calculate on-hold count ---
@@ -341,7 +364,7 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
         if (!openStateGroup) return 0;
 
         const onHoldLabel = openStateGroup.labels?.find((l: any) => 
-            l && l.label && ['on hold', 'in-discussion', 'blocked'].includes(l.label.toLowerCase())
+            l && l.label && ['on hold', 'in discussion', 'blocked'].includes(l.label.toLowerCase())
         );
         return onHoldLabel?.count || 0;
     };
@@ -441,7 +464,7 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
             </div>
 
             {/* --- FILTER CONTROLS --- */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4 p-2">
+            <div className="grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-4 p-2">
                 <div>
                     <label htmlFor="resourceFilter" className={labelClass}>Assignee</label>
                     <select 
@@ -539,6 +562,7 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
                     )}
                 </div>
                 {/* --- ADDED END --- */}
+
                 {/* ---Labels Filter ---- */}
                 <div>
                     <label htmlFor="stateFilter" className={labelClass}>State</label>
@@ -552,6 +576,51 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
                         <option value="open">Open Only</option>
                         <option value="closed">Closed Only</option>
                     </select>
+                </div>
+                {/* --- ADDED: Role Dropdown --- */}
+                <div>
+                    <label htmlFor="roleFilter" className={labelClass}>Role</label>
+                    <select
+                        id="roleFilter"
+                        value={filters.role || ''}
+                        onChange={handleRoleChange}
+                        className={inputClass}
+                    >
+                        <option value="">All Roles</option>
+                        <option value="developer">Developer</option>
+                        <option value="tester">Tester</option>
+                    </select>
+                </div>
+
+                {/* --- ADDED: Issue/PR Checkboxes --- */}
+                <div className="md:col-span-1">
+                    <label className={labelClass}>Item Type</label>
+                    <div className="flex space-x-4 mt-2 p-2.5 bg-slate-600 border border-slate-500 rounded-lg">
+                        <div className="flex items-center">
+                            <input
+                                id="showIssues"
+                                type="checkbox"
+                                checked={!!filters.showIssues}
+                                onChange={() => handleTypeToggle('issues')}
+                                className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-600"
+                            />
+                            <label htmlFor="showIssues" className="ml-2 text-sm font-medium text-slate-300">
+                                Issues
+                            </label>
+                        </div>
+                        <div className="flex items-center">
+                            <input
+                                id="showPullRequests"
+                                type="checkbox"
+                                checked={!!filters.showPullRequests}
+                                onChange={() => handleTypeToggle('pullRequests')}
+                                className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-600"
+                            />
+                            <label htmlFor="showPullRequests" className="ml-2 text-sm font-medium text-slate-300">
+                                Pull Requests
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
                 <div>
@@ -775,7 +844,7 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
                                         </td>
                                         <td className="px-4 py-3 text-center">
                                             <span className="text-blue-400 font-semibold">
-                                                {stat.totalIssues}
+                                                {stat.openIssues + onHoldCount}
                                             </span>
                                         </td>
                                     </tr>
@@ -861,6 +930,11 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
                                 Team Lead: {teamLeads.find(l => l.githubId === filters.teamLeadGithubId)?.name || '...'}
                                 {/* ADDED: Indicate if hierarchy is active */}
                                 {filters.includeIndirectReports && ' (and hierarchy)'}
+                            </span>
+                        )}
+                        {filters.role && (
+                            <span className="px-2 py-1 bg-gray-500/20 text-gray-300 rounded text-xs capitalize">
+                                Role: {filters.role}
                             </span>
                         )}
                         {/* --- ADDED END --- */}
