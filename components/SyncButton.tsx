@@ -69,6 +69,7 @@ export const SyncButton: React.FC<SyncButtonProps> = ({
         onSuccess: (data) => onSyncComplete?.(true, data.employeeStats, data.issueStats, data.message),
         onError: (message) => onSyncComplete?.(false, null, null, message),
     });
+    
   
     // --- CORRECTED Event Handlers ---
     
