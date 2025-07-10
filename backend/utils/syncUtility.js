@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import { Issue } from "../models/issue.model.js";
 import { SyncConfig } from "../models/syncConfig.model.js";
 
-dotenv.config({ path: "C:/Users/phane/Documents/Projects/Web Development/MindMatrixPlanner/backend/.env" });
+dotenv.config({ path: "MindMatrixPlanner/backend/.env" });
 export const {ORG,REPO,MONGODB_URI, LOG_LEVEL = "info"} = process.env;
 
 // Configure logging based on LOG_LEVEL
@@ -86,21 +86,38 @@ export const syncUtility = {
         };
     },
     
-    mapSyncConfig: async function () {
+    mapSyncConfig: async ({ employeeStats, issueStats }) => {
         try {
-        const data = new SyncConfig( {
-            lastUpdatedAt: new Date(),
-            employeeLastUpdatedAt: new Date(),
-            totalIssuesLog: await Issue.countDocuments(),
-            totalPrMerged: await Issue.countDocuments({pull_request: true, merged_at: { $exists: true, $nin: ["", null] }}),
-            totalIssueClosed: await Issue.countDocuments({state: 'closed'}),
-            totalPr: await Issue.countDocuments({pull_request: true})
-        });
-        return await data.save();    
+          const update = {
+            employeeSync: {
+              lastUpdatedAt:   new Date(),
+              updated:         employeeStats.updated,
+              inserted:        employeeStats.inserted,
+              deleted:         employeeStats.deleted,
+              deletionsSkipped:employeeStats.deletionsSkipped
+            },
+            issueSync: {
+              lastUpdatedAt:    new Date(),
+              totalIssuesLog:   issueStats.totalIssuesLog,
+              totalPr:          issueStats.totalPr,
+              totalPrMerged:    issueStats.totalPrMerged,
+              totalIssueClosed: issueStats.totalIssueClosed
+            }
+          };
+      
+          const result = await SyncConfig.findOneAndUpdate(
+            {},
+            { $set: update },
+            { upsert: true, new: true }
+          );
+      
+          logger.info("✅ SyncConfig updated for full sync.");
+          return result;
+      
         } catch (error) {
-        logger.error("Error updating the Sync Config: ", error);
+          logger.error("❌ Error updating SyncConfig:", error);
+          throw error;
         }
-        
     },
     
     /**
@@ -182,8 +199,5 @@ export const syncUtility = {
         logger.error(`Error generating stats: ${error.message}`);
         throw error;
         }
-    },
-
-  
-  
+    },  
 };

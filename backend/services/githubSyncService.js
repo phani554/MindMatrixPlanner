@@ -12,7 +12,6 @@ import {
 
 const formatDate = syncUtility.formatDate;
 const mapIssueToDocument = syncUtility.mapIssueToDocument;
-const mapSyncConfig = syncUtility.mapSyncConfig;
 
 async function _processIssueBatch(batch) {
   try {
@@ -110,11 +109,24 @@ export async function runSync(options = {}) {
       logger.info(`✅ Processed final batch #${batchCount} (${batch.length} issues)`);
     }
 
-    await mapSyncConfig();
+    // await mapSyncConfig();
     logger.info(`🎉 Synced ${issueCount} issues in ${batchCount} batches.`);
-
-    const result = [issueCount, expiration_date];
-    return result;
+    const totalIssuesLog   = await Issue.countDocuments();
+    const totalPr          = await Issue.countDocuments({ pull_request: true });
+    const totalPrMerged    = await Issue.countDocuments({
+      pull_request: true,
+      merged_at:     { $exists: true, $nin: ["", null] }
+    });
+    const totalIssueClosed = await Issue.countDocuments({ state: "closed" });
+    // const result = [issueCount, expiration_date];
+    return {
+      issueCount,            // number you were already returning
+      expiration_date,
+      totalIssuesLog,
+      totalPr,
+      totalPrMerged,
+      totalIssueClosed
+    };
 
   } catch (error) {
     let descriptiveError;

@@ -1,67 +1,92 @@
 import { runSync } from '../services/githubSyncService.js';
 import { syncTeamMembers } from '../services/githubEmployeeFetchService.js';
 import { logger } from '../utils/syncUtility.js';
+import { syncUtility } from '../utils/syncUtility.js';
+import { broadcastSyncComplete } from '../routes/sync.route.js';
 
-/**
- * Controller to trigger the GitHub issue synchronization.
- * Responds to an API request.
- */
-export const triggerSync = async function(req, res) {
-  // Destructure the request body to separate sync options from the new metadata.
-  // The '...syncOptions' rest parameter will collect properties like 'fullSync', 'since', etc.
-  const { triggeredBy, triggeredAt, ...syncOptions } = req.body;
+const mapSyncConfig = syncUtility.mapSyncConfig;
+
+
+export const triggerFullSync = async (req, res, next) => {
+  // 1️⃣ Destructure any frontend-metadata + optional sync options
+  const {
+    triggeredBy,
+    triggeredAt,
+
+    // Employee‑sync option:
+    teamSlug,
+
+    // Issue‑sync options:
+    fullSync,
+    since,
+    labels,
+    batchSize,
+    syncLimit,
+    state
+  } = req.body;
+
+  logger.info(`🚀 Full sync requested by '${triggeredBy || 'Unknown'}' at ${triggeredAt || new Date().toISOString()}`);
 
   try {
-    // Log the metadata for auditing and debugging.
-    // Use default values in case the metadata is not provided in the request.
-    logger.info(`Received request to trigger issue synchronization by user: '${triggeredBy || 'Unknown'}' at ${triggeredAt || 'N/A'}.`);
-    logger.info('Sync options received:', syncOptions);
-    
-    // Pass ONLY the relevant sync options down to the service layer.
-    // The service layer does not need to know who triggered the sync.
-    const issuesSynced = await runSync(syncOptions);
+    // 2️⃣ Prepare and invoke employee sync
+    const teamOptions = {};
+    if (teamSlug) {
+      teamOptions.teamSlug = teamSlug;
+      logger.info(`↳ Will sync only team: '${teamSlug}'`);
+    } else {
+      logger.info(`↳ Will sync default teams`);
+    }
+    const empReport = await syncTeamMembers(teamOptions);
+    const employeeStats = {
+      updated:          empReport.stats.updated,
+      inserted:         empReport.stats.inserted,
+      deleted:          empReport.stats.deleted,
+      deletionsSkipped: empReport.stats.deletionsSkipped
+    };
 
-    res.status(200).json({
+    // 3️⃣ Prepare and invoke issue sync
+    const issueOptions = {};
+    if (fullSync === true) issueOptions.fullSync = fullSync;
+    if (since)            issueOptions.since    = since;
+    if (labels)           issueOptions.labels   = labels;
+    if (batchSize)        issueOptions.batchSize= batchSize;
+    if (syncLimit)        issueOptions.syncLimit= syncLimit;
+    if (state)            issueOptions.state    = state;
+
+    logger.info('↳ Issue sync options:', issueOptions);
+    const {
+      issueCount,
+      expiration_date,
+      totalIssuesLog,
+      totalPr,
+      totalPrMerged,
+      totalIssueClosed
+    } = await runSync(issueOptions);
+
+    const issueStats = { totalIssuesLog, totalPr, totalPrMerged, totalIssueClosed };
+
+    // 4️⃣ Persist both sets of stats in SyncConfig
+    await mapSyncConfig({ employeeStats, issueStats });
+
+    const payload = {
+      employeeStats,
+      issueStats,
+      expiration_date
+    };
+
+    // ① Broadcast to all SSE clients
+    broadcastSyncComplete(payload);
+
+    // ② Then respond to the HTTP request too
+    return res.status(200).json({
       success: true,
-      message: 'Synchronization completed successfully.',
-      issueCount: issuesSynced[0],
-      expiration_date: issuesSynced[1]
+      message: "🎉 Full synchronization completed successfully.",
+      ...payload,
+      logs: empReport.logs
     });
-  } catch (error) {
-    // The error is already logged with details by the service layer.
-    // We now use the descriptive message from the error for the API response.
-    res.status(500).json({
-      success: false,
-      message: error.message || 'An unknown error occurred during synchronization.',
-    });
-  }
-};
-
-export const handleTeamSyncRequest = async (req, res, next) => {
-  // teamSlug will be undefined if the route without the parameter is hit
-  const { teamSlug } = req.params;
-  const options = {};
-
-  // Only add teamSlug to options if it was actually provided in the URL
-  if (teamSlug) {
-      options.teamSlug = teamSlug;
-      logger.info(`Received specific API sync request for team: '${teamSlug}'.`);
-  } else {
-      logger.info(`Received API request for default sync (developers, testers).`);
-  }
-
-  try {
-      // Pass the options object to the service. It will be {} for the default case.
-      const syncResult = await syncTeamMembers(options);
-
-      res.status(200).json({
-          message: `Sync successful.`,
-          ...syncResult, // Spreads { syncedTeams: [...], totalSyncedEmployees: ... }
-      });
 
   } catch (error) {
-      // Pass any errors to the global error handler
-      logger.error(`API controller caught an error during sync. Passing to error handler.`);
-      next(error);
+    logger.error('❌ Full sync failed:', error);
+    return next(error);
   }
 };

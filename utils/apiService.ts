@@ -11,6 +11,8 @@ export class AuthError extends Error {
       this.data = data;
     }
 }
+
+import { configs } from "@/config";
   
 /**
  * A generic, reusable API service function that supports cancellation.
@@ -44,3 +46,49 @@ export const apiService = async <T>(url: string, options?: RequestInit): Promise
     // Parse the JSON into the caller-defined type.
     return response.json() as Promise<T>;
 };
+
+export interface SyncOptions {
+  batchSize?: number;
+  state?: 'all' | 'open' | 'closed';
+  syncLimit?: number;
+  fullSync?: boolean;
+  since?: string;
+  // plus triggeredBy, triggeredAt
+  triggeredBy?: string;
+  triggeredAt?: string;
+}
+
+export interface EmployeeStats { /* … */ }
+export interface IssueStats    { /* … */ }
+export interface SyncResponse {
+  message:         string;
+  expiration_date: string;
+  employeeStats:   EmployeeStats;
+  issueStats:      IssueStats;
+}
+
+export async function syncRun(options: SyncOptions, signal?: AbortSignal): Promise<SyncResponse> {
+  const res = await fetch(`${configs.BACKEND_URL}/sync/run`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(options),
+    signal
+  });
+
+  if (!res.ok) {
+    if (res.status === 401) throw new Error('User is not authenticated');
+    const text = await res.text();
+    throw new Error(`Sync failed: ${res.status} ${res.statusText}${text ? ` — ${text}` : ''}`);
+  }
+  if (res.status === 204) {
+    // fallback shape
+    return {
+      message:         'No new issues to sync',
+      expiration_date: new Date().toISOString(),
+      employeeStats:   { updated: 0, inserted: 0, deleted: 0, deletionsSkipped: 0 },
+      issueStats:      { totalIssuesLog: 0, totalPr: 0, totalPrMerged: 0, totalIssueClosed: 0 }
+    };
+  }
+  return res.json();
+}

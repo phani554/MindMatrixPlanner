@@ -1,7 +1,6 @@
 import { Employee } from "../models/employees.model.js";
 import { octokit as gitclient } from "../controller/getOctokit.js";
 import { ORG, logger } from "../utils/syncUtility.js";
-import mongoose from "mongoose";
 
 /**
  * [NEW] Centralizes the mapping from a GitHub team slug to a DB role enum.
@@ -74,19 +73,16 @@ async function _syncSingleTeam(teamSlug, octokit) {
     skippedDeletions: [], unenriched: [], logs: []
   };
 
-  // Fetch existing employees in this role
   const existingEmps = await Employee.find({ role });
   const existingGithubIds = new Set(existingEmps.map(e => e.githubId).filter(Boolean));
   const incomingGithubIds = new Set();
 
-  // 1️⃣ Sync loop
   const params = { org: ORG, team_slug: teamSlug, per_page: 100 };
   for await (const page of octokit.paginate.iterator(octokit.rest.teams.listMembersInOrg, params)) {
     for (const member of page.data) {
       incomingGithubIds.add(member.id);
       const apiDisplayName = await _getDisplayName(octokit, member.login);
 
-      // Three-step lookup
       let existingDoc =
         await Employee.findOne({ githubId: member.id }) ||
         await Employee.findOne({ username: member.login }) ||
@@ -94,8 +90,12 @@ async function _syncSingleTeam(teamSlug, octokit) {
           ? await Employee.findOne({ name: apiDisplayName })
           : null);
 
+      const newName = (apiDisplayName?.trim().split(' ').length === 2)
+        ? apiDisplayName
+        : member.login;
+
       if (existingDoc) {
-        // Update existing
+        // ✅ Only update if fields actually differ
         const payload = {
           githubId: member.id,
           username: member.login,
@@ -104,15 +104,23 @@ async function _syncSingleTeam(teamSlug, octokit) {
         if (apiDisplayName?.trim().split(' ').length === 2) {
           payload.name = apiDisplayName;
         }
-        await Employee.updateOne({ _id: existingDoc._id }, { $set: payload });
-        report.updated.push(existingDoc.name);
+
+        const needsUpdate = Object.entries(payload).some(
+          ([key, value]) => existingDoc[key] !== value
+        );
+
+        if (needsUpdate) {
+          await Employee.updateOne({ _id: existingDoc._id }, { $set: payload });
+          if (!report.updated.includes(existingDoc.name)) {
+            report.updated.push(existingDoc.name);
+          }
+          report.logs.push({
+            level: 'info',
+            message: `Updated employee: '${existingDoc.username}'`
+          });
+        }
 
       } else {
-        // Create new
-        const newName =
-          apiDisplayName?.trim().split(' ').length === 2
-            ? apiDisplayName
-            : member.login;
         const doc = mapEmployeeToDocument(member, role, newName);
         const created = await Employee.create(doc);
         report.inserted.push(created.name);
@@ -124,7 +132,7 @@ async function _syncSingleTeam(teamSlug, octokit) {
     }
   }
 
-  // 2️⃣ Safe‑deletion logic
+  // 🔥 Safe deletion logic
   const toDeleteIds = [...existingGithubIds].filter(id => !incomingGithubIds.has(id));
   if (toDeleteIds.length) {
     const candidates = await Employee.find({ githubId: { $in: toDeleteIds } });
@@ -133,19 +141,19 @@ async function _syncSingleTeam(teamSlug, octokit) {
     for (const emp of candidates) {
       const subs = await Employee.find({ reportsTo: emp._id }, 'name');
       if (subs.length) {
-        // Warn about orphaned reports
-        console.warn(
-          `⚠️ Deleting manager/team‑lead '${emp.name}' will orphan: ${subs.map(s => s.name).join(', ')}`
-        );
+        const warning = `⚠️ Skipped deletion of '${emp.name}' — still referenced by [${subs.map(s => s.name).join(', ')}]`;
+        console.warn(warning);
         report.skippedDeletions.push({
           name: emp.name,
           githubId: emp.githubId,
           username: emp.username,
           referencedBy: subs.map(s => s.name)
         });
+        report.logs.push({ level: 'warn', message: warning });
       } else {
         safeDelete.push(emp._id);
         report.deleted.push(emp.name);
+        report.logs.push({ level: 'info', message: `Deleted employee: '${emp.name}'` });
       }
     }
 
@@ -155,12 +163,19 @@ async function _syncSingleTeam(teamSlug, octokit) {
     }
   }
 
-  // 3️⃣ Unenriched check
+  // 🧹 Unenriched employees
   const unenriched = await Employee.find({ role, githubId: null }, 'name');
   report.unenriched = unenriched.map(e => e.name);
+  if (unenriched.length) {
+    report.logs.push({
+      level: 'warn',
+      message: `Found ${unenriched.length} unenriched employees.`
+    });
+  }
 
   return report;
 }
+
 
 
 /**
@@ -183,7 +198,6 @@ export async function syncTeamMembers(options = {}) {
 
    try {
        const octokit = await gitclient.getforPat();
-       await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/github-dashboard');
        logger.info("Database connected successfully.\n");
 
        for (const team of teamsToSync) {
@@ -241,12 +255,6 @@ export async function syncTeamMembers(options = {}) {
             logs: finalReport.logs.concat({ level: 'error', message: descriptiveError.message })
         };
     }
-    finally{
-        if (mongoose.connection.readyState === 1) {
-            await mongoose.disconnect();
-            logger.info("\nDatabase connection closed.");    
-        }
-    }
+
 }
 // To run this script directly for testing:
-syncTeamMembers();

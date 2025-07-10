@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { ORG } from "../utils/syncUtility.js";
 
 
-dotenv.config({ path: "C:/Users/phane/Documents/Projects/Web Development/MindMatrixPlanner/backend/.env" });
+dotenv.config({ path: "MindMatrixPlanner/backend/.env" });
 
 const octokit = {
 
