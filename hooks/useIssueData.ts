@@ -2,6 +2,7 @@
 import { useCallback } from 'react';
 import { useApi } from './useApi';
 import { issueService } from '../services/issueService';
+import { fetchService } from '@/services/resourceService';
 import { IssueFilters, SortOptions, AssigneeStatsSortOptions, PaginationParams } from '@/api.types.ts';
 
 export const useAssigneeStats = (
@@ -32,6 +33,14 @@ export const useSummaryStats = (filters: IssueFilters = {}) => {
     const apiCall = useCallback(
         (signal: AbortSignal) => issueService.getSummaryStats(filters, signal),
         [filters]
+    );
+    return useApi(apiCall);
+};
+
+export const useModules = () => {
+    const apiCall = useCallback(
+        (signal: AbortSignal) => fetchService.getAllModules(signal),
+        []
     );
     return useApi(apiCall);
 };

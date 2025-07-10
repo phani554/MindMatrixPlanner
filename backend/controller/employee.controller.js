@@ -1,4 +1,6 @@
 import {employeeService} from '../services/employeeService.js';
+import { handleAsync } from '../utils/handleAsync.js';
+import { Employee } from '../models/employees.model.js';
 
 export const employeeController = {
         /**
@@ -74,3 +76,11 @@ export const employeeController = {
 
     },
 };
+
+export const getModuleList = handleAsync(async (req, res) => {
+    const modules = await Employee.getAllModuleNames();
+    res.status(200).json({
+        status: 'success',
+        data: modules,
+    });
+});

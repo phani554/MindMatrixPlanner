@@ -11,8 +11,9 @@ import {
 import { buildQueryString } from "@/utils/queryBuilder";
 import { apiService } from "@/utils/apiService";
 import { handleApiError } from "@/utils/apiError";
+import { configs } from "@/config";
 
-const BACKEND_URL = "http://localhost:5100/issues";
+const BACKEND_URL = configs.BACKEND_URL;
 
 /**
  * Simple, focused service for issues API - leverages your existing infrastructure
@@ -30,7 +31,7 @@ export const issueService = {
         try {
             const allParams = { ...filters, ...sortOptions, ...pagination };
             const queryString = buildQueryString(allParams);
-            const url = `${BACKEND_URL}/stats${queryString ? `?${queryString}` : ''}`;
+            const url = `${BACKEND_URL}/issues/stats${queryString ? `?${queryString}` : ''}`;
 
             return await apiService<AssigneeStatsResponse>(url, { signal });
         } catch (error) {
@@ -50,7 +51,7 @@ export const issueService = {
         try {
             const allParams = { ...filters, ...sortOptions, ...pagination };
             const queryString = buildQueryString(allParams);
-            const url = `${BACKEND_URL}${queryString ? `?${queryString}` : ''}`;
+            const url = `${BACKEND_URL}/issues/${queryString ? `?${queryString}` : ''}`;
 
             return await apiService<IssuesResponse>(url, { signal });
         } catch (error) {
@@ -67,11 +68,12 @@ export const issueService = {
     ): Promise<SummaryResponse> {
         try {
             const queryString = buildQueryString(filters);
-            const url = `${BACKEND_URL}/summary${queryString ? `?${queryString}` : ''}`;
+            const url = `${BACKEND_URL}/issues/summary${queryString ? `?${queryString}` : ''}`;
 
             return await apiService<SummaryResponse>(url, { signal });
         } catch (error) {
             throw handleApiError(error, 'summary statistics');
         }
-    }
-};
+    },
+    
+}

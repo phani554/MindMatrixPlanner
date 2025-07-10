@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { useAssigneeStats, useSummaryStats } from '../hooks/useIssueData';
+import { useAssigneeStats, useSummaryStats, useModules } from '../hooks/useIssueData';
 import { IssueFilters, AssigneeStatsSortOptions, PaginationParams } from '@/api.types.ts';
 import { Resource } from '../types';
 
@@ -52,6 +52,9 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
         limit: 20 // Reasonable page size
     });
 
+    const [moduleInput, setModuleInput] = useState('');
+
+
     // --- Debounce filters to prevent constant API calls ---
     const debouncedFilters = useDebounce(filters, 500);
 
@@ -68,6 +71,18 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
         error: summaryError 
     } = useSummaryStats(debouncedFilters);
 
+    const { data: allModules, isLoading: modulesLoading } = useModules();
+
+    // --- Memoized list of module suggestions based on user input ---
+    const moduleSuggestions = useMemo(() => {
+        if (!moduleInput || !allModules) return [];
+        // Don't show suggestions that are already selected
+        const selectedModules = new Set(filters.module || []);
+        return allModules.filter(mod =>
+            !selectedModules.has(mod) &&
+            mod.toLowerCase().includes(moduleInput.toLowerCase())
+        );
+    }, [moduleInput, allModules, filters.module]);
     // --- Extract data from responses ---
     const statsData = statsResponse?.data || [];
     const summaryData = summaryResponse?.data;
@@ -92,7 +107,24 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
             setPagination(prev => ({ ...prev, page: 1 }));
         }
     };
+    // --- ADDED START: Memoized lists for the new dropdowns ---
+    // This logic creates the data needed to populate our new UI controls.
+    const teamLeads = useMemo(() => {
+        // Find all employees marked as a team lead (includes Module Owners).
+        return resources
+            .filter(r => r.isTeamLead)
+            .sort((a, b) => a.name.localeCompare(b.name));
+    }, [resources]);
 
+    const modules = useMemo(() => {
+        // Collect all unique module names from all resources.
+        const allModules = new Set<string>();
+        resources.forEach(r => {
+            r.modules?.forEach(mod => allModules.add(mod));
+        });
+        return Array.from(allModules).sort();
+    }, [resources]);
+    // --- ADDED END ---
     // --- Chart Configuration ---
     const chartData = useMemo(() => {
         if (!summaryData) return null;
@@ -260,13 +292,56 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
         setPagination(prev => ({ ...prev, page: 1 }));
     };
 
+    const handleModuleSelect = (moduleName: string) => {
+        setFilters(prev => ({
+            ...prev,
+            module: [...(prev.module || []), moduleName]
+        }));
+        setModuleInput(''); 
+        setPagination({ page: 1, limit: pagination.limit });
+    };
+
+    const handleModuleRemove = (moduleNameToRemove: string) => {
+        setFilters(prev => ({
+            ...prev,
+            module: prev.module?.filter(mod => mod !== moduleNameToRemove)
+        }));
+        setPagination({ page: 1, limit: pagination.limit });
+    };
+
+    const handleTeamLeadChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedId = e.target.value;
+        setFilters(prev => {
+            const newFilters = { ...prev };
+            if (selectedId) {
+                newFilters.teamLeadGithubId = parseInt(selectedId, 10);
+            } else {
+                delete newFilters.teamLeadGithubId; // Clear the filter if "All" is selected
+                delete newFilters.includeIndirectReports;
+            }
+            return newFilters;
+        });
+        setPagination(prev => ({ ...prev, page: 1 }));
+    };
+    // --- ADDED END ---
+     // --- ADDED START: Handler for the new checkbox ---
+    const handleIndirectReportsToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const isChecked = e.target.checked;
+        setFilters(prev => ({
+            ...prev,
+            includeIndirectReports: isChecked
+        }));
+        // No need to reset pagination here as it's a sub-filter of the team lead.
+    };
+    // --- ADDED END ---
+
     // --- Helper function to calculate on-hold count ---
     const getOnHoldCount = (stat: any) => {
         const openStateGroup = stat.employee.countsByStateAndLabel?.find((s: any) => s.state === 'open');
         if (!openStateGroup) return 0;
 
         const onHoldLabel = openStateGroup.labels?.find((l: any) => 
-            l && l.label && ['on-hold', 'in-discussion', 'blocked'].includes(l.label.toLowerCase())
+            l && l.label && ['on hold', 'in-discussion', 'blocked'].includes(l.label.toLowerCase())
         );
         return onHoldLabel?.count || 0;
     };
@@ -383,7 +458,88 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
                         ))}
                     </select>
                 </div>
+                {/* --- ADDED START: Module Filter Input --- */}
+                <div className="relative">
+                    <label htmlFor="moduleFilter" className={labelClass}>
+                        Module(s)
+                    </label>
+                    {/* Display selected modules as "pills" */}
+                    <div className="flex flex-wrap gap-2 p-2 bg-slate-600 border border-slate-500 rounded-lg mb-1 min-h-[44px]">
+                        {filters.module?.map(mod => (
+                            <span key={mod} className="flex items-center px-2 py-1 bg-cyan-600 text-cyan-100 rounded-full text-sm">
+                                {mod}
+                                <button
+                                    onClick={() => handleModuleRemove(mod)}
+                                    className="ml-2 -mr-1 text-cyan-200 hover:text-white"
+                                    title={`Remove ${mod}`}
+                                >
+                                    ×
+                                </button>
+                            </span>
+                        ))}
+                        {/* The actual input field */}
+                        <input
+                            type="text"
+                            id="moduleFilter"
+                            placeholder={modulesLoading ? "Loading modules..." : "Type to add module..."}
+                            value={moduleInput}
+                            onChange={(e) => setModuleInput(e.target.value)}
+                            className="bg-transparent flex-grow outline-none text-slate-200 placeholder-slate-400"
+                            disabled={modulesLoading}
+                        />
+                    </div>
+                    {/* Autocomplete suggestion dropdown */}
+                    {moduleSuggestions.length > 0 && (
+                        <ul className="absolute z-10 w-full bg-slate-700 border border-slate-600 rounded-lg mt-1 max-h-60 overflow-y-auto">
+                            {moduleSuggestions.slice(0, 10).map(suggestion => (
+                                <li
+                                    key={suggestion}
+                                    onClick={() => handleModuleSelect(suggestion)}
+                                    className="px-3 py-2 text-slate-300 hover:bg-slate-600 cursor-pointer"
+                                >
+                                    {suggestion}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
 
+                {/* --- ADDED END --- */}
+
+                {/* --- ADDED START: Team Lead Filter Dropdown --- */}
+                <div>
+                    <label htmlFor="teamLeadFilter" className={labelClass}>Team Lead</label>
+                    <select 
+                        id="teamLeadFilter" 
+                        value={filters.teamLeadGithubId || ''} 
+                        onChange={handleTeamLeadChange} 
+                        className={inputClass}
+                    >
+                        <option value="">All Teams</option>
+                        {teamLeads.map(lead => (
+                            <option key={lead.githubId} value={lead.githubId}>
+                                {lead.name}
+                            </option>
+                        ))}
+                    </select>
+                    {/* This checkbox ONLY appears if a team lead is selected */}
+                    {filters.teamLeadGithubId && (
+                        <div className="mt-2 flex items-center">
+                            <input
+                                id="indirectReports"
+                                type="checkbox"
+                                checked={!!filters.includeIndirectReports}
+                                onChange={handleIndirectReportsToggle}
+                                className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-600"
+                            />
+                            <label htmlFor="indirectReports" className="ml-2 text-sm font-medium text-slate-300">
+                                Include Indirect Reports
+                            </label>
+                        </div>
+                    )}
+                </div>
+                {/* --- ADDED END --- */}
+                {/* ---Labels Filter ---- */}
                 <div>
                     <label htmlFor="stateFilter" className={labelClass}>State</label>
                     <select 
@@ -413,6 +569,7 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
                     />
                     <p className="text-xs text-slate-400 mt-1">Comma-separated labels</p>
                 </div>
+                {/* --- Start Date Filter ---- */}
 
                 <div>
                     <label htmlFor="reportStartDate" className={labelClass}>Start Date</label>
@@ -424,6 +581,7 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
                         className={inputClass}
                     />
                 </div>
+                {/* ---End Date Filter ---- */}
 
                 <div>
                     <label htmlFor="reportEndDate" className={labelClass}>End Date</label>
@@ -692,6 +850,20 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
                                 To: {filters.createdEndDate}
                             </span>
                         )}
+                        {/* --- ADDED START: Display logic for new active filters --- */}
+                        {filters.module && (
+                            <span className="px-2 py-1 bg-cyan-500/20 text-cyan-300 rounded text-xs">
+                                Modules: {filters.module.join(', ')}
+                            </span>
+                        )}
+                        {filters.teamLeadGithubId && (
+                            <span className="px-2 py-1 bg-indigo-500/20 text-indigo-300 rounded text-xs">
+                                Team Lead: {teamLeads.find(l => l.githubId === filters.teamLeadGithubId)?.name || '...'}
+                                {/* ADDED: Indicate if hierarchy is active */}
+                                {filters.includeIndirectReports && ' (and hierarchy)'}
+                            </span>
+                        )}
+                        {/* --- ADDED END --- */}
                     </div>
                 </div>
             )}

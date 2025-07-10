@@ -29,6 +29,11 @@ export interface IssueFilters {
     closedEndDate?: string;
     pull_request?: boolean;
     issueType?: string;
+    // --- ADDED/MODIFIED START: New, specific filters ---
+    module?: string[]; // Use string array for better type safety, like labels.
+    teamLeadGithubId?: number;
+
+    includeIndirectReports?: boolean;
     [key: string]: any;
 }
 

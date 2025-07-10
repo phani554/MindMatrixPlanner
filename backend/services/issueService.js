@@ -1,14 +1,66 @@
 import { Issue } from '../models/issue.model.js'; // Adjust the path as needed
+import mongoose from 'mongoose';
+// Ensure this path is correct for your project structure
+import { Employee } from '../models/employees.model.js'; 
+
+/**
+ * Pre-queries the Employee collection to get a list of assignee GitHub IDs
+ * based on module or team lead filters.
+ * @param {object} [filters={}] - The filter criteria.
+ * @returns {Promise<number[]|null>} An array of GitHub IDs, or null if no filters were applied.
+ * @private
+ */
+const _getEmployeeFilteredIds = async (filters = {}) => {
+  const { module, teamLeadGithubId, includeIndirectReports } = filters;
+  if (!module && !teamLeadGithubId) {
+      return null; // No employee-specific filters to apply
+  }
+
+  const employeeQuery = {};
+
+  if (module && Array.isArray(module) && module.length > 0) {
+    employeeQuery.modules = { $all: module };
+  }
+
+  // 2. Handle Team Lead filter (with new hierarchical logic)
+  if (teamLeadGithubId) {
+      let teamMemberIds;
+      if (includeIndirectReports === true || includeIndirectReports === 'true') {
+          // --- HIERARCHY PATH ---
+          // Use the new static method to get the entire reporting chain.
+          teamMemberIds = await Employee.getReportingHierarchyIds(teamLeadGithubId);
+      } else {
+        // --- DIRECT REPORTS PATH ---
+        // Find the lead's _id.
+        const lead = await Employee.findOne({ githubId: teamLeadGithubId }).select('_id').lean();
+        if (lead) {
+            // Find direct reports and get their GitHub IDs.
+            const directReports = await Employee.find({ reportsTo: lead._id }).select('githubId').lean();
+            teamMemberIds = directReports.map(e => e.githubId);
+        } else {
+            teamMemberIds = []; // Lead not found, so no reports.
+        }
+      }
+      
+    // If team members were found, add a condition to the main employeeQuery.
+    // This will AND with the module filter if it's also active.
+    employeeQuery.githubId = { $in: teamMemberIds.length > 0 ? teamMemberIds : [-1] };
+  }
+
+  // 3. Execute the final combined query and return the list of matching GitHub IDs.
+  const employees = await Employee.find(employeeQuery).select('githubId').lean();
+  return employees.map(e => e.githubId);
+};
+
 
 /**
  * Builds a MongoDB query object from a set of filter parameters.
  * @param {object} [filters={}] - The filter criteria from the request query.
  * @param {object} [options={}] - Options to control the query building logic.
- * @param {boolean} [options.defaultToOpen=true] - If true, defaults the state to 'open' if not specified.
- * @returns {object} A MongoDB query object.
+ * @returns {Promise<object>} A MongoDB query object.
  * @private
  */
-const _buildIssuesQuery = (filters = {}, options = {}) => {
+const _buildIssuesQuery = async (filters = {}, options = {}) => {
     const { defaultToOpen = true } = options;
     const query = {};
 
@@ -35,33 +87,54 @@ const _buildIssuesQuery = (filters = {}, options = {}) => {
         }
     }
 
-    // --- Revised State Logic ---
     if (filters.state && filters.state !== 'all') {
-        // Highest precedence: an explicit state filter from the user.
         query.state = filters.state;
     } else if (filters.closedById || query.closedAt) {
-        // Second precedence: filters that imply a 'closed' state.
         query.state = 'closed';
     } else if (defaultToOpen && filters.state !== 'all') {
-        // Lowest precedence: default to 'open' only if allowed and 'all' wasn't specified.
         query.state = 'open';
     }
     
-    // Ensure closedAt has a value if it's part of the query
     if (query.closedAt) {
         query.closedAt = { ...query.closedAt, $ne: null };
     }
-    // --- End of Revised State Logic ---
+    
+    // --- Centralized Assignee ID Filtering Logic ---
+    const employeeFilteredIds = await _getEmployeeFilteredIds(filters);
+    let explicitAssigneeIds = null;
+    if (filters.assignee_ids) {
+        explicitAssigneeIds = filters.assignee_ids.split(',').map(id => parseInt(id.trim(), 10));
+    }
+
+    let finalAssigneeIds = null;
+    if (employeeFilteredIds !== null && explicitAssigneeIds !== null) {
+        const setA = new Set(employeeFilteredIds);
+        const setB = new Set(explicitAssigneeIds);
+        finalAssigneeIds = [...setA].filter(id => setB.has(id));
+    } else if (employeeFilteredIds !== null) {
+        finalAssigneeIds = employeeFilteredIds;
+    } else if (explicitAssigneeIds !== null) {
+        finalAssigneeIds = explicitAssigneeIds;
+    }
+
+    if (finalAssigneeIds !== null) {
+        // Use the final list of IDs to filter assignees
+        query['assignees.id'] = { $in: finalAssigneeIds.length > 0 ? finalAssigneeIds : [-1] };
+    }
+    // --- End of Centralized Logic ---
 
     if (filters.pull_request !== undefined) {
         query.pull_request = filters.pull_request === 'true';
     }
     if (filters.user) query['user.login'] = filters.user;
     if (filters.createdById) query['user.id'] = parseInt(filters.createdById, 10);
+    // The 'assignees' filter (for login names) is correctly handled here
     if (filters.assignees) query['assignees.login'] = { $in: filters.assignees.split(',') };
-    if (filters.assignee_ids) query['assignees.id'] = { $in: filters.assignee_ids.split(',').map(id => parseInt(id.trim(), 10)) };
     if (filters.labels) query.labels = { $all: filters.labels.split(',').map(label => new RegExp(label.trim(), 'i')) };
     if (filters.issueType) query.issueType = filters.issueType;
+
+    // DELETED: This line is redundant as its logic is now part of the centralized block above.
+    // if (filters.assignee_ids) query['assignees.id'] = { ... }; 
 
     return query;
 };
@@ -70,9 +143,8 @@ const _buildIssuesQuery = (filters = {}, options = {}) => {
  * Service object encapsulating all complex issue-related business logic.
  */
 export const issueService = {
-   // Fast summary endpoint for doughnut chart
    async getSummaryStats(filters = {}) {
-    const query = _buildIssuesQuery(filters, { defaultToOpen: false });
+    const query = await _buildIssuesQuery(filters, { defaultToOpen: false });
     
     const pipeline = [
       { $match: query },
@@ -85,37 +157,30 @@ export const issueService = {
         }
       },
       {
-        $project: {
-          _id: 0,
-          totalIssues: 1,
-          openIssues: 1,
-          closedIssues: 1
-        }
+        $project: { _id: 0, totalIssues: 1, openIssues: 1, closedIssues: 1 }
       }
     ];
 
     const result = await Issue.aggregate(pipeline);
-    return result[0] || { 
-      totalIssues: 0, 
-      openIssues: 0, 
-      closedIssues: 0 
-    };
+    return result[0] || { totalIssues: 0, openIssues: 0, closedIssues: 0 };
   },
-  // This function and its pipeline are correct based on our last revision.
+
   async getAssigneeStats(filters = {}, sortOptions = {}, pagination = {}) {
     const { page = 1, limit = 15 } = pagination;
     const skip = (page - 1) * limit;
-    // Calls the builder with defaultToOpen: false, correctly getting all states by default.
-    const query = _buildIssuesQuery(filters, { defaultToOpen: false });
-     // Extract assignee-specific filters for post-unwind filtering
-    const assigneePostFilters = {};
-    if (filters.assignees) {
-      assigneePostFilters['assignees.login'] = { $in: filters.assignees.split(',') };
-    }
 
-    if (filters.assignee_ids) {
-      assigneePostFilters['assignees.id'] = { $in: filters.assignee_ids.split(',').map(id => parseInt(id.trim(), 10)) };
+    const query = await _buildIssuesQuery(filters, { defaultToOpen: false });
+     // --- ADDED START: Create the Post-Unwind Filter ---
+    // This is the key to the solution. We create a second filter to be
+    // applied AFTER the unwind stage to remove co-assigned members who
+    // are not part of the original filter criteria.
+    const postUnwindFilter = {};
+    if (query['assignees.id']) {
+        // If the main query was filtering by assignee IDs (from any source:
+        // team lead, module, or direct IDs), we reuse that same filter logic here.
+        postUnwindFilter['assignees.id'] = query['assignees.id'];
     }
+    // --- ADDED END ---
 
     const validSortFields = {
         openIssues: 'openIssues',
@@ -126,11 +191,17 @@ export const issueService = {
     const sortBy = validSortFields[sortOptions.sortBy] || 'totalIssues';
     const sortOrder = sortOptions.order === 'asc' ? 1 : -1;
 
-    // Base aggregation stages (shared between count and data queries)
     const baseAggregationStages = [
       { $match: query },
       { $unwind: "$assignees" },
-      ...(Object.keys(assigneePostFilters).length > 0 ? [{ $match: assigneePostFilters }] : []),
+      // DELETED: The corresponding $match stage for assigneePostFilters is also removed.
+      // --- ADDED START: The Accuracy Filter ---
+      // Stage 3: Apply the post-unwind filter. This crucial step removes the
+      // leaked assignees, ensuring only members of the filtered group remain.
+      // This is added conditionally ONLY if an assignee filter was active.
+      ...(Object.keys(postUnwindFilter).length > 0 ? [{ $match: postUnwindFilter }] : []),
+      // --- ADDED END ---
+
       {
         $group: {
           _id: { id: "$assignees.id", login: "$assignees.login" },
@@ -206,21 +277,10 @@ export const issueService = {
       { $sort: { [sortBy]: sortOrder } }
     ];
 
-    // Pipeline for counting total records
-    const countPipeline = [
-      ...baseAggregationStages,
-      { $count: "totalCount" }
-    ];
-
-    // Pipeline for getting paginated data
-    const dataPipeline = [
-      ...baseAggregationStages,
-      { $skip: skip },
-      { $limit: limit }
-    ];
+    const countPipeline = [ ...baseAggregationStages, { $count: "totalCount" } ];
+    const dataPipeline = [ ...baseAggregationStages, { $skip: skip }, { $limit: limit } ];
 
     try {
-      // Execute both aggregations in parallel
       const [totalCountResult, paginatedResults] = await Promise.all([
         Issue.aggregate(countPipeline),
         Issue.aggregate(dataPipeline)
@@ -246,37 +306,36 @@ export const issueService = {
     }
   },
 
-  // Enhanced findIssues with pagination  
   async findIssues(filters = {}, pagination = {}) {
     const { page = 1, limit = 15 } = pagination;
     const skip = (page - 1) * limit;
-
     const { sortBy = 'updatedAt', order = 'desc' } = filters;
 
-    // Calls the builder with defaultToOpen: true, correctly defaulting to 'open' issues.
-    const query = _buildIssuesQuery(filters);
-    // Valid sort fields for individual issues
+    // Correctly awaiting the async query builder function
+    const query = await _buildIssuesQuery(filters);
+    
     const validSortFields = {
-      createdAt: 'createdAt',           // When issue was created
-      updatedAt: 'updatedAt',           // When issue was last updated  
-      closedAt: 'closedAt',             // When issue was closed
-      title: 'title',                   // Issue title alphabetically
-      number: 'number',                 // GitHub issue number
-      state: 'state'                    // open/closed
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt',  
+      closedAt: 'closedAt',    
+      title: 'title',          
+      number: 'number',        
+      state: 'state'           
     };
 
     const sortField = validSortFields[sortBy] || 'updatedAt';
     const sortDirection = order === 'asc' ? 1 : -1;
 
-    // Get total count and paginated results in parallel
     const [totalCount, issues] = await Promise.all([
       Issue.countDocuments(query),
       Issue.find(query)
-        .sort({ [sortField]: sortDirection })  // ✅ Dynamic sorting instead of hardcoded
+        .sort({ [sortField]: sortDirection })
         .skip(skip)
         .limit(limit)
     ]);
     const totalPages = Math.ceil(totalCount / limit);
+    
+    // Note: Assuming 'isStale', 'ageInDays', and 'resolutionTimeInDays' are virtuals on your Issue model
     const staleCount = issues.filter(issue => issue.isStale(filters.staleDays)).length;
 
     let averageAgeInDays;
