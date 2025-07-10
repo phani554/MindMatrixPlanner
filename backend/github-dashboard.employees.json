@@ -1,0 +1,5136 @@
+[{
+  "_id": {
+    "$oid": "686e577c9c16b47369cec519"
+  },
+  "name": "Abhay Mohnot",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": null,
+  "githubId": 6465508,
+  "username": "apmohnot",
+  "modules": [
+    "Postgres"
+  ],
+  "office": null,
+  "email": "mm.amp.vg",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:20.892Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:30.884Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577c9c16b47369cec51d"
+  },
+  "name": "Meghana Thakekar Singh",
+  "role": "developer",
+  "isModuleOwner": true,
+  "isTeamLead": true,
+  "reportsTo": null,
+  "githubId": 6465588,
+  "username": "MeghanaThakekar",
+  "modules": [
+    "Opportunities",
+    "Custom Work",
+    "Imports",
+    "Reports",
+    "Opportunity",
+    "Cusom Work",
+    "Account Overlap",
+    "Collaboration"
+  ],
+  "office": "Mumbai",
+  "email": "meghana.thakekar@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:20.932Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:31.822Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577c9c16b47369cec51f"
+  },
+  "name": "Vishal Patil",
+  "role": "developer",
+  "isModuleOwner": true,
+  "isTeamLead": true,
+  "reportsTo": null,
+  "githubId": 6465635,
+  "username": "Vish-Patil",
+  "modules": [
+    "Editor",
+    "MDF",
+    "Deals",
+    "Web",
+    "Dataroom",
+    "Editors",
+    "Automation UI",
+    "Contract",
+    "Business Planning"
+  ],
+  "office": "Mumbai",
+  "email": "vishal.patil@mindmatrix.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:20.942Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:32.785Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577c9c16b47369cec521"
+  },
+  "name": "Pushpendra Pandey",
+  "role": "developer",
+  "isModuleOwner": true,
+  "isTeamLead": true,
+  "reportsTo": null,
+  "githubId": 84513539,
+  "username": "pushpendraPande",
+  "modules": [
+    "Playbook",
+    "LMS"
+  ],
+  "office": "Mumbai",
+  "email": "pushpendra.pandey@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:20.944Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:39.153Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577c9c16b47369cec523"
+  },
+  "name": "philip",
+  "role": "developer",
+  "isModuleOwner": true,
+  "isTeamLead": true,
+  "reportsTo": null,
+  "githubId": 6465584,
+  "username": "pKanth",
+  "modules": [
+    "CRMs",
+    "Third Party Integration",
+    "Partner Locator",
+    "Filter Mgmt",
+    "View Assets",
+    "Bridge AI",
+    "Fanfliks",
+    "Chrome Extension",
+    "Automation"
+  ],
+  "office": "Hyderabad",
+  "email": "philip.kanth@mindmatrix.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:20.946Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:31.540Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577c9c16b47369cec526"
+  },
+  "name": "Shiv Mishra",
+  "role": "developer",
+  "isModuleOwner": true,
+  "isTeamLead": true,
+  "reportsTo": null,
+  "githubId": 6465643,
+  "username": "shivmishra",
+  "modules": [
+    "Performance",
+    "Client Tickets",
+    "Customization",
+    "Setup/ Locators/ Performance",
+    "Gallery",
+    "Setup",
+    "Marketplace",
+    "Navigation",
+    "SNC",
+    "Opportunity related"
+  ],
+  "office": "Mumbai",
+  "email": "shiv.mishra@mindmatrix.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:20.949Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:33.320Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577c9c16b47369cec528"
+  },
+  "name": "yogesh",
+  "role": "developer",
+  "isModuleOwner": true,
+  "isTeamLead": true,
+  "reportsTo": null,
+  "githubId": 6941481,
+  "username": "yogeshgharat",
+  "modules": [
+    "Dashboard"
+  ],
+  "office": "Mumbai",
+  "email": "yogesh.gharat@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:20.960Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:34.392Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577c9c16b47369cec52a"
+  },
+  "name": "Mahima Patil",
+  "role": "developer",
+  "isModuleOwner": true,
+  "isTeamLead": true,
+  "reportsTo": null,
+  "githubId": 13726617,
+  "username": "Mahimapatil",
+  "modules": [
+    "Drip",
+    "Reports",
+    "Exports",
+    "Custom Work",
+    "Drips",
+    "Custom Work - Acronis"
+  ],
+  "office": "Mumbai",
+  "email": "mahima.patil@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:20.961Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:34.711Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577c9c16b47369cec52c"
+  },
+  "name": "Tajinder Sharma",
+  "role": "tester",
+  "isModuleOwner": true,
+  "isTeamLead": true,
+  "reportsTo": null,
+  "githubId": 42926529,
+  "username": "tajindersharma",
+  "modules": [
+    "SSO",
+    "Social",
+    "Fanfliks",
+    "Social Drips",
+    "Mobile APP",
+    "DevOps",
+    "AI"
+  ],
+  "office": "Chandigarh",
+  "email": "tajinder@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:20.963Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:04.812Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577c9c16b47369cec52f"
+  },
+  "name": "Muhammed Furquan Khan",
+  "role": "developer",
+  "isModuleOwner": true,
+  "isTeamLead": true,
+  "reportsTo": null,
+  "githubId": 6465608,
+  "username": "furquankhan",
+  "modules": [
+    "Salesforce CRM",
+    "IFT",
+    "AI",
+    "Fanfliks",
+    "Dynamics",
+    "Rebo",
+    "PaP",
+    "Postgres",
+    "Salesforce",
+    "SFDC",
+    "Custom Work"
+  ],
+  "office": "Chandigarh",
+  "email": "furquan.khan@mindmatrix.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:20.966Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:32.172Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577c9c16b47369cec531"
+  },
+  "name": "Rahul Jogdand",
+  "role": "developer",
+  "isModuleOwner": true,
+  "isTeamLead": true,
+  "reportsTo": null,
+  "githubId": 20436878,
+  "username": "Rahulmaxv",
+  "modules": [
+    "UI/UX"
+  ],
+  "office": "Mumbai",
+  "email": "rahul.jogdand@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:20.980Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:35.314Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577c9c16b47369cec533"
+  },
+  "name": "Tamanna Rana",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec523"
+  },
+  "githubId": 88433216,
+  "username": "tamannarevclerx",
+  "modules": [
+    "Partner Locator",
+    "Filter Mgmt"
+  ],
+  "office": "Chandigarh",
+  "email": "tamanna.rana@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:20.982Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:40.873Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577c9c16b47369cec535"
+  },
+  "name": "Sumit Mittal",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec528"
+  },
+  "githubId": 58559444,
+  "username": "sumitrevclerx",
+  "modules": [
+    "Dashboard"
+  ],
+  "office": "Chandigarh",
+  "email": "sumit@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:20.983Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:37.262Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577c9c16b47369cec537"
+  },
+  "name": "Haresh Kedar",
+  "role": "developer",
+  "isModuleOwner": true,
+  "isTeamLead": true,
+  "reportsTo": null,
+  "githubId": 6492820,
+  "username": "HareshKedar",
+  "modules": [
+    "Case",
+    "Collaboration",
+    "LeadRouting",
+    "Business Planning",
+    "Reports",
+    "Localization",
+    "Cases"
+  ],
+  "office": "Mumbai",
+  "email": "haresh.kedar@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:20.984Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:33.851Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577c9c16b47369cec53a"
+  },
+  "name": "Vinayak Suryavanshi",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec526"
+  },
+  "githubId": 79090746,
+  "username": "Vinayakvs1994",
+  "modules": [
+    "Setup/ Locators/ Performance",
+    "System Notifiaction Configuration",
+    "Setup",
+    "Campaign",
+    "Link Manager",
+    "Reports"
+  ],
+  "office": "Mumbai",
+  "email": "vinayak.suryavanshi@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:20.986Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:38.795Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec53c"
+  },
+  "name": "Priyanka Borunde",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec526"
+  },
+  "githubId": 22660369,
+  "username": "PriyankaBorunde",
+  "modules": [
+    "Gallery",
+    "Setup",
+    "User Mgmt",
+    "Custom Work",
+    "Announcement/2FA/Login/Password"
+  ],
+  "office": "Mumbai",
+  "email": "priyanka.borunde@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.004Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:35.584Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec53e"
+  },
+  "name": "Abdur Rauf",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec51f"
+  },
+  "githubId": 87379623,
+  "username": "AbdurRauf-Khan",
+  "modules": [
+    "Web",
+    "Dataroom",
+    "MDF"
+  ],
+  "office": "Mumbai",
+  "email": "abdur.rauf@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.005Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:39.961Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec540"
+  },
+  "name": "Abhijith Nair",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec53a"
+  },
+  "githubId": 170502556,
+  "username": "AbhijithNa1r",
+  "modules": [
+    "System Notifiaction Configuration",
+    "Setup"
+  ],
+  "office": "Mumbai",
+  "email": "abhijit.nair@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.007Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:57.748Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec542"
+  },
+  "name": "Abhineet Kumar",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec535"
+  },
+  "githubId": 109676892,
+  "username": "abhineetkumar49",
+  "modules": [
+    "Dashboard"
+  ],
+  "office": "Chandigarh",
+  "email": "abhineet.kumar@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.008Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:46.975Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec544"
+  },
+  "name": "Abhishek Saiswani",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec526"
+  },
+  "githubId": 6465580,
+  "username": "abhisheksaiswani",
+  "modules": [
+    "Marketplace",
+    "Navigation"
+  ],
+  "office": "Mumbai",
+  "email": "abhishek.saiswani@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.009Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:31.259Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec548"
+  },
+  "name": "Achal Kumar",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52c"
+  },
+  "githubId": 181352727,
+  "username": "AchalRevclerx",
+  "modules": [
+    "Fanfliks"
+  ],
+  "office": "Chandigarh",
+  "email": "achal.kumar@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.011Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:59.379Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec54a"
+  },
+  "name": "Ajitpal Singh",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52f"
+  },
+  "githubId": 150783001,
+  "username": "ajitSMalhi",
+  "modules": [
+    "IFT"
+  ],
+  "office": "Chandigarh",
+  "email": "ajitpal.singh@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.013Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:55.468Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec54c"
+  },
+  "name": "Akanksha Sharma",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec533"
+  },
+  "githubId": 170304379,
+  "username": "Akanksha2321",
+  "modules": [
+    "Partner Locator",
+    "Filter Mgmt"
+  ],
+  "office": "Chandigarh",
+  "email": "akanksha.sharma@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.014Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:57.485Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec54e"
+  },
+  "name": "Amit Ahuja",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec535"
+  },
+  "githubId": 126570200,
+  "username": "amitahujarev",
+  "modules": [
+    "Dashboard"
+  ],
+  "office": "Chandigarh",
+  "email": "amit.ahuja@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.015Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:51.242Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec550"
+  },
+  "name": "Amritpal Singh",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52f"
+  },
+  "githubId": 169251980,
+  "username": "amritpal0001",
+  "modules": [
+    "Postgres",
+    "Fanfliks"
+  ],
+  "office": "Chandigarh",
+  "email": "amritpal.singh@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.016Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:56.951Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec552"
+  },
+  "name": "Amruta Kamble",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec53a"
+  },
+  "githubId": 115165149,
+  "username": "AmrutaKamble10",
+  "modules": [
+    "Campaign",
+    "Link Manager",
+    "Reports"
+  ],
+  "office": "Mumbai",
+  "email": "amruta.kamble@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.017Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:48.760Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec554"
+  },
+  "name": "Aniket Kumar",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52f"
+  },
+  "githubId": 181114940,
+  "username": "AniketRevclerx",
+  "modules": [
+    "Salesforce CRM",
+    "Postgres"
+  ],
+  "office": "Chandigarh",
+  "email": "aniket.kumar@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.018Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:58.863Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec556"
+  },
+  "name": "Anju Vishwakarma",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52f"
+  },
+  "githubId": 88433214,
+  "username": "AnjuRV",
+  "modules": [
+    "IFT"
+  ],
+  "office": "Chandigarh",
+  "email": "anju.v@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.019Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:40.488Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec558"
+  },
+  "name": "Ashif Husain",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52c"
+  },
+  "githubId": 109672524,
+  "username": "ashifhusainoo7",
+  "modules": [
+    "Social Drips",
+    "SSO"
+  ],
+  "office": "Chandigarh",
+  "email": "ashif.husain@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.020Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:46.712Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec55a"
+  },
+  "name": "Ashutosh Pandey",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec528"
+  },
+  "githubId": 137782841,
+  "username": "Ashu-990",
+  "modules": [
+    "Dashboard"
+  ],
+  "office": "Mumbai",
+  "email": "ashutosh.pandey@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.021Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:53.119Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec55c"
+  },
+  "name": "Ashwani Patti",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52f"
+  },
+  "githubId": 91262914,
+  "username": "Ashwani-revclerx",
+  "modules": [
+    "Salesforce CRM"
+  ],
+  "office": "Chandigarh",
+  "email": "ashwani.kumar@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.022Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:41.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec55e"
+  },
+  "name": "Chinna Kotareddy",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52a"
+  },
+  "githubId": 117972166,
+  "username": "ChinnaMaxval",
+  "modules": [
+    "Custom Work - Acronis"
+  ],
+  "office": "Mumbai",
+  "email": "chinna.kotareddy@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.023Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:49.271Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec560"
+  },
+  "name": "Cnigdha Soares",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52a"
+  },
+  "githubId": 152146521,
+  "username": "Cnigdha",
+  "modules": [
+    "Custom Work - Acronis"
+  ],
+  "office": "Mumbai",
+  "email": "cnigdha.soares@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.024Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:55.976Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec562"
+  },
+  "name": "Dikshita Kasare",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec537"
+  },
+  "githubId": 137781971,
+  "username": "Dikshitakasare0108",
+  "modules": [
+    "Localization"
+  ],
+  "office": "Mumbai",
+  "email": "dikshita.kasare@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.025Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:52.135Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec564"
+  },
+  "name": "R Dilleswar Rao",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52f"
+  },
+  "githubId": 50979631,
+  "username": "dilleswarrevclerx",
+  "modules": [
+    "Salesforce"
+  ],
+  "office": "Chandigarh",
+  "email": "dilleswar@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.026Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:37.009Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec566"
+  },
+  "name": "Dilpreet Kaur",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec531"
+  },
+  "githubId": 104075619,
+  "username": "dilpreetkaurrevclerx",
+  "modules": [
+    "UI/UX"
+  ],
+  "office": "Chandigarh",
+  "email": "dilpreet.kaur@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.027Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:44.016Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec568"
+  },
+  "name": "Divyesh Hole",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec528"
+  },
+  "githubId": 112927107,
+  "username": "DivyeshHole",
+  "modules": [
+    "Dashboard"
+  ],
+  "office": "Mumbai",
+  "email": "divyesh.hole@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.028Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:47.303Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec56a"
+  },
+  "name": "Eva Chaudhary",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52f"
+  },
+  "githubId": 138590209,
+  "username": "Evakangra",
+  "modules": [
+    "IFT"
+  ],
+  "office": "Chandigarh",
+  "email": "eva.chaudhary@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.029Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:53.383Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec56c"
+  },
+  "name": "Gurinder Singh",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52c"
+  },
+  "githubId": 92525920,
+  "username": "gurinder1497",
+  "modules": [
+    "Mobile APP",
+    "Social"
+  ],
+  "office": "Chandigarh",
+  "email": "gurinder.singh@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.031Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:41.736Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec570"
+  },
+  "name": "Jaskaran Singh",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52c"
+  },
+  "githubId": 151126742,
+  "username": "JaskarnSingh1992",
+  "modules": [
+    "Social"
+  ],
+  "office": "Chandigarh",
+  "email": "jaskaran.singh1@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.032Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:55.724Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec572"
+  },
+  "name": "Jay Barot",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec51f"
+  },
+  "githubId": 137781327,
+  "username": "JayBarot10",
+  "modules": [
+    "MDF"
+  ],
+  "office": "Mumbai",
+  "email": "jay.barot@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.033Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:51.760Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec574"
+  },
+  "name": "Jot Dhaliwal",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec523"
+  },
+  "githubId": 40827875,
+  "username": "jotdhaliwal",
+  "modules": [
+    "View Assets",
+    "Bridge AI",
+    "Fanfliks",
+    "Chrome Extension"
+  ],
+  "office": "Chandigarh",
+  "email": "jatinder.dhaliwal@mindmatrix.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.034Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:36.471Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec576"
+  },
+  "name": "Zaid Kadri",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec521"
+  },
+  "githubId": 115164811,
+  "username": "ZaidKadiri",
+  "modules": [
+    "Playbook",
+    "LMS"
+  ],
+  "office": "Mumbai",
+  "email": "kadiri.zaid@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.035Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:48.416Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec578"
+  },
+  "name": "Komal Chawla",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec531"
+  },
+  "githubId": 113579435,
+  "username": "komalchawlarevclerx",
+  "modules": [
+    "UI/UX"
+  ],
+  "office": "Chandigarh",
+  "email": "komal.chawla@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.036Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:48.013Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec57a"
+  },
+  "name": "Kriti Shetty",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec51f"
+  },
+  "githubId": 137781165,
+  "username": "KritiShetty",
+  "modules": [
+    "Editor"
+  ],
+  "office": "Mumbai",
+  "email": "kriti.shetty@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.037Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:51.506Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec57c"
+  },
+  "name": "Kumar Chandan",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec535"
+  },
+  "githubId": 121863662,
+  "username": "chandanrevclerx",
+  "modules": [
+    "Dashboard"
+  ],
+  "office": "Chandigarh",
+  "email": "kumar.chandan@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.038Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:50.569Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec57e"
+  },
+  "name": "Kunal Wavhule",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec528"
+  },
+  "githubId": 118966210,
+  "username": "kunalmindmatrix",
+  "modules": [
+    "Dashboard"
+  ],
+  "office": "Mumbai",
+  "email": "kunal.wavhule@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.039Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:49.938Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec582"
+  },
+  "name": "Laxmikant Yadav",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52f"
+  },
+  "githubId": 137782443,
+  "username": "Laxmikant-Yadav",
+  "modules": [
+    "Salesforce CRM"
+  ],
+  "office": "Mumbai",
+  "email": "laxmikant.yadav@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.041Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:52.854Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec584"
+  },
+  "name": "Lekha Ram",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52f"
+  },
+  "githubId": null,
+  "username": null,
+  "modules": [
+    "Salesforce CRM"
+  ],
+  "office": "Chandigarh",
+  "email": "lekha.ram@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.042Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T12:07:46.450Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec586"
+  },
+  "name": "Lidiya Dominic",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec51f"
+  },
+  "githubId": 87377156,
+  "username": "Lidiya0402",
+  "modules": [
+    "Editors"
+  ],
+  "office": "Mumbai",
+  "email": "lidiya.dominic@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.043Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:39.707Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec588"
+  },
+  "name": "Manali Patil",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec51d"
+  },
+  "githubId": 105647044,
+  "username": "manali1109",
+  "modules": [
+    "Opportunity",
+    "Cusom Work"
+  ],
+  "office": "Mumbai",
+  "email": "manali.patil@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.043Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:44.624Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec58a"
+  },
+  "name": "Manoj Sharma",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52f"
+  },
+  "githubId": 148982084,
+  "username": "manoj-rev",
+  "modules": [
+    "SFDC",
+    "Custom Work"
+  ],
+  "office": "Chandigarh",
+  "email": "manoj.sharma@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.044Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:53.638Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec58c"
+  },
+  "name": "Mayur Patil",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec521"
+  },
+  "githubId": 105477460,
+  "username": "mayurpa22",
+  "modules": [
+    "Playbook",
+    "LMS"
+  ],
+  "office": "Mumbai",
+  "email": "mayur.patil@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.045Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:44.350Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec58e"
+  },
+  "name": "Mohammed Hammad",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec51f"
+  },
+  "githubId": 150241558,
+  "username": "MohammedHammad01",
+  "modules": [
+    "MDF"
+  ],
+  "office": "Mumbai",
+  "email": "mohammed.hammad@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.046Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:53.978Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec590"
+  },
+  "name": "Mohammed Saeed",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec526"
+  },
+  "githubId": 115165743,
+  "username": "SaeedMS22",
+  "modules": [
+    "SNC",
+    "Setup",
+    "Opportunity related"
+  ],
+  "office": "Mumbai",
+  "email": "mohammed.saeed@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.047Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:49.011Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec592"
+  },
+  "name": "Mohammed Ubaid",
+  "role": "developer",
+  "isModuleOwner": true,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 6465628,
+  "username": "ubaidmohammed",
+  "modules": [
+    "Custom Work"
+  ],
+  "office": "Mumbai",
+  "email": "mubaid@mindmatrix.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.048Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:32.442Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec594"
+  },
+  "name": "Muwaj Mulla",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec51f"
+  },
+  "githubId": 137782397,
+  "username": "muwaj-mulla",
+  "modules": [
+    "Automation UI"
+  ],
+  "office": "Mumbai",
+  "email": "muwaj.mulla@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.049Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:52.414Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec596"
+  },
+  "name": "Noor_ans",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5b6"
+  },
+  "githubId": 99163263,
+  "username": "Noor-1898",
+  "modules": [
+    "Hubspot CRM"
+  ],
+  "office": "Mumbai",
+  "email": "noor.ansari@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.050Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:42.772Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec598"
+  },
+  "name": "Parvesh Sharma",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec531"
+  },
+  "githubId": 118245398,
+  "username": "SharmaParvesh",
+  "modules": [
+    "UI/UX"
+  ],
+  "office": "Chandigarh",
+  "email": "parvesh.sharma@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.051Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:49.687Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec59a"
+  },
+  "name": "Payal Thakur",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52f"
+  },
+  "githubId": 180507438,
+  "username": "PayalRevclerx",
+  "modules": [
+    "IFT"
+  ],
+  "office": "Chandigarh",
+  "email": "payal.thakur@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.052Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:58.600Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec59c"
+  },
+  "name": "Pooja Ghope",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec526"
+  },
+  "githubId": 105706651,
+  "username": "poojaghope",
+  "modules": [
+    "Setup"
+  ],
+  "office": "Mumbai",
+  "email": "pooja.ghope@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.053Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:45.849Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5a0"
+  },
+  "name": "Prashant Ghule",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec51d"
+  },
+  "githubId": 109220027,
+  "username": "pghule82",
+  "modules": [
+    "Account Overlap",
+    "Opportunity",
+    "Collaboration"
+  ],
+  "office": "Mumbai",
+  "email": "prashant.ghule@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.055Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:46.450Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5a2"
+  },
+  "name": "Pratik Bhagit",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec51f"
+  },
+  "githubId": 112927176,
+  "username": "pratikbhagit",
+  "modules": [
+    "Contract"
+  ],
+  "office": "Mumbai",
+  "email": "pratik.bhagit@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.057Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:47.629Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5a4"
+  },
+  "name": "Priya Badyal",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52f"
+  },
+  "githubId": 103936597,
+  "username": "PriyaBadyal",
+  "modules": [
+    "SFDC",
+    "Custom Work"
+  ],
+  "office": "Chandigarh",
+  "email": "priya.badyal@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.058Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:43.757Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5a6"
+  },
+  "name": "Rohin Sharma",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec535"
+  },
+  "githubId": 92525805,
+  "username": "rohin2sharmarevclerx",
+  "modules": [
+    "Dashboard"
+  ],
+  "office": "Chandigarh",
+  "email": "rohin.sharma@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.059Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:41.489Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5a8"
+  },
+  "name": "Rohit",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52f"
+  },
+  "githubId": 121864967,
+  "username": "rohitrevclerx",
+  "modules": [
+    "IFT"
+  ],
+  "office": "Chandigarh",
+  "email": "rohit.gupta@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.060Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:50.875Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5aa"
+  },
+  "name": "Saba Shaikh",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec521"
+  },
+  "githubId": 150647726,
+  "username": "Saba-Sk",
+  "modules": [
+    "Playbook",
+    "LMS"
+  ],
+  "office": "Mumbai",
+  "email": "saba.shaikh@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.061Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:54.852Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5ac"
+  },
+  "name": "Sabharee Raj",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5ce"
+  },
+  "githubId": 98084240,
+  "username": "sabhareeraj",
+  "modules": [
+    "Smartlists Scoring"
+  ],
+  "office": "Hyderabad",
+  "email": "sabharee.raj@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.062Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:42.510Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5ae"
+  },
+  "name": "Sakshi Phalke",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec53a"
+  },
+  "githubId": 150653428,
+  "username": "sakshiiphalke",
+  "modules": [
+    "Setup"
+  ],
+  "office": "Mumbai",
+  "email": "sakshi.phalke@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.063Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:55.208Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5b0"
+  },
+  "name": "Salmaan",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec535"
+  },
+  "githubId": 71872682,
+  "username": "SalmaanAli",
+  "modules": [
+    "Dashboard"
+  ],
+  "office": "Chandigarh",
+  "email": "salmaan@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.064Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:38.489Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5b2"
+  },
+  "name": "Sarbjit Raju",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52c"
+  },
+  "githubId": 158447729,
+  "username": "Sarbjit-raju",
+  "modules": [
+    "AI"
+  ],
+  "office": "Chandigarh",
+  "email": "sarbjit.raju@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.065Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:56.230Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5b4"
+  },
+  "name": "Saurab Kumar",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec574"
+  },
+  "githubId": 121862721,
+  "username": "saurabrevclerx",
+  "modules": [
+    "View Assets"
+  ],
+  "office": "Chandigarh",
+  "email": "saurab.kumar@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.066Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:50.296Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5b6"
+  },
+  "name": "Sayak Mitra",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec523"
+  },
+  "githubId": 32535526,
+  "username": "sayak0006",
+  "modules": [
+    "CRMs",
+    "Hubspot CRM",
+    "CRM"
+  ],
+  "office": "Hyderabad",
+  "email": "sayak.mitra@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.067Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:36.089Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5b8"
+  },
+  "name": "Shailesh D. Tayde",
+  "role": "tester",
+  "isModuleOwner": true,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 6465652,
+  "username": "shaileshtayde",
+  "modules": [
+    "Global + Custom Work",
+    "Security",
+    "Performance"
+  ],
+  "office": "Mumbai",
+  "email": "shailesh.tayde@mindmatrix.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.068Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:02.890Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5ba"
+  },
+  "name": "Shakeb Anwar",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec537"
+  },
+  "githubId": 97658581,
+  "username": "shakebanwar",
+  "modules": [
+    "Cases"
+  ],
+  "office": "Chandigarh",
+  "email": "shakeb.anwar@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.068Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:42.101Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5bc"
+  },
+  "name": "Shubham Tyagi",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5b6"
+  },
+  "githubId": 170304343,
+  "username": "ShubhamTyagiRevclerx",
+  "modules": [
+    "CRM"
+  ],
+  "office": "Chandigarh",
+  "email": "shubham.tyagi@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.069Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:57.221Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5be"
+  },
+  "name": "Shubhangi Jadhav",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec528"
+  },
+  "githubId": 170521971,
+  "username": "shubhangijadhav1212",
+  "modules": [
+    "Dashboard"
+  ],
+  "office": "Mumbai",
+  "email": "shubhangi.jadhav@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.070Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:58.342Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5c0"
+  },
+  "name": "Shubhankar Sharma",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec574"
+  },
+  "githubId": 181352616,
+  "username": "ShubhankarRevclerx",
+  "modules": [
+    "Fanfliks",
+    "View Assets"
+  ],
+  "office": "Chandigarh",
+  "email": "shubhankar.sharma@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.071Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:59.122Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5c2"
+  },
+  "name": "Srushti",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5b6"
+  },
+  "githubId": 105647357,
+  "username": "Srushti225",
+  "modules": [
+    "CRM"
+  ],
+  "office": "Mumbai",
+  "email": "srushti.sakharkar@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.072Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:45.222Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5c4"
+  },
+  "name": "Steffi Mary",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec51f"
+  },
+  "githubId": null,
+  "username": null,
+  "modules": [
+    "Editor",
+    "Business Planning"
+  ],
+  "office": "Mumbai",
+  "email": "steffi.mary@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.073Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T12:07:46.474Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5c6"
+  },
+  "name": "Sunil Kumar",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec531"
+  },
+  "githubId": 71871374,
+  "username": "sunil768",
+  "modules": [
+    "UI/UX"
+  ],
+  "office": "Chandigarh",
+  "email": "sunil.kumar@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.074Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:38.209Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5c8"
+  },
+  "name": "Tushar Gupta",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec537"
+  },
+  "githubId": 150241912,
+  "username": "Tushargupta3012",
+  "modules": [
+    "Localization"
+  ],
+  "office": "Mumbai",
+  "email": "tushar.gupta@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.075Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:54.593Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5ca"
+  },
+  "name": "Umed Gunjal",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52f"
+  },
+  "githubId": 105647075,
+  "username": "ugunjal",
+  "modules": [
+    "SFDC"
+  ],
+  "office": "Mumbai",
+  "email": "umed.gunjal@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.076Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:44.971Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5cc"
+  },
+  "name": "Varsha Golimbade",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec53c"
+  },
+  "githubId": 105647924,
+  "username": "vgolimbade",
+  "modules": [
+    "Announcement/2FA/Login/Password"
+  ],
+  "office": "Mumbai",
+  "email": "varsha.golimbade@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.077Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:45.585Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5ce"
+  },
+  "name": "VineshDesham",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec523"
+  },
+  "githubId": 14013971,
+  "username": "vineshvinnu",
+  "modules": [
+    "Automation",
+    "Smartlists Scoring"
+  ],
+  "office": "Hyderabad",
+  "email": "vinesh.desham@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.078Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:35.009Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5d0"
+  },
+  "name": "Wasim Khan",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec521"
+  },
+  "githubId": 150241570,
+  "username": "WasimKhan01",
+  "modules": [
+    "Playbook",
+    "LMS"
+  ],
+  "office": "Mumbai",
+  "email": "wasim.khan@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.079Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:54.240Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5d2"
+  },
+  "name": "Wasima Shaikh",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec51d"
+  },
+  "githubId": 170519534,
+  "username": "WasimaShaikh",
+  "modules": [
+    "Opportunity"
+  ],
+  "office": "Mumbai",
+  "email": "wasima.shaikh@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.080Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:58.076Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5d4"
+  },
+  "name": "Yasin Shaikh",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec52c"
+  },
+  "githubId": 169248530,
+  "username": "yasinshaikh111",
+  "modules": [
+    "Social"
+  ],
+  "office": "Chandigarh",
+  "email": "yasin.shaikh@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.080Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:56.517Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5d6"
+  },
+  "name": "Yogendra matkar",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577c9c16b47369cec51f"
+  },
+  "githubId": 106380597,
+  "username": "YogendraMatkar",
+  "modules": [
+    "Editor",
+    "Deals"
+  ],
+  "office": "Mumbai",
+  "email": "yogendra.matkar@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.081Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:46.201Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5d8"
+  },
+  "name": "Sageer Shaikh",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": null,
+  "githubId": 92398225,
+  "username": "sageershaikha",
+  "modules": [
+    "Custom"
+  ],
+  "office": null,
+  "email": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.082Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:08.031Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5da"
+  },
+  "name": "Sunil Rao",
+  "role": "developer",
+  "isModuleOwner": true,
+  "isTeamLead": true,
+  "reportsTo": null,
+  "githubId": 6465639,
+  "username": "sunrao",
+  "modules": [
+    "Product",
+    "Editors",
+    "LMS",
+    "Playbooks",
+    "View Assets",
+    "Content Syndication",
+    "Galleries",
+    "User Mgmt",
+    "CRM",
+    "External Links",
+    "Social",
+    "Drip",
+    "Accounts",
+    "Contacts"
+  ],
+  "office": "Mumbai",
+  "email": "sunil.rao@mindmatrix.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.083Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:33.069Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5dc"
+  },
+  "name": "Nagarani Dubbaka",
+  "role": "tester",
+  "isModuleOwner": true,
+  "isTeamLead": true,
+  "reportsTo": null,
+  "githubId": 42613052,
+  "username": "Dubbaka-Nagarani",
+  "modules": [
+    "Opportunities"
+  ],
+  "office": "Hyderabad",
+  "email": "dubbaka.nagarani@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.084Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:37.976Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5de"
+  },
+  "name": "Vardharaj",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5da"
+  },
+  "githubId": 6553864,
+  "username": "vardharaj",
+  "modules": [
+    "Editors",
+    "LMS",
+    "Playbooks",
+    "View Assets",
+    "Content Syndication",
+    "Print Editor",
+    "AI",
+    "Dataroom",
+    "Web",
+    "Email"
+  ],
+  "office": "Mumbai",
+  "email": "vardharaj.kawde@rebackoffice.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.085Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:37.886Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5e0"
+  },
+  "name": "Manjiri Desmukh",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5d8"
+  },
+  "githubId": 54529079,
+  "username": "manjirirevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "manjiri@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.086Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:37.992Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5e2"
+  },
+  "name": "Parveen Kumar",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5da"
+  },
+  "githubId": 69450747,
+  "username": "parveenrevclerx",
+  "modules": [
+    "Galleries",
+    "User Mgmt"
+  ],
+  "office": "Chandigarh",
+  "email": "parveen@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.087Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:37.997Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5e4"
+  },
+  "name": "Lovish Bhatti",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5d8"
+  },
+  "githubId": 50917627,
+  "username": "Lovishrevclerx",
+  "modules": [
+    "Custom",
+    "Automation",
+    "Security",
+    "Automation/Security"
+  ],
+  "office": "Chandigarh",
+  "email": "lovish@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.088Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:37.985Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5e6"
+  },
+  "name": "Amandeep Kaur",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5d8"
+  },
+  "githubId": 192942211,
+  "username": "amandeeprevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "amandeep.kaur@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.089Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.139Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5e8"
+  },
+  "name": "Amitabh Talukdar",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5da"
+  },
+  "githubId": 27962160,
+  "username": "amitabhtalukdar",
+  "modules": [
+    "CRM",
+    "External Links",
+    "Collaboration",
+    "Asset List",
+    "SFDC",
+    "Solution Mgmt",
+    "MDF",
+    "Deals",
+    "Product/Database"
+  ],
+  "office": "Hyderabad",
+  "email": "amitabh.talukdar@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.090Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:37.971Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5ea"
+  },
+  "name": "Roma Soni",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5d8"
+  },
+  "githubId": 54528766,
+  "username": "romarevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "roma@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.091Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:37.988Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5ec"
+  },
+  "name": "Rohit Haridas",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5da"
+  },
+  "githubId": 6639166,
+  "username": "Rohitharidas",
+  "modules": [
+    "Social",
+    "Drip"
+  ],
+  "office": "Mumbai",
+  "email": "rharidas@vectre.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.091Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:37.922Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5ee"
+  },
+  "name": "Vidya Bade",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": true,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5da"
+  },
+  "githubId": 45587887,
+  "username": "VidyaBade",
+  "modules": [
+    "Accounts",
+    "Contacts"
+  ],
+  "office": "Mumbai",
+  "email": "Vidya.Bade@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.092Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:37.981Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5f0"
+  },
+  "name": "Abhay Gaikwad",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5de"
+  },
+  "githubId": 192886068,
+  "username": "abhayqa921",
+  "modules": [
+    "View Assets"
+  ],
+  "office": "Mumbai",
+  "email": "abhay.gaikwad@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.093Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.137Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5f2"
+  },
+  "name": "Abhishek Kumar",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 143691781,
+  "username": "AbhishekKumarRevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "abhishek.kumar@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.094Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.072Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5f4"
+  },
+  "name": "Aditi Thakur",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e2"
+  },
+  "githubId": 90826779,
+  "username": "Aditirevclerx",
+  "modules": [
+    "Galleries"
+  ],
+  "office": "Chandigarh",
+  "email": "aditi.thakur@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.095Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.001Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5f6"
+  },
+  "name": "Akash kumar",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e4"
+  },
+  "githubId": 187263927,
+  "username": "Akashrevclerx",
+  "modules": [
+    "Automation",
+    "Security"
+  ],
+  "office": "Chandigarh",
+  "email": "akash.kumar@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.096Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.127Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5f8"
+  },
+  "name": "Aman Deep",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e6"
+  },
+  "githubId": 97150237,
+  "username": "amanrevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "amandeep@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.097Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:08.905Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5fa"
+  },
+  "name": "Amit Sharma",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e4"
+  },
+  "githubId": 187360307,
+  "username": "AmitRevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "amit.kumar@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.098Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.130Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5fc"
+  },
+  "name": "Anandit Sood",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e8"
+  },
+  "githubId": 187247969,
+  "username": "AnanditS",
+  "modules": [
+    "Collaboration",
+    "Asset List"
+  ],
+  "office": "Chandigarh",
+  "email": "anandit.sood@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.099Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.121Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec5fe"
+  },
+  "name": "Ankit Kumar",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5ea"
+  },
+  "githubId": 147475845,
+  "username": "ankitrevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "ankit.kumar@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.100Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.085Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec600"
+  },
+  "name": "Anuj",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e4"
+  },
+  "githubId": 97150054,
+  "username": "AnujRevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "anuj@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.101Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.004Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec602"
+  },
+  "name": "Asher Kumar",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5dc"
+  },
+  "githubId": 103925765,
+  "username": "Asher-maxval",
+  "modules": [
+    "Opportunities"
+  ],
+  "office": "Hyderabad",
+  "email": "Asher.Kumar@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.102Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.014Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec604"
+  },
+  "name": "Atul Sharma",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5de"
+  },
+  "githubId": 182089090,
+  "username": "Atulrevclerx",
+  "modules": [
+    "Print Editor"
+  ],
+  "office": "Chandigarh",
+  "email": "atul.sharma@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.103Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.115Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec606"
+  },
+  "name": "Bhagyashri wankhade",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e4"
+  },
+  "githubId": 125253397,
+  "username": "BhagyashriRevclerx",
+  "modules": [
+    "Automation/Security"
+  ],
+  "office": "Chandigarh",
+  "email": "bhagyashri.wankhade@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.103Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.051Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec608"
+  },
+  "name": "Deeksha Sharma",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e4"
+  },
+  "githubId": 102713290,
+  "username": "DeekshaRevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "deeksha.sharma@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.104Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.011Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec60a"
+  },
+  "name": "Dheeraj Sobti",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e2"
+  },
+  "githubId": 141320879,
+  "username": "Dheerajrevclerx",
+  "modules": [
+    "User Mgmt"
+  ],
+  "office": "Chandigarh",
+  "email": "dheeraj.sobti@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.105Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.069Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec60c"
+  },
+  "name": "Eshwar-Chavan",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5de"
+  },
+  "githubId": 143786706,
+  "username": "Eshwar-Chavan",
+  "modules": [
+    "Playbooks"
+  ],
+  "office": "Mumbai",
+  "email": "eshwar.chavan@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.106Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.079Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec60e"
+  },
+  "name": "Gudia",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5de"
+  },
+  "githubId": 178142274,
+  "username": "GudiaRevclerx",
+  "modules": [
+    "AI"
+  ],
+  "office": "Chandigarh",
+  "email": "gudia@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.107Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.108Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec610"
+  },
+  "name": "Hritikesh Kumar",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5ea"
+  },
+  "githubId": 175302554,
+  "username": "HritikeshRevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "hritikesh.kumar@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.108Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.102Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec612"
+  },
+  "name": "Imteyaz Ahmad",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e8"
+  },
+  "githubId": 119917459,
+  "username": "ImteyazRevclerx",
+  "modules": [
+    "SFDC"
+  ],
+  "office": "Chandigarh",
+  "email": "imteyaz.ahamad@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.109Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.033Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec614"
+  },
+  "name": "Jasdeep Kaur",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5de"
+  },
+  "githubId": 178136056,
+  "username": "Jasdeeprevclerx",
+  "modules": [
+    "Playbooks"
+  ],
+  "office": "Chandigarh",
+  "email": "jasdeep.kaur@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.110Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.106Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec618"
+  },
+  "name": "Krishnakant Dubey",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e6"
+  },
+  "githubId": 136305060,
+  "username": "KrishnakantRevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "krishnakant.dubey@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.112Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.063Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec61c"
+  },
+  "name": "Meenakshi",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e6"
+  },
+  "githubId": 191082149,
+  "username": "MeenakshiRevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "meenakshi@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.113Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec61e"
+  },
+  "name": "Megha Solanke",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5ec"
+  },
+  "githubId": 106654008,
+  "username": "Megha-Solanke",
+  "modules": [
+    "Drip"
+  ],
+  "office": "Mumbai",
+  "email": "megha.solanke@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.114Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.021Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec620"
+  },
+  "name": "Anusha Miryala",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5ee"
+  },
+  "githubId": 105437575,
+  "username": "anushamiryala6296",
+  "modules": [
+    "Contacts"
+  ],
+  "office": "Hyderabad",
+  "email": "miryala.anusha@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.115Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.018Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec622"
+  },
+  "name": "Mitali Thakur",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5de"
+  },
+  "githubId": 110168980,
+  "username": "Mitalirevclerx",
+  "modules": [
+    "Web"
+  ],
+  "office": "Chandigarh",
+  "email": "mitali.thakur@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.116Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.030Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec624"
+  },
+  "name": "Mohit Makhaik",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 130961207,
+  "username": "MohitRevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "mohit.makhaik@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.118Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.060Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec626"
+  },
+  "name": "Natasha Kapoor",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e4"
+  },
+  "githubId": 163122977,
+  "username": "NatashaRevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "natasha.kapoor@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.118Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.090Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec628"
+  },
+  "name": "Navdeep",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5ec"
+  },
+  "githubId": 97150227,
+  "username": "NavdeepRevclerx",
+  "modules": [
+    "Social"
+  ],
+  "office": "Chandigarh",
+  "email": "navdeep.singh@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.119Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.007Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec62a"
+  },
+  "name": "Rai_Nikhil",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e4"
+  },
+  "githubId": 191978509,
+  "username": "NikhilRaiRevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "nikhil.rai@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.120Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.135Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec62c"
+  },
+  "name": "Nikhil Sidana",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e4"
+  },
+  "githubId": 182471708,
+  "username": "NikhilRevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "nikhil.sidana@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.121Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.117Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec62e"
+  },
+  "name": "Nishtha Aneja",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e2"
+  },
+  "githubId": 178136025,
+  "username": "Nishtharevclerx",
+  "modules": [
+    "User Mgmt"
+  ],
+  "office": "Chandigarh",
+  "email": "nishtha.aneja@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.122Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.104Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec630"
+  },
+  "name": "Pankaj",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e8"
+  },
+  "githubId": 184734281,
+  "username": "Pankaj-Revclerx",
+  "modules": [
+    "Solution Mgmt"
+  ],
+  "office": "Chandigarh",
+  "email": "pankaj@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.123Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.119Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec632"
+  },
+  "name": "Pooja Upreti",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5de"
+  },
+  "githubId": 164486103,
+  "username": "Poojarevclerx",
+  "modules": [
+    "Playbooks"
+  ],
+  "office": "Chandigarh",
+  "email": "pooja.upreti@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.124Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.096Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec634"
+  },
+  "name": "Prerna Sharma",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e4"
+  },
+  "githubId": 126458596,
+  "username": "PrernaRevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "prerna.sharma@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.125Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.057Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec636"
+  },
+  "name": "Priyank Kumar",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e8"
+  },
+  "githubId": 110168689,
+  "username": "Priyankrevclerx",
+  "modules": [
+    "MDF",
+    "Deals"
+  ],
+  "office": "Chandigarh",
+  "email": "priyank.kumar@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.126Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.024Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec638"
+  },
+  "name": "Sahil Thakur",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e4"
+  },
+  "githubId": 152860609,
+  "username": "SahilThakurRevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "sahil.thakur@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.128Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.087Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec63a"
+  },
+  "name": "Sukreeti Sharma",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e6"
+  },
+  "githubId": 180617195,
+  "username": "SukreetiRevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "sukreeti.sharma@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.128Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.111Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec63c"
+  },
+  "name": "Tarun jamwal",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e4"
+  },
+  "githubId": 167079321,
+  "username": "tarunjamwalrevclerx",
+  "modules": [
+    "Custom"
+  ],
+  "office": "Chandigarh",
+  "email": "tarun.jamwal@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.130Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.100Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec63e"
+  },
+  "name": "Tarun Mittal",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5de"
+  },
+  "githubId": 125947484,
+  "username": "tarunmittalrevclerx",
+  "modules": [
+    "LMS"
+  ],
+  "office": "Chandigarh",
+  "email": "tarun.mittal@revclerx.com",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.131Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.054Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec640"
+  },
+  "name": "Varaprasad Rao",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5da"
+  },
+  "githubId": 13694943,
+  "username": "varaprasad1",
+  "modules": [
+    "Editors",
+    "CRM"
+  ],
+  "office": "Hyderabad",
+  "email": "vara.prasad@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:37.948Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec642"
+  },
+  "name": "Viraj Madhavi",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5e8"
+  },
+  "githubId": 193463800,
+  "username": "virajmadhavi26",
+  "modules": [
+    "External Links",
+    "Product/Database"
+  ],
+  "office": "Mumbai",
+  "email": "viraj.madhavi@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.144Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686e577d9c16b47369cec644"
+  },
+  "name": "Yash Jain",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": {
+    "$oid": "686e577d9c16b47369cec5de"
+  },
+  "githubId": 123166452,
+  "username": "yashjain02154",
+  "modules": [
+    "Email"
+  ],
+  "office": "Mumbai",
+  "email": "yash.jain@maxval.net",
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T11:50:21.134Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:18:38.036Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb342ed36eafbe01cfd3"
+  },
+  "name": "Chris Phillips",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 6414193,
+  "username": "cphillips83",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:55:49.009Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:02.533Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb382ed36eafbe01cfef"
+  },
+  "name": "AMPBuilds",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 6798360,
+  "username": "AMPBuilds",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:55:52.624Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:34.125Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb3a2ed36eafbe01cffe"
+  },
+  "name": "Prajith Vel",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 24417305,
+  "username": "Prajithvel",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:55:54.485Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:35.829Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb3c2ed36eafbe01d00c"
+  },
+  "name": "manojrev",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 63649918,
+  "username": "manojrev",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:55:56.380Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:37.677Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb3c2ed36eafbe01d011"
+  },
+  "name": "abhijeet gaikwad",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 66121235,
+  "username": "abhijeet1033",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:55:56.866Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:37.941Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb3e2ed36eafbe01d01e"
+  },
+  "name": "Gajendra Singh",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 84557162,
+  "username": "GajendraRevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:55:58.413Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:39.436Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb3f2ed36eafbe01d027"
+  },
+  "name": "Bhargavi Baichwal",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 87530745,
+  "username": "BhargaviMaxval",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:55:59.266Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:40.237Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb412ed36eafbe01d03b"
+  },
+  "name": "Rajrevclerx",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 102157495,
+  "username": "Rajrevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:01.810Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:43.228Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb532ed36eafbe01d0ab"
+  },
+  "name": "AliImam02",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 185221571,
+  "username": "AliImam02",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:19.137Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:59.712Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb532ed36eafbe01d0af"
+  },
+  "name": "Vatan-Garg",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 198723720,
+  "username": "Vatan-Garg",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:19.383Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:04:59.963Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb532ed36eafbe01d0b3"
+  },
+  "name": "SadikRevClerx",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 204655073,
+  "username": "SadikRevClerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:19.632Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:00.212Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb542ed36eafbe01d0b8"
+  },
+  "name": "sanika shinde",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 207057962,
+  "username": "sanikashinde628",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:20.328Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:00.787Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb542ed36eafbe01d0bc"
+  },
+  "name": "NehaSawant2306",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 207058071,
+  "username": "NehaSawant2306",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:20.582Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:01.040Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb542ed36eafbe01d0c0"
+  },
+  "name": "MohddWasi2",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 208835863,
+  "username": "MohddWasi2",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:20.839Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:01.299Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb552ed36eafbe01d0c4"
+  },
+  "name": "Amol-spec",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 211802028,
+  "username": "Amol-spec",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:21.116Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:01.662Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb552ed36eafbe01d0c8"
+  },
+  "name": "Shivani-revclerx",
+  "role": "developer",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 215646466,
+  "username": "Shivani-revclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:21.377Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:01.914Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb592ed36eafbe01d0ed"
+  },
+  "name": "Priyarevclerx",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 71871744,
+  "username": "Priyarevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:25.983Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:06.762Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb5a2ed36eafbe01d0f1"
+  },
+  "name": "simranpreetrevclerx",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 83335974,
+  "username": "simranpreetrevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:26.387Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:07.019Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb5b2ed36eafbe01d0f7"
+  },
+  "name": "tamanna-revclerx",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 91538292,
+  "username": "tamanna-revclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:27.005Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:07.703Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb5c2ed36eafbe01d103"
+  },
+  "name": "GaganpreetRevclerx",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 102713158,
+  "username": "GaganpreetRevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:28.425Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:09.162Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb5c2ed36eafbe01d10a"
+  },
+  "name": "kamran khan",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 102713496,
+  "username": "kamranRevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:28.975Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:09.681Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb5e2ed36eafbe01d114"
+  },
+  "name": "NirmalRevclerx",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 110168950,
+  "username": "NirmalRevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:30.028Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:10.913Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb5e2ed36eafbe01d11b"
+  },
+  "name": "Ajit kumar",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 117884567,
+  "username": "AjitRevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:30.581Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:11.440Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb602ed36eafbe01d12d"
+  },
+  "name": "anilsingh2011",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 141010018,
+  "username": "anilsingh2011",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:32.748Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:13.791Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb622ed36eafbe01d13c"
+  },
+  "name": "TesterKomal",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 153194696,
+  "username": "Komalrevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:34.620Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:15.689Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb622ed36eafbe01d140"
+  },
+  "name": "Anushkarevclerx",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 156782745,
+  "username": "Anushkarevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:34.880Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:15.960Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb632ed36eafbe01d14a"
+  },
+  "name": "Nandinirevclerx",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 171684420,
+  "username": "Nandinirevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:35.949Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:17.363Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb662ed36eafbe01d15c"
+  },
+  "name": "aditya04soni",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 183853529,
+  "username": "aditya04soni",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:38.210Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:19.747Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb682ed36eafbe01d16c"
+  },
+  "name": "Nikshayrevclerx",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 192089774,
+  "username": "Nikshayrevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:40.292Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:21.826Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb692ed36eafbe01d177"
+  },
+  "name": "Abhinav Thakur",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 193903182,
+  "username": "abhinavrevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:41.454Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:23.164Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb692ed36eafbe01d17b"
+  },
+  "name": "vikaspalrevclerx",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 196622860,
+  "username": "vikaspalrevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:41.798Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:23.431Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb6a2ed36eafbe01d17f"
+  },
+  "name": "AnkitSamratRevclerx",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 203766879,
+  "username": "AnkitSamratRevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:42.151Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:23.781Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb6a2ed36eafbe01d183"
+  },
+  "name": "poojgulati",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 206208781,
+  "username": "poojgulati",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:42.396Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:24.046Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb6a2ed36eafbe01d187"
+  },
+  "name": "DCrevclerx",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 213591836,
+  "username": "DCrevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:42.648Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:24.437Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb6b2ed36eafbe01d18b"
+  },
+  "name": "GurvirSinghRevclerx",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 213741769,
+  "username": "GurvirSinghRevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:43.024Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:24.686Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb6b2ed36eafbe01d190"
+  },
+  "name": "Abhishek Sharma",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 213741819,
+  "username": "abhishek-sharma14",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:43.285Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:24.963Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb6b2ed36eafbe01d194"
+  },
+  "name": "Hariomrevclerx16",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 213741877,
+  "username": "Hariomrevclerx16",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:43.538Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:25.519Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "686ebb6b2ed36eafbe01d198"
+  },
+  "name": "priyankarevclerx",
+  "role": "tester",
+  "isModuleOwner": false,
+  "isTeamLead": false,
+  "reportsTo": null,
+  "githubId": 217009682,
+  "username": "priyankarevclerx",
+  "modules": [],
+  "office": null,
+  "birthDate": null,
+  "joiningDate": null,
+  "contactNumber": null,
+  "createdAt": {
+    "$date": "2025-07-09T18:56:43.799Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-09T19:05:25.764Z"
+  },
+  "__v": 0
+}]
