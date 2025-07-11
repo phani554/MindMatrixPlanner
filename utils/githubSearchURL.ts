@@ -52,6 +52,10 @@ export function buildGitHubSearchURL(filters: IssueFilters): string {
     parts.push(`created:<=${endDate}`);
   }
 
+  if (filters.user) {
+    parts.push(`author:${filters.user}`);
+  }
+
   // --- Final URL Assembly ---
 
   // Join all parts with a space and encode them to be URL-safe.

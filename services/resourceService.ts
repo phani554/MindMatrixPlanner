@@ -103,17 +103,41 @@ interface SyncStatusData {
 }
 
 export const employeeService = {
-    async getSyncStatus(signal?: AbortSignal): Promise<SyncStatusData> {
+    async getSyncStatus(signal) {
         try {
-            const response = await apiService<{ data: any }>(`${BASE_URL}/sync/status`, { signal });
-            return response.data;
+            const response = await apiService(`${BASE_URL}/sync/status`, { signal });
+
+            if (response && response.data) {
+                // Add a success flag for easier UI logic
+                return { success: true, ...response.data };
+            } else {
+                // Handle cases where the server returns 200 OK but the format is wrong
+                console.warn("Sync status response was successful but format was incorrect.", response);
+                throw new Error('Server returned an invalid format for sync status.');
+            }
+
         } catch (error) {
-            // It's okay if this fails silently (e.g., on first run)
-            console.warn("Could not fetch sync status:", error);
-            return { message:'failed', timestamp: ''};
+            // --- Intelligent Error Handling ---
+
+            // 1. Re-throw critical authentication errors so the UI can react (e.g., logout).
+            if (error instanceof AuthError) {
+                console.error("AuthError caught in getSyncStatus; re-throwing.", error);
+                throw error;
+            }
+
+            // 2. Handle user cancellation silently.
+            if (error.name === 'AbortError') {
+                console.log("Sync status fetch was cancelled.");
+                // Return an object that indicates it was not a failure.
+                // We use success: true but a specific message.
+                return { success: true, message: 'Status fetch cancelled.', timestamp: '' };
+            }
+
+            // 3. For any other generic error, throw it so the hook can display the real message.
+            console.error("Generic error in getSyncStatus; re-throwing.", error);
+            throw error;
         }
     },
-
     // async updateEmployee(githubId: number, updateData: Partial<Resource>): Promise<Resource> {
     //     try {
     //         return await apiService<Resource>(`${BASE_URL}/${githubId}`, {

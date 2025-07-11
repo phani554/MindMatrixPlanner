@@ -88,7 +88,7 @@ const performBackgroundSync = async (syncOptions) => {
             message: `Sync failed: ${error.message || 'An unknown error occurred.'}`
         };
         // You would need to create this broadcastSyncError function and a listener on the frontend.
-        // broadcastSyncError(errorPayload);
+        broadcastSyncError(errorPayload);
 
     } finally {
         // 6️⃣ Release the lock regardless of success or failure
@@ -98,50 +98,62 @@ const performBackgroundSync = async (syncOptions) => {
 };
 
 
-/**
+/*
  * The Express.js route handler.
  * Its only job is to validate the request, trigger the background task,
  * and respond immediately.
- */
+ * This function now expects to run AFTER the validateToken middleware.
+*/
+
 export const triggerFullSync = (req, res, next) => {
-    // Check if a sync is already in progress
     if (isSyncing) {
         logger.warn('Sync request rejected: another sync is already in progress.');
-        // 409 Conflict is a good status code for this situation.
         return res.status(409).json({
             success: false,
             message: "A synchronization process is already running. Please try again later."
         });
     }
 
-    // 1️⃣ Get metadata and options from the request
     const { triggeredBy, triggeredAt, ...syncOptions } = req.body;
     const effectiveTriggeredBy = triggeredBy || 'Unknown';
     const effectiveTriggeredAt = triggeredAt || new Date().toISOString();
 
     logger.info(`🚀 Sync request received from '${effectiveTriggeredBy}' at ${effectiveTriggeredAt}. Triggering background process.`);
 
-    // 2️⃣ Call the background task function WITHOUT await.
-    // This is the "fire-and-forget" part. The function will run on its own.
     performBackgroundSync({
         ...syncOptions,
-        triggeredBy: effectiveTriggeredBy // Pass metadata to the background task
+        triggeredBy: effectiveTriggeredBy
     });
 
-    // 3️⃣ Immediately respond to the client with a 202 Accepted status.
-    // This confirms the request was received and is being processed.
+    // Access the expiration_date passed from the validateToken middleware
+    const { tokenExpirationDate } = res.locals;
+
+    // Immediately respond with 202 Accepted and include the expiration date.
     return res.status(202).json({
         success: true,
-        message: "Sync process initiated. You will be notified via SSE upon completion."
+        message: "Sync process initiated. You will be notified via SSE upon completion.",
+        expiration_date: tokenExpirationDate // Include the expiration date here
     });
 };
-export const getStatus = handleAsync(async (req,res) => {
+
+/**
+ * Gets the status of the last sync.
+ * This function also expects to run AFTER the validateToken middleware.
+ */
+export const getStatus = handleAsync(async (req, res) => {
     const status = await getLastSyncStatus();
-    if (!status){
+    if (!status) {
         return res.status(404).json({ status: 'fail', message: 'Sync status has not been recorded yet.' });
     }
+
+    // You can also include the token expiration here if desired for frontend updates
+    const { tokenExpirationDate } = res.locals;
+
     res.status(200).json({
         status: 'success',
-        data: status,
+        data: {
+            ...status,
+            expiration_date: tokenExpirationDate // Optionally add to status payload
+        },
     });
 });

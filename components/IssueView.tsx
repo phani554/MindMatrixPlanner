@@ -5,7 +5,8 @@ import { useAssigneeStats, useSummaryStats, useModules } from '../hooks/useIssue
 import { IssueFilters, AssigneeStatsSortOptions, PaginationParams } from '@/api.types.ts';
 import { Resource } from '../types';
 import { buildGitHubSearchURL } from '@/utils/queryBuilder';
-
+import { UserSearchInput } from './UserSearchInput';
+import { MultiSelectSearchInput } from './MultiSelectSearchInput';
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -209,6 +210,16 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
         }
     };
 
+    const selectedAssignee = useMemo(() => {
+        return resources.find(r => r.githubId === filters.assignee_ids?.[0]);
+    }, [filters.assignee_ids, resources]);
+
+    const selectedCreator = useMemo(() => {
+        return resources.find(r => r.username === filters.user);
+    }, [filters.user, resources]);
+
+    const selectedTeamLead = useMemo(() => resources.find(r => r.githubId === filters.teamLeadGithubId), [filters.teamLeadGithubId, resources]);
+
     // --- Sorting Handler ---
     const handleSort = (field: SortField) => {
         setSortOptions(prev => ({
@@ -255,19 +266,7 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
     };
 
     // --- UI Handlers ---
-    const handleAssigneeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedId = e.target.value;
-        setFilters(prev => {
-            const newFilters = { ...prev };
-            if (selectedId) {
-                newFilters.assignee_ids = [parseInt(selectedId, 10)];
-            } else {
-                delete newFilters.assignee_ids;
-            }
-            return newFilters;
-        });
-        setPagination(prev => ({ ...prev, page: 1 })); // Reset to first page
-    };
+  
 
     const handleDateChange = (date: string, field: 'createdStartDate' | 'createdEndDate') => {
         setFilters(prev => ({ 
@@ -311,16 +310,17 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
         setPagination({ page: 1, limit: pagination.limit });
     };
 
-    const handleTeamLeadChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedId = e.target.value;
+    // --- NEW Handlers for Team Lead Search ---
+    const handleTeamLeadSelect = (user: Resource) => {
+        setFilters(prev => ({ ...prev, teamLeadGithubId: user.githubId }));
+        setPagination(prev => ({ ...prev, page: 1 }));
+    };
+
+    const handleTeamLeadClear = () => {
         setFilters(prev => {
             const newFilters = { ...prev };
-            if (selectedId) {
-                newFilters.teamLeadGithubId = parseInt(selectedId, 10);
-            } else {
-                delete newFilters.teamLeadGithubId; // Clear the filter if "All" is selected
-                delete newFilters.includeIndirectReports;
-            }
+            delete newFilters.teamLeadGithubId;
+            delete newFilters.includeIndirectReports;
             return newFilters;
         });
         setPagination(prev => ({ ...prev, page: 1 }));
@@ -392,6 +392,41 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
         return pages;
     };
 
+    const handleAssigneeSelect = (user: Resource) => {
+        setFilters(prev => ({
+            ...prev,
+            assignee_ids: [user.githubId] // Set the filter by ID
+        }));
+        setPagination(prev => ({ ...prev, page: 1 }));
+    };
+    
+    const handleAssigneeClear = () => {
+        setFilters(prev => {
+            const newFilters = { ...prev };
+            delete newFilters.assignee_ids; // Remove the filter
+            return newFilters;
+        });
+        setPagination(prev => ({ ...prev, page: 1 }));
+    };
+    
+    const handleCreatedBySelect = (user: Resource) => {
+        setFilters(prev => ({
+            ...prev,
+            user: user.username // Set the filter by username
+        }));
+        setPagination(prev => ({ ...prev, page: 1 }));
+    };
+    
+    const handleCreatedByClear = () => {
+        setFilters(prev => {
+            const newFilters = { ...prev };
+            delete newFilters.user; // Remove the filter
+            return newFilters;
+        });
+        setPagination(prev => ({ ...prev, page: 1 }));
+    };
+ 
+
     // --- Styling classes ---
     const inputClass = "bg-slate-600 border border-slate-500 text-slate-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5";
     const labelClass = "block text-sm font-medium text-slate-300 mb-1";
@@ -412,142 +447,39 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
                 </div>
             )}
 
-            {/* --- SUMMARY CHART SECTION --- */}
-            <div className="mb-6 p-4 bg-slate-800/50 rounded-lg">
-                <h2 className="text-lg font-semibold text-slate-100 mb-2 text-center">
-                    Issues Overview
-                </h2>
-                <p className="text-slate-400 text-sm text-center mb-4">
-                    Click on chart sections to filter by Open or Closed issues
-                </p>
-                <div className="grid md:grid-cols-2 gap-6 items-center">
-                    {/* Chart */}
-                    <div className="h-64 relative">
-                        {(summaryLoading || isTyping) && (
-                            <div className="absolute inset-0 bg-slate-800/70 flex items-center justify-center z-10 rounded">
-                                <p className="text-slate-300">Loading summary...</p>
-                            </div>
-                        )}
-                        {summaryError && (
-                            <div className="flex items-center justify-center h-full">
-                                <p className="text-red-400">Error loading summary: {summaryError}</p>
-                            </div>
-                        )}
-                        {chartData && (
-                            <Doughnut data={chartData} options={chartOptions} />
-                        )}
-                    </div>
-                    
-                    {/* Stats Summary */}
-                    <div className="space-y-3">
-                        <div className="bg-slate-700/50 p-3 rounded-lg">
-                            <p className="text-2xl font-bold text-slate-100">
-                                {summaryData?.totalIssues || 0}
-                            </p>
-                            <p className="text-slate-300 text-sm">Total Issues</p>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="bg-amber-500/20 p-3 rounded-lg border border-amber-500/30">
-                                <p className="text-xl font-semibold text-amber-400">
-                                    {summaryData?.openIssues || 0}
-                                </p>
-                                <p className="text-amber-200 text-sm">Open</p>
-                            </div>
-                            <div className="bg-emerald-500/20 p-3 rounded-lg border border-emerald-500/30">
-                                <p className="text-xl font-semibold text-emerald-400">
-                                    {summaryData?.closedIssues || 0}
-                                </p>
-                                <p className="text-emerald-200 text-sm">Closed</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             {/* --- FILTER CONTROLS --- */}
             <div className="grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-4 p-2">
+                <UserSearchInput
+                        label="Assignee"
+                        placeholder="Search by name or username..."
+                        allUsers={resources}
+                        selectedUser={selectedAssignee}
+                        onSelectUser={handleAssigneeSelect}
+                        onClear={handleAssigneeClear}
+                />
+                {/* --- Module Filter updated to use MultiSelectSearchInput --- */}
+                <MultiSelectSearchInput
+                    label="Module(s)"
+                    placeholder="Type to add module..."
+                    allOptions={allModules || []}
+                    selectedOptions={filters.module || []}
+                    onSelect={handleModuleSelect}
+                    onRemove={handleModuleRemove}
+                    isLoading={modulesLoading}
+                />
+                
+                {/* ... other filters like State, Role, Date, etc. ... */}
+                {/* --- Team Lead Filter updated to use UserSearchInput --- */}
                 <div>
-                    <label htmlFor="resourceFilter" className={labelClass}>Assignee</label>
-                    <select 
-                        id="resourceFilter" 
-                        value={filters.assignee_ids?.[0] || ''} 
-                        onChange={handleAssigneeChange} 
-                        className={inputClass}
-                    >
-                        <option value="">All Resources</option>
-                        {resources.map(r => (
-                            <option key={r.githubId} value={r.githubId}>
-                                {r.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                {/* --- ADDED START: Module Filter Input --- */}
-                <div className="relative">
-                    <label htmlFor="moduleFilter" className={labelClass}>
-                        Module(s)
-                    </label>
-                    {/* Display selected modules as "pills" */}
-                    <div className="flex flex-wrap gap-2 p-2 bg-slate-600 border border-slate-500 rounded-lg mb-1 min-h-[44px]">
-                        {filters.module?.map(mod => (
-                            <span key={mod} className="flex items-center px-2 py-1 bg-cyan-600 text-cyan-100 rounded-full text-sm">
-                                {mod}
-                                <button
-                                    onClick={() => handleModuleRemove(mod)}
-                                    className="ml-2 -mr-1 text-cyan-200 hover:text-white"
-                                    title={`Remove ${mod}`}
-                                >
-                                    ×
-                                </button>
-                            </span>
-                        ))}
-                        {/* The actual input field */}
-                        <input
-                            type="text"
-                            id="moduleFilter"
-                            placeholder={modulesLoading ? "Loading modules..." : "Type to add module..."}
-                            value={moduleInput}
-                            onChange={(e) => setModuleInput(e.target.value)}
-                            className="bg-transparent flex-grow outline-none text-slate-200 placeholder-slate-400"
-                            disabled={modulesLoading}
-                        />
-                    </div>
-                    {/* Autocomplete suggestion dropdown */}
-                    {moduleSuggestions.length > 0 && (
-                        <ul className="absolute z-10 w-full bg-slate-700 border border-slate-600 rounded-lg mt-1 max-h-60 overflow-y-auto">
-                            {moduleSuggestions.slice(0, 10).map(suggestion => (
-                                <li
-                                    key={suggestion}
-                                    onClick={() => handleModuleSelect(suggestion)}
-                                    className="px-3 py-2 text-slate-300 hover:bg-slate-600 cursor-pointer"
-                                >
-                                    {suggestion}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-
-                {/* --- ADDED END --- */}
-
-                {/* --- ADDED START: Team Lead Filter Dropdown --- */}
-                <div>
-                    <label htmlFor="teamLeadFilter" className={labelClass}>Team Lead</label>
-                    <select 
-                        id="teamLeadFilter" 
-                        value={filters.teamLeadGithubId || ''} 
-                        onChange={handleTeamLeadChange} 
-                        className={inputClass}
-                    >
-                        <option value="">All Teams</option>
-                        {teamLeads.map(lead => (
-                            <option key={lead.githubId} value={lead.githubId}>
-                                {lead.name}
-                            </option>
-                        ))}
-                    </select>
-                    {/* This checkbox ONLY appears if a team lead is selected */}
-                    {filters.teamLeadGithubId && (
+                    <UserSearchInput
+                        label="Team Lead"
+                        placeholder="Search for a lead..."
+                        allUsers={teamLeads}
+                        selectedUser={selectedTeamLead}
+                        onSelectUser={handleTeamLeadSelect}
+                        onClear={handleTeamLeadClear}
+                    />
+                    {selectedTeamLead && (
                         <div className="mt-2 flex items-center">
                             <input
                                 id="indirectReports"
@@ -562,7 +494,6 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
                         </div>
                     )}
                 </div>
-                {/* --- ADDED END --- */}
 
                 {/* ---Labels Filter ---- */}
                 <div>
@@ -663,6 +594,16 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
                         className={inputClass}
                     />
                 </div>
+                {/* ---User Filter ---- */}
+
+                <UserSearchInput
+                    label="Created By"
+                    placeholder="Search by name or username..."
+                    allUsers={resources}
+                    selectedUser={selectedCreator}
+                    onSelectUser={handleCreatedBySelect}
+                    onClear={handleCreatedByClear}
+                />
             </div>
 
             {/* --- CLEAR FILTERS BUTTON --- */}
@@ -744,6 +685,60 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
                     </div>
                 </div>
             )}
+
+            {/* --- SUMMARY CHART SECTION --- */}
+            <div className="mb-6 p-4 bg-slate-800/50 rounded-lg">
+                <h2 className="text-lg font-semibold text-slate-100 mb-2 text-center">
+                    Issues Overview
+                </h2>
+                <p className="text-slate-400 text-sm text-center mb-4">
+                    Click on chart sections to filter by Open or Closed issues
+                </p>
+                <div className="grid md:grid-cols-2 gap-6 items-center">
+                    {/* Chart */}
+                    <div className="h-64 relative">
+                        {(summaryLoading || isTyping) && (
+                            <div className="absolute inset-0 bg-slate-800/70 flex items-center justify-center z-10 rounded">
+                                <p className="text-slate-300">Loading summary...</p>
+                            </div>
+                        )}
+                        {summaryError && (
+                            <div className="flex items-center justify-center h-full">
+                                <p className="text-red-400">Error loading summary: {summaryError}</p>
+                            </div>
+                        )}
+                        {chartData && (
+                            <Doughnut data={chartData} options={chartOptions} />
+                        )}
+                    </div>
+                    
+                    {/* Stats Summary */}
+                    <div className="space-y-3">
+                        <div className="bg-slate-700/50 p-3 rounded-lg">
+                            <p className="text-2xl font-bold text-slate-100">
+                                {summaryData?.totalIssues || 0}
+                            </p>
+                            <p className="text-slate-300 text-sm">Total Issues</p>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div className="bg-amber-500/20 p-3 rounded-lg border border-amber-500/30">
+                                <p className="text-xl font-semibold text-amber-400">
+                                    {summaryData?.openIssues || 0}
+                                </p>
+                                <p className="text-amber-200 text-sm">Open</p>
+                            </div>
+                            <div className="bg-emerald-500/20 p-3 rounded-lg border border-emerald-500/30">
+                                <p className="text-xl font-semibold text-emerald-400">
+                                    {summaryData?.closedIssues || 0}
+                                </p>
+                                <p className="text-emerald-200 text-sm">Closed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
 
             {/* --- DATA TABLE --- */}
             <div className="overflow-x-auto relative">
@@ -858,7 +853,22 @@ export const IssueView: React.FC<IssueViewProps> = ({ resources }) => {
                                         </td>
 
                                         <td className="px-4 py-3 text-center">
-                                            <span className="text-red-400 font-medium">{getOnHoldCount(stat)}</span>
+                                        {onHoldCount > 0 ? (
+                                            <a
+                                                href={buildGitHubSearchURL({
+                                                    ...baseLinkFilters, // Correctly includes the `user` filter (username)
+                                                    state: 'open',
+                                                    labels: ['on hold', 'in discussion', 'blocked']
+                                                })}
+                                                target="_blank" rel="noopener noreferrer"
+                                                className="text-red-400 font-medium hover:underline"
+                                                title={`View ${onHoldCount} on-hold items for ${stat.employee.name}`}
+                                            >
+                                                {onHoldCount}
+                                            </a>
+                                        ) : (
+                                            <span className="text-slate-400">0</span>
+                                        )}
                                         </td>
 
                                         {/* --- Clickable Link for ALL items for this user --- */}

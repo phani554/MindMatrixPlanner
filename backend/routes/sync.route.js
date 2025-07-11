@@ -1,11 +1,12 @@
 import {Router} from 'express';
 import { getStatus, triggerFullSync } from '../controller/sync.controller.js';
 import { clients } from '../utils/eventutil.js';
+import { validateToken } from '../middleware/sync.middleware.js';
 
 
 const router = Router();
 
-router.route('/run').post(triggerFullSync);
+router.route('/run').post(validateToken, triggerFullSync);
 router.get("/stream", (req, res) => {
     // Required headers for SSE
     res.setHeader("Content-Type", "text/event-stream");
@@ -13,7 +14,7 @@ router.get("/stream", (req, res) => {
     res.setHeader("Connection", "keep-alive");
   
     // Send a comment to establish the stream
-    res.write(":\n\n");
+    res.write("SSE Event Handler:\n\n");
   
     // Store this client
     clients.push(res);
@@ -25,6 +26,6 @@ router.get("/stream", (req, res) => {
     });
 });
 
-router.route('/status').get(getStatus);
+router.route('/status').get(validateToken, getStatus);
 
 export default router;

@@ -98,19 +98,32 @@ async function getGithubDisplayName(githubUrl) {
 ;
   }
 }
+/**
+ * 💡 NEW: A dedicated function to check token validity before starting a sync.
+ * This function is now exported and used by the controller for a pre-sync check.
+ * @returns {Promise<{success: boolean, expiration_date?: string, message?: string}>}
+*/
+export async function checkTokenValidity() {
+  try {
+    const octokitClient = await octokit.getforPat();
+    // A lightweight API call to check credentials and get headers.
+    const response = await octokitClient.rest.meta.get();
 
-const octokitclient = await octokit.getforPat();
+    if (response.status === 200 && response.headers['github-authentication-token-expiration']) {
+      const expiration_date = new Date(parseInt(response.headers['github-authentication-token-expiration']) * 1000).toUTCString();
+      return { success: true, expiration_date };
+    } else {
+      // This case handles scenarios where the token is valid but headers are unexpected
+      return { success: false, message: 'Token is valid, but expiration date could not be determined.' };
+    }
+  } catch (error) {
+    if (error.status === 401) {
+      // This is the most common failure case for an invalid/expired token.
+      return { success: false, message: 'GitHub Token is invalid or expired.' };
+    }
+    // Handle other potential errors (e.g., network issues)
+    return { success: false, message: `An unexpected error occurred during token validation: ${error.message}` };
+  }
+}
 
-const response = await octokitclient.rest.teams.listMembersInOrg({
-  org: ORG,
-  team_slug: 'testers',
-  per_page: 100
-});
-export const expiration_date = new Date(response.headers['github-authentication-token-expiration']).toUTCString();
-// const developer_member_list = [];
-// for (const member of response.data) {
-//   developer_member_list.push(`username: ${member.login}, githubId: ${member.id}, html_url: ${await getGithubDisplayName(member.html_url)}`);
-// }
-// console.log(developer_member_list);
-// console.log(developer_member_list.length);
-export {octokit};
+export {octokit}

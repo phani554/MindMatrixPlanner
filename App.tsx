@@ -105,7 +105,7 @@ const parseSOWDate = (dateStr?: string): string | undefined => {
 
 
 const App: React.FC = () => {
-  const { data: syncStatus } = useSyncStatus();
+  const syncStatus = useSyncStatus();
 
   const { data, isLoading, error } = useApi(fetchService.getResources);
 
@@ -243,84 +243,7 @@ const App: React.FC = () => {
     const philipId = 'res_philip_thomas';
     const varadrajId = 'res_varadraj_swami';
     const romaId = 'res_roma_soni';
-
-
-    // const initialResourcesData: Resource[] = [
-    //   { id: shaileshId, name: 'Shailesh Tayde', role: 'Head of Development', email: 'shailesh.t@example.com', contactNumber:'9876500001', birthDate: parseBirthDate('10 Jun'), joiningDate: parseJoiningDate('2010-06-01')},
-    //   { id: sunilId, name: 'Sunil Rao', role: 'Head of Global Testing', email: 'sunil.r@example.com', contactNumber:'9876500002', birthDate: parseBirthDate('15 Aug'), joiningDate: parseJoiningDate('2011-07-10') },
-    //   { id: sageerId, name: 'Sageer Shaikh', role: 'Head of Custom/PM/SC', email: 'sageer.s@example.com', contactNumber:'9876500003', birthDate: parseBirthDate('20 Jul'), joiningDate: parseJoiningDate('2012-09-05') },
-    //   { id: philipId, name: 'Philip Thomas', role: 'Overall Lead - Asset Mgmt, Automation', parentId: shaileshId, email: 'philip.t@example.com', birthDate: parseBirthDate('25 Aug'), joiningDate: parseJoiningDate('2015-02-15') },
-    //   { id: 'res_ubaid_shaikh', name: 'Ubaid Shaikh', role: 'Overall Lead - Playbooks, LMS', parentId: shaileshId, email: 'ubaid.s@example.com', birthDate: parseBirthDate('05 Jun'), joiningDate: parseJoiningDate('2017-01-10') },
-    //   { id: 'res_vishal_patel', name: 'Vishal Patel', role: 'Overall Lead - MDF, Org Goals', parentId: shaileshId, email: 'vishal.p@example.com', joiningDate: parseJoiningDate('2018-03-20'), birthDate: parseBirthDate('03 Mar') },
-    //   { id: 'res_shiv_kumar', name: 'Shiv Kumar', role: 'Overall Lead - User Mgmt, Galleries, Tracking', parentId: shaileshId, email: 'shiv.k@example.com', joiningDate: parseJoiningDate('2016-05-05'), birthDate: parseBirthDate('12 Dec')},
-    //   { id: 'res_furquan_ahmed', name: 'Furquan Ahmed', role: 'Overall Lead - CRMs, AI', parentId: shaileshId, email: 'furquan.a@example.com', birthDate: parseBirthDate('15 Jan'), joiningDate: parseJoiningDate('2016-03-01')},
-    //   { id: 'res_sayak_boral', name: 'Sayak Boral', role: 'Lead Developer - CRMs Add-ons', parentId: 'res_furquan_ahmed', email: 'sayak.b@example.com', birthDate: parseBirthDate('10 Jul'), joiningDate: parseJoiningDate('2019-08-01')},
-    //   { id: 'res_tajinder_singh', name: 'Tajinder Singh', role: 'Overall Lead - Social, Mobile, SSO', parentId: shaileshId, email: 'tajinder.s@example.com', birthDate: parseBirthDate('20 Jun'), joiningDate: parseJoiningDate('2018-05-10')},
-    //   { id: 'res_haresh_patil', name: 'Haresh Patil', role: 'Overall Lead - Reports, Lead Routing, Collaboration', parentId: shaileshId, email: 'haresh.p@example.com', birthDate: parseBirthDate('10 Sep'), joiningDate: parseJoiningDate('2019-01-15')}, 
-    //   { id: 'res_sumit_kumar_dev', name: 'Sumit Kumar', role: 'Overall Lead - Dashboards', parentId: shaileshId, email: 'sumit.k.dev@example.com', birthDate: parseBirthDate('22 Jun'), joiningDate: parseJoiningDate('2017-11-15')},
-    //   { id: 'res_vishal_kumar_editors', name: 'Vishal Kumar', role: 'Overall Lead - Editors', parentId: shaileshId, email: 'vishal.k.editors@example.com', joiningDate: parseJoiningDate('2018-06-01'), birthDate: parseBirthDate('07 Feb')},
-    //   { id: 'res_meghana_reddy', name: 'Meghana Reddy', role: 'Lead Developer - Contacts, Email Drip', parentId: shaileshId, email: 'meghana.r@example.com', birthDate: parseBirthDate('05 Nov'), joiningDate: parseJoiningDate('2021-04-01')},
-    //   { id: 'res_mahima_kulkarni', name: 'Mahima Kulkarni', role: 'Lead Developer - Exports, Email Drip', parentId: shaileshId, email: 'mahima.k@example.com', birthDate: parseBirthDate('25 Sep'), joiningDate: parseJoiningDate('2020-02-20')},
-    //   { id: 'res_rahul_ui', name: 'Rahul UI', role: 'Overall Lead - UI', parentId: shaileshId, email: 'rahul.ui@example.com', birthDate: parseBirthDate('18 Jul'), joiningDate: parseJoiningDate('2015-09-01')},
-    //   { id: 'res_jot_singh', name: 'Jot Singh', role: 'Developer - Asset Mgmt', parentId: philipId, email: 'jot.s@example.com'},
-    //   { id: 'res_saurabh_singh', name: 'Saurabh Singh', role: 'Developer - Asset Mgmt', parentId: philipId, email: 'saurabh.s@example.com'},
-    //   { id: 'res_tamanna_rana', name: 'Tamanna Rana', role: 'HTML Specialist - Asset Mgmt', parentId: philipId, email: 'tamanna.r@example.com'},
-    //   { id: 'res_raj_qa_asset', name: 'Raj (QA)', role: 'QA Engineer - Asset Mgmt', parentId: philipId, email: 'raj.qa.asset@example.com'}, 
-    //   { id: 'res_komal_qa', name: 'Komal QA', role: 'QA Engineer', parentId: 'res_raj_qa_asset'},
-    //   { id: 'res_abhay_qa', name: 'Abhay QA', role: 'QA Engineer', parentId: 'res_raj_qa_asset'},
-    //   { id: 'res_pushpendra_playbooks', name: 'Pushpendra Kumar', role: 'Developer - Playbooks', parentId: 'res_ubaid_shaikh', email: 'pushpendra.k@example.com'},
-    //   { id: 'res_mayur_patil_playbooks', name: 'Mayur Patil', role: 'HTML Specialist - Playbooks', parentId: 'res_ubaid_shaikh', email: 'mayur.p@example.com'},
-    //   { id: 'res_zaid_playbooks', name: 'Zaid Khan', role: 'Business Analyst - Playbooks', parentId: 'res_ubaid_shaikh', email: 'zaid.k@example.com'},
-    //   { id: 'res_ashwani_crm', name: 'Ashwani Kumar', role: 'Developer - CRMs', parentId: 'res_furquan_ahmed', email: 'ashwani.k@example.com'},
-    //   { id: 'res_srushti_s', name: 'Srushti Skharkar', role: 'Developer - CRMs Add-ons', parentId: 'res_sayak_boral', email: 'srushti.s@example.com'},
-    //   { id: 'res_imteyaz_crm_qa', name: 'Imteyaz Ahmed', role: 'QA Engineer - CRMs', parentId: 'res_furquan_ahmed', email: 'imteyaz.a@example.com'},
-    //   { id: 'res_gurinder_mobile', name: 'Gurinder Singh', role: 'Developer - Mobile', parentId: 'res_tajinder_singh', email: 'gurinder.s@example.com'},
-    //   { id: 'res_ashif_social', name: 'Ashif Shaikh', role: 'Developer - Social', parentId: 'res_tajinder_singh', email: 'ashif.s@example.com'},
-    //   { id: varadrajId, name: 'Varadraj Swami', role: 'QA Lead', parentId: sunilId, email: 'varadraj.s@example.com', birthDate: parseBirthDate('12 Aug'), joiningDate: parseJoiningDate('2017-06-15')},
-    //   { id: 'res_praveen_kumar_qa', name: 'Praveen Kumar', role: 'QA Lead', parentId: sunilId, email: 'praveen.k.qa@example.com', birthDate: parseBirthDate('18 May'), joiningDate: parseJoiningDate('2018-08-01')}, 
-    //   { id: 'res_rohit_sharma_qa', name: 'Rohit Sharma', role: 'QA Lead', parentId: sunilId, email: 'rohit.s.qa@example.com', birthDate: parseBirthDate('01 Dec'), joiningDate: parseJoiningDate('2019-10-10')}, 
-    //   { id: 'res_anusha_m', name: 'Anusha Miryala', role: 'QA Engineer', parentId: varadrajId, email: 'anusha.m@example.com'},
-    //   { id: 'res_vidya_b', name: 'Vidya Bade', role: 'QA Engineer', parentId: 'res_praveen_kumar_qa', email: 'vidya.b@example.com'},
-    //   { id: 'res_navdeep_s', name: 'Navdeep Singh', role: 'QA Engineer', parentId: 'res_rohit_sharma_qa', email: 'navdeep.s@example.com'},
-    //   { id: romaId, name: "Roma Soni", role: "Custom Tester", parentId: sageerId, birthDate: parseBirthDate("15 Sep"), joiningDate: parseJoiningDate("01-08-2019"), email: "roma.soni@example.com", contactNumber: "9896307551" },
-    //   { id: 'res_rishita_thapliyal', name: "Rishita Thapliyal", role: "Custom Tester", parentId: sageerId, email: "rishita.t@example.com" },
-    //   { id: 'res_hritikesh_ct', name: "Hritikesh", role: "Custom Tester", parentId: sageerId, email: "hritikesh.ct@example.com" },
-    //   { id: 'res_ankit_kumar_ct1', name: "Ankit Kumar", role: "Custom Tester", parentId: sageerId, email: "ankit.k.ct1@example.com" }, 
-    //   { id: 'res_lovish_bhatti', name: "Lovish Bhatti", role: "Custom Tester", parentId: sageerId, birthDate: parseBirthDate("11 Jan"), joiningDate: parseJoiningDate("20-05-2019"), email: "lovish.bhatti@example.com", contactNumber: "9041089919" },
-    //   { id: 'res_anuj_singh_ct', name: "Anuj Singh", role: "Custom Tester", parentId: sageerId, email: "anuj.s.ct@example.com" }, 
-    //   { id: 'res_tarun_ct', name: "Tarun", role: "Custom Tester", parentId: sageerId, email: "tarun.ct@example.com" },
-    //   { id: 'res_deeksha_sharma', name: 'Deeksha Sharma', role: 'Custom Tester', parentId: sageerId, email: 'deeksha.s@example.com', birthDate: parseBirthDate('05 Apr'), joiningDate: parseJoiningDate('2022-01-20')}, 
-    //   { id: 'res_kanchan_singh_ct', name: "Kanchan Singh", role: "Custom Tester", parentId: sageerId, email: "kanchan.s.ct@example.com" },
-    //   { id: 'res_sahil_thakur_ct', name: "Sahil Thakur", role: "Custom Tester", parentId: sageerId, email: "sahil.t.ct@example.com" },
-    //   { id: 'res_prerna_sharma_ct', name: "Prerna Sharma", role: "Custom Tester", parentId: sageerId, email: "prerna.s.ct@example.com" },
-    //   { id: 'res_natasha_kapoor_ct', name: "Natasha Kapoor", role: "Custom Tester", parentId: sageerId, email: "natasha.k.ct@example.com" },
-    //   { id: 'res_manjiri_deshmukh', name: "Manjiri Deshmukh", role: "Custom Tester", parentId: sageerId, email: "manjiri.d@example.com" }, 
-    //   { id: 'res_mohit_makhaik_ct', name: "Mohit Makhaik", role: "Custom Tester", parentId: sageerId, email: "mohit.m.ct@example.com" },
-    //   { id: 'res_abhishek_kumar_ct', name: "Abhishek Kumar", role: "Custom Tester", parentId: sageerId, email: "abhishek.k.ct@example.com" },
-    //   { id: 'res_amandeep_kaur', name: "Amandeep Kaur", role: "Custom Tester", parentId: sageerId, email: "amandeep.k@example.com" }, 
-    //   { id: 'res_krishnakant_dubey_ct', name: "Krishnakant Dubey", role: "Custom Tester", parentId: sageerId, email: "krishnakant.d.ct@example.com" },
-    //   { id: 'res_sukreeti_ct', name: "Sukreeti", role: "Custom Tester", parentId: sageerId, email: "sukreeti.ct@example.com" },
-    //   { id: 'res_nikhil_sidana_ct', name: "Nikhil Sidana", role: "Custom Tester", parentId: sageerId, email: "nikhil.s.ct@example.com" },
-    //   { id: 'res_abhinav_thakur_ct', name: "Abhinav Thakur", role: "Custom Tester", parentId: sageerId, email: "abhinav.t.ct@example.com" },
-    //   { id: 'res_ankit_kumar_ct2', name: "Ankit Kumar(I)", role: "Custom Tester", parentId: sageerId, email: "ankit.k.ct2@example.com" }, 
-    //   { id: 'res_tamanna_bhartwal_pm', name: "Tamanna Bhartwal", role: "Project Manager", parentId: sageerId, email: "tamanna.b.pm@example.com" },
-    //   { id: 'res_aditya_soni_pm', name: "Aditya Soni", role: "Project Manager", parentId: sageerId, email: "aditya.s.pm@example.com" },
-    //   { id: 'res_ravneet_bhatti_pm', name: "Ravneet Bhatti", role: "Project Manager", parentId: sageerId, email: "ravneet.b.pm@example.com" },
-    //   { id: 'res_anand_anbalagan_pm', name: "Anand Anbalagan", role: "Project Manager", parentId: sageerId, email: "anand.a.pm@example.com" },
-    //   { id: 'res_nupur_aggarwal_pm', name: "Nupur Aggarwal", role: "Project Manager", parentId: sageerId, email: "nupur.a.pm@example.com" },
-    //   { id: 'res_kashif_khan_pm', name: "Kashif Khan", role: "Project Manager", parentId: sageerId, email: "kashif.k.pm@example.com" },
-    //   { id: 'res_akanksha_panchal_sc', name: "Akanksha Panchal", role: "System Configurator", parentId: sageerId, email: "akanksha.p.sc@example.com" },
-    //   { id: 'res_ankur_mishra_sc', name: "Ankur Mishra", role: "System Configurator", parentId: sageerId, email: "ankur.m.sc@example.com" },
-    //   { id: 'res_bhagyashri_w_at', name: "Bhagyashri Wankhade", role: "Automation Tester", parentId: sageerId, email: "bhagyashri.w.at@example.com" },
-    //   { id: 'res_akash_kumar_at', name: "Akash Kumar", role: "Automation Tester", parentId: sageerId, email: "akash.k.at@example.com" },
-    //   { id: 'res_aman_deep_ct', name: "Aman Deep", role: "Custom Tester", parentId: sageerId, email: "aman.d.ct@example.com" }, 
-    //   { id: 'res_nikhil_rai_ct', name: "Nikhil Rai", role: "Custom Tester", parentId: sageerId, email: "nikhil.r.ct@example.com" },
-    //   { id: 'res_amit_sharma_ct', name: "Amit Sharma", role: "Custom Tester", parentId: sageerId, email: "amit.s.ct@example.com" },
-    //   { id: 'res_meenakshi_ct', name: "Meenakshi", role: "Custom Tester", parentId: sageerId, email: "meenakshi.ct@example.com" },
-    //   { id: 'res_vikas_pal_at', name: "Vikas Pal", role: "Automation Tester", parentId: sageerId, email: "vikas.p.at@example.com" },
-    //];
-    
-    
+   
     const initialDepartmentsData: Department[] = [
         { id: 'dept_dev', name: 'Development', leaderId: shaileshId },
         { id: 'dept_test', name: 'Global Testing', leaderId: sunilId },
@@ -428,54 +351,7 @@ const App: React.FC = () => {
 
   }, []);
 
-  // useEffect(() => {
 
-  //   const controller = new AbortController();
-
-  //   const fetchResources = async () => {
-  //     try {
-  //       const response = await fetch('http://localhost:5100/data/raw', {
-  //         credentials: 'include', // Important: Send cookies for protected routes
-  //         signal: controller.signal 
-
-  //       });
-
-  //       if (!response.ok) {
-  //         // If the server returns a 401 Unauthorized, it means the user is not logged in.
-  //         if (response.status === 401) {
-  //            // You can redirect to login here or set an error message.
-  //            window.location.href = 'http://localhost:5100/auth/login';
-  //            return; // Stop execution
-  //         }
-  //         throw new Error(`API request failed with status: ${response.status}`);
-  //       }
-
-  //       const fetchedData: Resource[] = await response.json();
-  //       setResources(fetchedData); // Set the state with the fetched data
-  //       console.log("Data fetch successful!");
-
-  //     } catch (err: any) {
-  //       if (err.name === 'AbortError') {
-  //         console.log('Fetch aborted');
-  //       }
-  //       else {
-  //         console.error("An error occurred while fetching data:", err);
-  //         setErrorResource(err.message);
-  //       }
-        
-  //     } finally {
-  //       if (!controller.signal.aborted) {
-  //         setIsLoadingResource(false);
-  //       }
-  //     }
-  //   };
-
-  //   fetchResources(); // Call the async function from within the hook
-  //   return () => {
-  //     console.log("Cleanup: Aborting fetch request.");
-  //     controller.abort();
-  //   };
-  // }, []); // The empty array [] is the key to making this run only once.
 
   if (isLoadingResource) {
     return <div>Loading resources...</div>;
@@ -825,13 +701,18 @@ const handleSyncStart = (userLogin: string, timestamp: string) => {
 
                 <div className=" flex ">
                   <div className = "flex gap-5 mr-5 items-center">
-                   Last Synced {(formatLastSynced(syncStatus.timestamp))}
-                  </div>
+                    {syncStatus.isLoading
+                        ? 'Checking status...'
+                        : syncStatus.success
+                            ? `Last Synced ${formatLastSynced(syncStatus.timestamp)}`
+                            : syncStatus.message // This will now correctly show the auth error
+                    }                  
                     <SyncButton
                         showAdvancedOptions={true}
                         onSyncComplete={handleSyncComplete}
                         onSyncStart={handleSyncStart}
                     />
+                  </div>
                 </div>
 
 

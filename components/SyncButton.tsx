@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useSseSync } from '@/hooks/useSseSync';
+import React, { useState, useEffect } from 'react';
+import { useSync } from '@/contexts/SyncProvider';
 import { useAuth } from '@/contexts/AuthProvider.tsx';
-import { syncRun } from '@/utils/apiService';
-import { configs } from '@/config';
+// import { syncRun } from '@/utils/apiService';
+// import { configs } from '@/config';
 import { formatLastSynced } from '@/utils/formatDate';
 
 // --- Interfaces (No changes needed) ---
@@ -25,13 +25,7 @@ interface IssueStats {
     totalPrMerged:    number;
     totalIssueClosed: number;
 }
-interface SyncResponse {
-    message:        string;
-    issueCount?:    number;
-    expiration_date: string;
-    employeeStats: EmployeeStats;
-    issueStats:    IssueStats;
-}
+
 // --- Component Props (No changes needed) ---
 interface SyncButtonProps {
     className?: string;
@@ -62,13 +56,20 @@ export const SyncButton: React.FC<SyncButtonProps> = ({
         syncLimit: 100000,
     });
 
-    // --- Use our custom hook to manage all the complex state ---
-    const { isLoading, error, data: completionData, trigger } = useSseSync<SyncResponse>({
-        sseUrl: `${configs.BACKEND_URL}/sync/stream`,
-        triggerApiCall: syncRun, // Pass the API trigger function
-        onSuccess: (data) => onSyncComplete?.(true, data.employeeStats, data.issueStats, data.message),
-        onError: (message) => onSyncComplete?.(false, null, null, message),
-    });
+    const { isLoading, error, data: completionData, trigger, cancel } = useSync();
+    // This effect allows the button to still notify its parent via props,
+    // maintaining the original component API if needed.
+    useEffect(() => {
+      // We only want to fire this when the process is truly finished.
+      if (!isLoading && (completionData || error)) {
+          onSyncComplete?.(
+              !!completionData, // success is true only if completionData exists
+              completionData?.employeeStats || null,
+              completionData?.issueStats || null,
+              completionData?.message || error || ''
+          );
+      }
+    }, [isLoading, completionData, error, onSyncComplete]);
     
   
     // --- CORRECTED Event Handlers ---
@@ -88,6 +89,8 @@ export const SyncButton: React.FC<SyncButtonProps> = ({
         triggeredBy: currentUser,
         triggeredAt: timestamp,
       });
+    // Close the options panel after triggering
+    setShowOptions(false);
     };
     
     // Specific handlers for buttons
@@ -102,16 +105,24 @@ export const SyncButton: React.FC<SyncButtonProps> = ({
       <div className={`inline-block relative ${className}`}>
         <div className="flex space-x-1">
             <button
-            onClick={handleQuickSync}
+            onClick={isLoading ? cancel : handleQuickSync}
             disabled={isLoading}
-            className="flex items-center space-x-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:opacity-50 text-white text-sm rounded-lg transition-all duration-200 hover:scale-105"
-            title={isLoading ? `Syncing as ${currentUser}...` : `Run incremental sync as ${currentUser}`}
+            className = {`flex items-center space-x-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:opacity-50 text-white text-sm rounded-lg transition-all duration-200 hover:scale-105 ${
+                    isLoading
+                        ? 'bg-red-600 hover:bg-red-700' // Cancel button style
+                        : 'bg-blue-600 hover:bg-blue-700' // Sync button style
+                }`}
+                title={
+                  isLoading
+                      ? 'Cancel the ongoing sync'
+                      : `Run incremental sync as ${currentUser}`
+              }
             >
             {isLoading ? (
                 <svg className="animate-spin w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
-            ) : error ? (
+            ) /*: error ? (
                 <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -119,17 +130,18 @@ export const SyncButton: React.FC<SyncButtonProps> = ({
                 <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-            ) : (
+            ) */: (
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
             )}
-            <span className="hidden sm:inline">{isLoading ? 'Syncing...' : 'Sync'}</span>
+            <span className="hidden sm:inline">{isLoading ? 'Cancel' : 'Sync'}</span>
             </button>
             {/* Added button to toggle advanced options panel */}
             {showAdvancedOptions && (
                  <button 
                     onClick={() => setShowOptions(prev => !prev)}
+                    disabled = {isLoading}
                     className="p-2 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-lg transition-colors"
                     title="Advanced Options"
                  >
@@ -183,15 +195,6 @@ export const SyncButton: React.FC<SyncButtonProps> = ({
                             <option value="all">All Issues</option>
                             <option value="open">Open Only</option>
                             <option value="closed">Closed Only</option>
-                        </select>
-                    </div>
-                    {/* Batch Size */}
-                    <div>
-                        <label className="block text-xs text-slate-300 mb-1">Batch Size</label>
-                        <select value={syncOptions.batchSize} onChange={(e) => handleOptionChange('batchSize', parseInt(e.target.value))} disabled={isLoading} className="w-full bg-slate-700 border border-slate-600 text-slate-200 text-xs rounded px-2 py-1 disabled:opacity-50">
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                            <option value="200">200</option>
                         </select>
                     </div>
                     {/* Sync Limit */}

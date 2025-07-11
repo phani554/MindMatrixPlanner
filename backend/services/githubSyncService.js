@@ -1,7 +1,7 @@
 import { Issue } from "../models/issue.model.js";
 import { SyncConfig } from "../models/syncConfig.model.js";
 import { octokit as gitclient } from "../controller/getOctokit.js";
-import { expiration_date } from "../controller/getOctokit.js";
+import { checkTokenValidity } from "../controller/getOctokit.js";
 import { 
   ORG,
   REPO,
@@ -9,6 +9,8 @@ import {
   syncUtility
 
 } from "../utils/syncUtility.js";
+
+
 
 const formatDate = syncUtility.formatDate;
 const mapIssueToDocument = syncUtility.mapIssueToDocument;
@@ -57,7 +59,8 @@ export async function runSync(options = {}) {
     state = "all",
     labels = null,
     syncLimit = 100000,
-    fullSync = false
+    fullSync = false,
+    expiration_date
   } = options;
 
   const octokit = await gitclient.getforPat();
