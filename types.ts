@@ -9,6 +9,9 @@ export interface Resource {
   username: string,
   role: string;
   reportsTo?: ResourceId | null; // For hierarchy
+  modules?: string[]; // List of modules the resource is associated with
+  isModuleOwner?: boolean; // Indicates if the resource is a module owner
+  isTeamLead?: boolean; // Indicates if the resource is a team lead
   birthDate?: string | null; 
   joiningDate?: string | null;
   email?: string | null;
