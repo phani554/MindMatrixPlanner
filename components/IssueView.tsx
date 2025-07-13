@@ -4,7 +4,7 @@ import { Doughnut } from 'react-chartjs-2';
 import { useAssigneeStats, useSummaryStats, useModules } from '../hooks/useIssueData';
 import { IssueFilters, AssigneeStatsSortOptions, PaginationParams } from '@/api.types.ts';
 import { Resource } from '../types';
-import { buildGitHubSearchURL } from '@/utils/queryBuilder';
+import { buildGitHubSearchURL } from '@/utils/githubSearchURL';
 import { UserSearchInput } from './UserSearchInput';
 import { MultiSelectSearchInput } from './MultiSelectSearchInput';
 // Register Chart.js components

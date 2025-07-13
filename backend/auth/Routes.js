@@ -2,6 +2,8 @@ import { Router } from "express";
 import path from "path";
 import fs from "fs";
 // Import the passport configuration for GitHub OAuth
+import doenev from "dotenv";
+doenev.config({ path: "MindMatrixPlanner/backend/.env" });
 import passport from "./Passport.js";
 import { isAuthenticated } from "../middleware/Auth.js";
 

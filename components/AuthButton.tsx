@@ -1,12 +1,13 @@
 import React from 'react';
 import { useAuth } from '../contexts/AuthProvider'; // Import our custom hook
+import { configs } from '@/config';
 
 interface AuthButtonProps {
   className?: string;
   compact?: boolean;
 }
 
-const BACKEND_URL = "http://localhost:5100"; // Centralized backend URL
+const BACKEND_URL = configs.BACKEND_URL; // Centralized backend URL
 
 const AuthButton: React.FC<AuthButtonProps> = ({ className = "", compact = false }) => {
   // Destructure the enhanced values from our context

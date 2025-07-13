@@ -12,8 +12,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { db } from "./db/dbConnect.js";
 import MongoStore from "connect-mongo";
+import path from "path";
 
-dotenv.config();
+dotenv.config(path.join(process.cwd(), ".env"));
 
 const app = express();
 // --- FIX #3: Use a consistent environment variable name ---
