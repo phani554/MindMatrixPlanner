@@ -1,0 +1,1 @@
+export const envpath = "C:/Users/phane/Documents/Projects/Web Development/MindMatrixPlanner/backend/.env";

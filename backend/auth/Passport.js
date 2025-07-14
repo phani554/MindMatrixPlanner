@@ -1,10 +1,12 @@
 import passport from "passport";
 import { Strategy as GitHubStrategy} from "passport-github2";
-import {Employee} from '../models/employees.model.js';
 import dotenv from "dotenv";
-import path from "path";
+import fs from "fs";
+import {Employee} from '../models/employees.model.js';
+import { envpath } from "../config.js";
 
-dotenv.config({ path: "MindMatrixPlanner/backend/.env" });
+dotenv.config({ path: envpath });
+
 /**
  * Called on every authenticated request.
  * Takes the user ID from the session and retrieves the full user object from the database.

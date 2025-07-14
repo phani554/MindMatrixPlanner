@@ -13,8 +13,12 @@ import cors from "cors";
 import { db } from "./db/dbConnect.js";
 import MongoStore from "connect-mongo";
 import path from "path";
+import { envpath } from "./config.js";
 
-dotenv.config(path.join(process.cwd(), ".env"));
+// This is your existing line
+
+// <-- 2. Add this block to test the path
+dotenv.config({ path: envpath });
 
 const app = express();
 // --- FIX #3: Use a consistent environment variable name ---
